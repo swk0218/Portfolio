@@ -1,0 +1,3679 @@
+<!DOCTYPE html>
+
+<html lang="ko">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<title>WKSEO</title>
+  <link rel="icon" type="image/png" href="assets/favicon.png">
+  <link rel="shortcut icon" href="assets/favicon.ico">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --black: #0a0a0a;
+            --white: #fafafa;
+            --accent: #0e1adf;
+            --gray: #8c8c8c;
+        }
+
+        body {
+            font-family: 'Archivo', sans-serif;
+            background: var(--black);
+            color: var(--white);
+            overflow-x: hidden;
+            letter-spacing: 0.01em;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100%;
+            padding: 2.25rem 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            background: linear-gradient(to bottom, rgba(14, 26, 223, 0.26) 0%, transparent 100%);
+        }
+
+        
+        nav.on-light {
+            background: linear-gradient(to bottom, rgba(14, 26, 223, 0.14) 0%, transparent 100%);
+        }
+
+        nav.on-light .logo,
+        nav.on-light .nav-links a {
+            color: var(--black);
+        }
+.logo {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1.32rem;
+            font-weight: 800;
+            letter-spacing: 0.1em;
+        
+            color: var(--white);
+            text-decoration: none;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 3rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: var(--white);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.15em;
+            position: relative;
+            transition: color 0.3s ease;
+        }
+
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .nav-links a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero */
+        .hero {
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .hero-content {
+            text-align: center;
+        }
+
+        .hero-eyebrow {
+            font-size: 0.9rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.3em;
+            color: var(--accent);
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease forwards;
+            opacity: 0;
+        }
+
+        .hero h1.hero-title {
+            font-family: 'Archivo', sans-serif;
+            /* Bigger, more commanding hero scale */
+            font-size: clamp(6.2rem, 19vw, 16.5rem);
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            margin-bottom: 2rem;
+            animation: fadeInUp 1s ease 0.2s forwards;
+            opacity: 0;
+            text-transform: uppercase;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            line-height: 1;
+            gap: 0;
+        }
+
+                .hero-title .hero-line {
+            line-height: 0.84;
+            height: 0.84em; /* lock line box to prevent vertical jitter during typing */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* tighten inter-line leading beyond pure line-height */
+        .hero-title .hero-line + .hero-line {
+            margin-top: -0.09em;
+        }
+
+        .hero-title .typing-slot{
+            width: 12ch; /* stable width so the word stays centered without layout shifts */
+        }
+
+        #typingText{
+            position: relative;
+            display: inline-block;
+            color: var(--accent);
+            line-height: 0.84;
+            height: 0.84em;
+            white-space: nowrap;
+        }
+
+        /* Absolute-positioned caret so it does not affect line metrics */
+        #typingText::after{
+            content: '';
+            position: absolute;
+            left: 100%;
+            margin-left: 0.08em;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 5px;
+            height: 0.72em;
+            background: var(--accent);
+            animation: blink 0.7s infinite;
+        }
+
+        .hero p.hero-subtitle {
+            /* Supporting statement under the hero (point color) */
+            font-size: clamp(1.85rem, 4.1vw, 3.45rem);
+            max-width: 46ch;
+            margin: 0 auto;
+            color: var(--accent);
+            line-height: 1.10; /* tighter leading */
+            font-weight: 500;
+            animation: fadeInUp 1s ease 0.4s forwards;
+            opacity: 0;
+        }
+
+
+        .scroll-indicator{
+    position: absolute;
+    left: 50%;
+    bottom: 3rem;
+    transform: translateX(-50%);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.6s forwards;
+    user-select: none;
+    pointer-events: none;
+}
+
+.scroll-line{
+    width: 2px;
+    height: 46px;
+    background: rgba(250, 250, 250, 0.22);
+    border-radius: 999px;
+    position: relative;
+    overflow: hidden;
+}
+
+.scroll-line-dot{
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
+    position: absolute;
+    left: 50%;
+    top: 6px;
+    transform: translateX(-50%);
+    animation: scrollLineDot 1.6s ease-in-out infinite;
+}
+
+@keyframes scrollLineDot{
+    0%{ opacity: 0; transform: translate(-50%, 0); }
+    20%{ opacity: 1; }
+    70%{ opacity: 1; transform: translate(-50%, 30px); }
+    100%{ opacity: 0; transform: translate(-50%, 30px); }
+}
+
+        /* Selected Works */
+        .highlights-section {
+            padding: 7.5rem 0 15rem;
+        }
+
+        .projects-grid {
+            display: grid;
+            gap: 9rem;
+        }
+
+        .project-card {
+            --parallax: 0px;
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 2.5rem;
+        }
+
+        .project-image {
+            width: 100%;
+            margin-left: 0;
+            height: min(78vh, 760px);
+            position: relative;
+            overflow: hidden;
+            background: #1a1a1a;
+        }
+
+                .project-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(14, 26, 223, 0.55) 0%, transparent 60%);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .project-card:hover .project-image::before {
+            opacity: 0.28;
+        }
+
+        .project-placeholder {
+            width: 100%;
+            height: 100%;
+            transform: translateY(var(--parallax, 0px));
+            will-change: transform;
+            transition: transform 0.65s ease, filter 1s ease;
+        }
+
+        .project-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transform: translateY(var(--parallax, 0px));
+            will-change: transform;
+            transition: transform 0.65s ease, filter 1s ease;
+        }
+
+        .project-card:hover .project-placeholder {
+            transform: translateY(var(--parallax, 0px)) scale(1.04);
+        }
+
+
+        .project-card:hover .project-image img {
+            transform: translateY(var(--parallax, 0px)) scale(1.04);
+        }
+        .project-details {
+            max-width: 1100px;
+            margin: 0 auto;
+            padding: 0 5%;
+            text-align: center;
+        }
+
+        
+
+        
+
+        /* Clickable image hint (Highlights + Portfolio) */
+        .project-image-link,
+        .work-image-link {
+            display: block;
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .project-image,
+        .work-item-image {
+            cursor: pointer;
+        }
+
+        .image-cta {
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            bottom: auto;
+            z-index: 3;
+            font-size: 0.95rem;
+            font-weight: 600;
+            color: var(--accent);
+            opacity: 0;
+            transform: translate(-50%, calc(-50% + 6px));
+            transition: opacity 0.28s ease, transform 0.28s ease;
+            pointer-events: none;
+            letter-spacing: 0.02em;
+            text-align: center;
+            white-space: nowrap;
+        }
+
+        .image-cta::after {
+
+            content: '';
+            display: block;
+            height: 2px;
+            width: 0;
+            background: var(--accent);
+            margin-top: 6px;
+            transition: width 0.3s ease;
+        }
+
+        .project-image:hover .image-cta,
+        .work-item-image:hover .image-cta {
+            opacity: 1;
+            transform: translate(-50%, -50%);
+        }
+
+        .project-image:hover .image-cta::after,
+        .work-item-image:hover .image-cta::after {
+            width: 100%;
+        }
+
+.project-number {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1rem;
+            color: var(--accent);
+            margin-bottom: 1rem;
+            font-weight: 800;
+            letter-spacing: 0.04em;
+            text-transform: none;
+            }
+
+        .project-title {
+            font-family: 'Archivo', sans-serif;
+            font-size: clamp(2rem, 4.2vw, 3.6rem);
+            font-weight: 800;
+            text-transform: none;
+            letter-spacing: -0.01em;
+            margin: 0 auto 1.4rem;
+            line-height: 1.05;
+            max-width: 22ch;
+        }
+
+        
+        .project-title.one-line {
+            white-space: nowrap;
+            max-width: none;
+        }
+
+        @media (max-width: 768px) {
+            .project-title.one-line { white-space: normal; }
+        }
+
+        .project-description {
+            font-size: 1.15rem;
+            
+            letter-spacing: 0.02em;
+            line-height: 1.42;
+            color: var(--gray);
+            margin: 0 auto 2rem;
+            font-weight: 300;
+            max-width: 72ch;
+            text-wrap: balance;
+        }
+
+        .meta-item {
+            font-size: 0.85rem;
+            text-align: center;
+        }
+
+        .meta-label {
+            text-transform: none;
+            letter-spacing: 0.02em;
+            color: var(--gray);
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .meta-value {
+            color: var(--white);
+            font-weight: 500;
+            letter-spacing: 0.05em;
+        }
+
+        .award-badge {
+            display: inline-flex;
+            align-items: center;
+            padding: 0.5rem 1rem;
+            background: rgba(14, 26, 223, 0.1);
+            border: 1px solid var(--accent);
+            color: var(--accent);
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 0.04em;
+        }
+
+        .award-badge::before {
+            content: '★';
+            margin-right: 0.5rem;
+        }
+
+.project-meta {
+            display: flex;
+            gap: 3rem;
+            margin-top: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .project-awards {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.4rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Portfolio */
+        .all-work {
+            padding: 10rem 5% 15rem;
+            background: var(--black);
+        }
+
+        .section-title {
+            font-family: 'Archivo', sans-serif;
+            font-size: clamp(3rem, 8vw, 7rem);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: -0.015em;
+            margin-bottom: 5rem;
+            text-align: center;
+        }
+
+        .work-tabs {
+            display: flex;
+            gap: 2.0rem;
+            margin: 0 auto 5rem;
+            flex-wrap: nowrap;
+            justify-content: center;
+            padding: 0;
+            background: transparent;
+            max-width: 1400px;
+            overflow-x: auto;
+            overflow-y: hidden;
+            scrollbar-width: none; /* Firefox */
+            -ms-overflow-style: none; /* IE/Edge */
+        }
+        .work-tabs::-webkit-scrollbar { display: none; }
+
+        
+        .tab-button {
+            background: transparent;
+            border: 0;
+            color: var(--gray);
+            padding: 0.35rem 0;
+            font-family: 'Archivo', sans-serif;
+            font-size: 0.95rem;
+            font-weight: 600;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: color 0.25s ease;
+            position: relative;
+        }
+
+        .tab-button::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -6px;
+            width: 0;
+            height: 2px;
+            background: var(--accent);
+            transition: width 0.3s ease;
+        }
+
+        .tab-button:hover,
+        .tab-button.active {
+            color: var(--accent);
+        }
+
+        .tab-button:hover::after,
+        .tab-button.active::after {
+            width: 100%;
+        }
+.work-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(min(480px, 100%), 1fr));
+            gap: 2.25rem;
+            max-width: 1640px;
+            margin: 0 auto;
+            justify-items: center;
+        }
+
+.work-grid.is-filtering { opacity: 0.92; }
+
+.work-item {
+            width: 100%;
+            max-width: 680px;
+            text-align: center;
+            transition: opacity 0.7s ease, transform 0.7s ease;
+            opacity: 1;
+            transform: translateY(0);
+            will-change: transform, opacity;
+        }
+
+        .work-item.reveal {
+            opacity: 0;
+            transform: translateY(60px);
+        }
+
+        .work-item.hidden {
+            display: none;
+        }
+
+.work-item.instant {
+            transition: none !important;
+        }
+.work-item-image {
+            width: 100%;
+            aspect-ratio: 16/9;
+            background: #1a1a1a;
+            margin-bottom: 1.15rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .work-item-image::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, var(--accent) 0%, transparent 100%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: 1;
+        }
+
+        .work-item:hover .work-item-image::before {
+            opacity: 0.5;
+        }
+
+        .work-item-image svg {
+            width: 100%;
+            height: 100%;
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .work-item-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.8s ease, filter 0.8s ease;
+        }
+
+        .work-item:hover .work-item-image svg {
+            transform: scale(1.05);
+        }
+
+        .work-item-title {
+            font-family: 'Archivo', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 800;
+            text-transform: none;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.45rem;
+            line-height: 1.2;
+        }
+
+        .work-item-tagline {
+            font-size: 0.95rem;
+            letter-spacing: 0.012em;
+            color: var(--gray);
+            line-height: 1.3;
+            margin: 0 auto 0.7rem;
+            max-width: 46ch;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+
+
+        .work-item-category {
+            font-size: 0.8rem;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            color: var(--accent);
+            font-weight: 600;
+            margin-bottom: 0.35rem;
+        }
+
+        .work-item-year {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        
+        .work-item-awards {
+            display: flex;
+            gap: 0.5rem;
+            margin-top: 1.1rem;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+        }
+
+        /* Awards (match project detail chips) */
+        .work-award-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            padding: 0.38rem 0.65rem;
+            border: 1px solid rgba(250,250,250,0.18);
+            border-radius: 999px;
+            background: rgba(250,250,250,0.03);
+        }
+        .work-award-badge .award-icon{
+            height: 22px;
+            width: auto;
+            display: block;
+            color: rgba(250,250,250,0.85);
+            flex: 0 0 auto;
+        }
+        .work-award-badge .award-label{
+            font-size: 0.82rem;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            color: var(--gray);
+            line-height: 1;
+            white-space: nowrap;
+        }
+/* About */
+        .about {
+            padding: 15rem 5%;
+            background: var(--white);
+            color: var(--black);
+        }
+
+        .about-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 2.5rem;
+            max-width: 1100px;
+            margin: 0 auto;
+            text-align: center;
+        }
+
+                .about h2 {
+            font-family: 'Archivo', sans-serif;
+            font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+            font-weight: 800;
+            text-transform: none;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.9rem;
+        }
+
+        .about-subtitle {
+            margin-top: 0;
+            
+            font-size: 1.2rem;
+            color: var(--gray);
+            font-weight: 300;
+            line-height: 1.42;
+        }
+
+        .about-text {
+            font-size: clamp(1.1rem, 2vw, 1.5rem);
+            line-height: 1.65;
+            color: var(--black);
+            font-weight: 300;
+            max-width: 70ch;
+            margin: 0 auto;
+            text-align: center;
+            text-wrap: balance;
+        }
+
+        .about-text p,
+        .about-subtitle,
+        .hero p.hero-subtitle{
+            text-wrap: balance;
+        }
+
+        .about-text strong {
+            color: var(--accent);
+            font-weight: 700;
+        }
+
+        
+        .about-bullets {
+            list-style: none;
+            padding: 0;
+            margin: 0 auto 1.9rem;
+            max-width: 70ch;
+            text-align: center;
+            color: var(--gray);
+        }
+        .about-bullets li {
+            margin: 0.35rem 0;
+            letter-spacing: 0.02em;
+            line-height: 1.35;
+        }
+        .about-text p {
+            margin: 1.35rem auto 0;
+            max-width: 70ch;
+            text-align: center;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 3rem;
+            margin: 5rem auto 0;
+            max-width: 1200px;
+        }
+
+                .skill-item {
+            border-top: 1px solid rgba(140, 140, 140, 0.38);
+            padding-top: 1.25rem;
+            text-align: center;
+        }
+
+                .skill-title {
+            font-weight: 800;
+            font-size: 1.12rem;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.9rem;
+        }
+
+        .skill-list {
+            list-style: none;
+            font-size: 0.95rem;
+            color: var(--gray);
+            line-height: 2;
+        }
+
+        
+/* About + Contact (merged) */
+.about-contact{
+            max-width: 1100px;
+            margin: 6rem auto 0;
+            padding-top: 4rem;
+            border-top: 1px solid rgba(140, 140, 140, 0.28);
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 2.5rem;
+            text-align: center;
+        }
+
+        .about-contact-label{
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: none;
+            letter-spacing: 0.04em;
+            color: var(--gray);
+            margin-bottom: 1rem;
+        }
+
+        .about-contact-value{
+            font-size: 1.25rem;
+            color: var(--black);
+            font-weight: 300;
+        }
+
+        .about-contact-value[href]{
+            text-decoration: none;
+            transition: color 0.25s ease;
+        }
+
+        .about-contact-value[href]:hover{
+            color: var(--accent);
+        }
+
+        .about-contact-links{
+            display: flex;
+            gap: 1.2rem;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .about-contact-link{
+            font-size: 1.05rem;
+            color: var(--black);
+            text-decoration: none;
+            font-weight: 300;
+            transition: color 0.25s ease;
+        }
+
+        .about-contact-link:hover{
+            color: var(--accent);
+        }
+
+/* Footer */
+        footer {
+            padding: 4rem 5%;
+            background: var(--white);
+            border-top: 1px solid rgba(140, 140, 140, 0.28);
+            color: var(--black);
+        }
+
+        .footer-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            gap: 1.25rem;
+            text-align: center;
+        }
+
+        footer p {
+            font-size: 0.85rem;
+            color: var(--gray);
+        }
+
+        .footer-social {
+            display: flex;
+            gap: 2rem;
+        }
+
+        .footer-social a {
+            color: var(--gray);
+            text-decoration: none;
+            font-size: 0.85rem;
+            font-weight: 500;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: color 0.3s ease;
+        }
+
+        .footer-social a:hover {
+            color: var(--accent);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(40px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+
+        
+/* Responsive */
+        @media (max-width: 1024px) {
+            nav {
+                padding: 2rem 5%;
+            }
+
+            .projects-grid {
+                gap: 7rem;
+            }
+
+            .project-image {
+                height: min(64vh, 640px);
+            }
+
+            .work-grid {
+                grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+                gap: 3rem;
+            }
+
+            .about {
+                padding: 10rem 6%;
+            }
+
+            .skills-grid {
+                grid-template-columns: repeat(2, 1fr);
+                max-width: 800px;
+            }
+
+            .about-contact {
+                grid-template-columns: 1fr;
+                max-width: 800px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            nav {
+                padding: calc(env(safe-area-inset-top) + 1.05rem) 6% 1.05rem;
+            }
+
+            .logo { font-size: 1.12rem; }
+
+            .nav-links {
+                gap: 1.25rem;
+            }
+
+            .nav-links a {
+                font-size: 0.78rem;
+                letter-spacing: 0.02em;
+            }
+
+            .about-text{ max-width: 42ch; }
+            .about-subtitle{ max-width: 42ch; margin-left:auto; margin-right:auto; }
+            .hero p.hero-subtitle{ max-width: 34ch; margin-left:auto; margin-right:auto; }
+
+
+            .hero-eyebrow {
+                margin-bottom: 1.15rem;
+            }
+
+            .hero h1.hero-title {
+                font-size: clamp(3.4rem, 14.5vw, 7.2rem);
+                margin-bottom: 1.1rem;
+                gap: 0;
+                letter-spacing: -0.015em;
+            }
+
+            .hero p.hero-subtitle {
+                font-size: clamp(1.28rem, 4.3vw, 2.1rem);
+                max-width: 36ch;
+                line-height: 1.10;
+            }
+
+            /* Mobile hero: keep desktop design, but prevent horizontal/vertical clipping */
+            .hero {
+                min-height: 100vh;
+                height: auto;
+                padding-top: calc(env(safe-area-inset-top) + 6.2rem);
+                padding-bottom: 3.25rem;
+            }
+            @supports (height: 100svh) {
+                .hero { min-height: 100svh; }
+            }
+            @supports (height: 100dvh) {
+                .hero { min-height: 100dvh; }
+            }
+
+            .hero-content{
+                width: 100%;
+                padding-inline: 6%;
+            }
+
+            /* Cap the typing slot width on small screens to avoid overflowing words */
+            .hero-title .typing-slot{
+                width: min(12ch, 92vw);
+            }
+
+            .hero-title .hero-line + .hero-line {
+                margin-top: -0.06em;
+            }
+
+
+            .scroll-indicator {
+                bottom: 2rem;
+            }
+
+            .highlights-section {
+                padding: 5.5rem 0 10rem;
+            }
+
+            .project-image {
+                height: 58vh;
+            }
+
+            .project-meta {
+                gap: 1.5rem;
+            }
+
+            .all-work {
+                padding: 7rem 6% 10rem;
+            }
+
+            .work-tabs {
+                margin-bottom: 3rem;
+                gap: 0.55rem 0.9rem;
+                flex-wrap: wrap;
+                overflow-x: hidden;
+                justify-content: center;
+            }
+
+            .tab-button {
+                padding: 0.65rem 1.0rem;
+                font-size: 0.78rem;
+            }
+
+            .work-grid {
+                grid-template-columns: 1fr;
+                max-width: 720px;
+            }
+
+            .work-item-tagline {
+                white-space: normal;
+            }
+
+            .footer-content {
+                flex-direction: column;
+                gap: 1.5rem;
+                text-align: center;
+            }
+        
+
+            .skills-grid {
+                grid-template-columns: 1fr;
+                gap: 2.5rem;
+                max-width: 800px;
+            }
+
+            /* Awards chips on mobile */
+            .work-award-badge .award-icon{ height: 15px; }
+            .work-award-badge .award-label{ font-size: 0.8rem; }
+
+
+        }
+
+        @media (max-width: 420px) {
+            .hero h1.hero-title {
+                font-size: clamp(3.1rem, 14.0vw, 6.4rem);
+                letter-spacing: -0.015em;
+            }
+
+            .hero p.hero-subtitle {
+                font-size: 1.15rem;
+                max-width: 34ch;
+                line-height: 1.10;
+            }
+            .tab-button {
+                padding: 0.75rem 1.2rem;
+                font-size: 0.75rem;
+            }
+
+            .project-image {
+                height: 52vh;
+            }
+            .hero-title .typing-slot{ width: min(12ch, 92vw); }
+
+        }
+
+        /* ===== v18: Archivo spacing/leading tuning (readability) ===== */
+        body{
+            letter-spacing: 0.02em;
+        }
+
+        /* Body / UI text: slightly looser tracking for Archivo */
+        .project-description{
+            letter-spacing: 0.026em !important;
+            line-height: 1.42;
+        }
+        .work-item-tagline{
+            letter-spacing: 0.026em !important;
+            line-height: 1.26;
+        }
+        .meta-value {
+            letter-spacing: 0.05em !important;
+        }
+        .project-meta .meta-value{ letter-spacing: 0.05em !important; }
+
+        .about-subtitle{
+            letter-spacing: 0.026em;
+            line-height: 1.34;
+        }
+        .about-text{
+            letter-spacing: 0.026em;
+            line-height: 1.58;
+        }
+
+        .about-contact-value,
+        .about-contact-link{
+            letter-spacing: 0.026em;
+        }
+
+        .work-item-year{ letter-spacing: 0.026em; }
+
+        /* Hero subtitle: mild tracking only (keeps premium feel at large size) */
+        .hero p.hero-subtitle{
+            letter-spacing: 0.01em;
+        }
+        /* ===== /v18 ===== */
+
+    
+/* ===== v21 Editorial (B) ===== */
+nav{
+    padding: 1.9rem 5%;
+    background: linear-gradient(to bottom, rgba(14, 26, 223, 0.34) 0%, transparent 100%);
+}
+nav.on-light{
+    background: linear-gradient(to bottom, rgba(14, 26, 223, 0.18) 0%, transparent 100%);
+}
+nav .nav-inner{
+    width: min(1400px, 100%);
+    margin: 0 auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    gap: 2rem;
+}
+.logo{
+    font-size: 1.35rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: none;
+}
+.nav-links{
+    gap: 2.25rem;
+}
+.nav-links a{
+    font-size: 0.95rem;
+    font-weight: 600;
+    letter-spacing: 0.02em !important;
+    text-transform: none !important;
+}
+.nav-links a::after{
+    content: '';
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 250ms ease;
+    opacity: 0.9;
+}
+.nav-links a:hover{ color: var(--accent); }
+.nav-links a:hover::after{
+    transform: scaleX(1);
+}
+
+/* Portfolio tabs: editorial text tabs (no boxes) */
+.work-tabs{
+    gap: 2rem;
+    padding: 0;
+}
+.tab-button{
+    border: none;
+    padding: 0;
+    background: transparent;
+    color: var(--gray);
+    font-size: 0.95rem;
+    font-weight: 600;
+    text-transform: none !important;
+    letter-spacing: 0.02em !important;
+}
+.tab-button::before{ content: none !important; }
+.tab-button::after{
+    content:'';
+    position:absolute;
+    left: 0;
+    right: 0;
+    bottom: -6px;
+    height: 1px;
+    background: currentColor;
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 250ms ease;
+    opacity: 0.9;
+}
+.tab-button:hover{
+    color: var(--accent);
+}
+.tab-button:hover::after{
+    transform: scaleX(1);
+}
+.tab-button.active{
+    color: var(--accent);
+}
+.tab-button.active::after{
+    transform: scaleX(1);
+}
+
+/* About heading: tighter spacing */
+        .about h2 {
+            font-family: 'Archivo', sans-serif;
+            font-size: clamp(1.9rem, 3.2vw, 2.8rem);
+            font-weight: 800;
+            text-transform: none;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.9rem;
+        }
+.about-subtitle{
+    margin-top: 0;
+    line-height: 1.28;
+}
+
+/* Skills: thinner gray rule + sentence case */
+        .skill-item {
+            border-top: 1px solid rgba(140, 140, 140, 0.38);
+            padding-top: 1.25rem;
+            text-align: center;
+        }
+        .skill-title {
+            font-weight: 800;
+            font-size: 1.12rem;
+            text-transform: none;
+            letter-spacing: 0.02em;
+            margin-bottom: 0.9rem;
+        }
+
+/* Meta values in highlights: a touch wider for readability */
+.project-meta .meta-value{
+    letter-spacing: 0.045em !important;
+    text-transform: none !important;
+}
+/* ===== /v21 ===== */
+
+
+/* ===== v24 Minimal hover (no text hint) ===== */
+.image-cta{ display:none !important; }
+
+.project-image:hover,
+.work-item-image:hover{ cursor: pointer; }
+
+/* Subtle overlay to suggest clickability */
+.project-image:hover::before{ opacity: 0.38 !important; }
+.work-item:hover .work-item-image::before{ opacity: 0.62 !important; }
+
+/* Slight image lift without shouting */
+.project-image:hover img{ transform: translateY(var(--parallax, 0px)) scale(1.08); filter: blur(0.4px); }
+.project-image:hover .project-placeholder{ transform: translateY(var(--parallax, 0px)) scale(1.08); filter: blur(0.4px); }
+.work-item:hover .work-item-image svg{ transform: scale(1.10); filter: blur(0.4px); }
+.work-item:hover .work-item-image img{ transform: scale(1.10); filter: blur(0.4px); }
+/* ===== /v24 ===== */
+
+/* ===== v35 Tabs: color-only (no underline) ===== */
+.tab-button{
+    border: 0 !important;
+    background: transparent !important;
+    padding: 0.35rem 0 !important;
+    border-radius: 0 !important;
+    transition: color 0.25s ease !important;
+}
+.tab-button::after,
+.tab-button::before{
+    content: none !important;
+    display: none !important;
+}
+.tab-button:hover,
+.tab-button.active{
+    color: var(--accent) !important;
+}
+/* ===== /v35 ===== */
+
+
+
+/* ===== v38 UI polish ===== */
+
+/* Stronger nav gradient + a bit more area */
+nav{
+    padding: 2.35rem 5% 2.1rem !important;
+    background: linear-gradient(to bottom,
+        rgba(14, 26, 223, 0.72) 0%,
+        rgba(14, 26, 223, 0.22) 62%,
+        rgba(14, 26, 223, 0.00) 100%) !important;
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+nav.on-light{
+    background: linear-gradient(to bottom,
+        rgba(14, 26, 223, 0.40) 0%,
+        rgba(14, 26, 223, 0.14) 62%,
+        rgba(14, 26, 223, 0.00) 100%) !important;
+}
+
+/* Mobile nav: smaller tap targets / typography */
+@media (max-width: 768px){
+    .nav-links{ gap: 0.95rem !important; }
+    .nav-links a{
+        font-size: 0.70rem !important;
+        letter-spacing: 0.015em !important;
+    }
+    nav{
+        padding: calc(env(safe-area-inset-top) + 0.9rem) 6% 0.95rem !important;
+    }
+}
+
+/* Selected Works reveal animation */
+.project-card.reveal{
+    opacity: 0;
+    transform: translateY(140px) scale(0.98);
+    transition: opacity 680ms ease, transform 980ms cubic-bezier(.18,.86,.2,1);
+    will-change: transform, opacity;
+}
+.project-card.reveal.is-visible{
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+.project-card.reveal .project-image img,
+.project-card.reveal .project-placeholder{
+    transform: translateY(70px) scale(1.08);
+    filter: blur(10px);
+    opacity: 0.78;
+    transition: transform 1100ms cubic-bezier(.18,.86,.2,1), filter 1000ms ease, opacity 820ms ease;
+    will-change: transform, filter, opacity;
+}
+.project-card.reveal.is-visible .project-image img,
+.project-card.reveal.is-visible .project-placeholder{
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+    opacity: 1;
+}
+
+/* Portfolio filter buttons: rounded badge language (border + blue on active/hover) */
+.work-tabs{
+    gap: 0.75rem 0.9rem !important;
+    flex-wrap: wrap !important;
+    overflow-x: hidden !important;
+    justify-content: center !important;
+    padding: 0 !important;
+}
+.tab-button{
+    position: relative;
+    border: 1px solid rgba(250,250,250,0.18) !important;
+    background: rgba(250,250,250,0.02) !important;
+    color: var(--gray) !important;
+    border-radius: 999px !important;
+    padding: 0.60rem 1.05rem !important;
+    font-size: 0.90rem !important;
+    font-weight: 600 !important;
+    letter-spacing: 0.02em !important;
+    transition: color 220ms ease, border-color 220ms ease, background 220ms ease, transform 220ms ease !important;
+}
+.tab-button:hover{
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    background: rgba(14, 26, 223, 0.12) !important;
+}
+.tab-button.active{
+    color: var(--accent) !important;
+    border-color: var(--accent) !important;
+    background: rgba(14, 26, 223, 0.14) !important;
+}
+.tab-button::after,
+.tab-button::before{ content: none !important; display:none !important; }
+
+@media (max-width: 768px){
+    .tab-button{
+        padding: 0.58rem 0.95rem !important;
+        font-size: 0.78rem !important;
+    }
+}
+
+/* Ensure portfolio thumbnails read as 16:9 */
+.work-item-image{
+    aspect-ratio: 16/9 !important;
+}
+
+/* ===== /v38 ===== */
+
+
+/* ===== v41 Fixes: hero overlap + selected works meta alignment ===== */
+:root{
+    --nav-h: 96px; /* will be updated by JS */
+}
+
+/* Hero: prevent fixed nav overlap on desktop and avoid scroll-indicator collisions */
+.hero{
+    display: grid !important;
+    grid-template-rows: 1fr auto;
+    justify-items: center;
+    align-items: center;
+    height: 100vh !important;
+    min-height: 100vh;
+    padding-top: calc(var(--nav-h) + 0.9rem) !important;
+    padding-bottom: 2.35rem !important;
+}
+.hero-content{
+    grid-row: 1;
+    align-self: center;
+    text-align: center;
+    width: 100%;
+    padding-inline: 5%;
+    padding-bottom: clamp(1.9rem, 3.4vh, 3.2rem);
+}
+.scroll-indicator{
+    grid-row: 2;
+    position: static !important;
+    left: auto !important;
+    bottom: auto !important;
+    transform: none !important;
+    margin: 0 auto;
+    opacity: 0;
+    animation: fadeInUp 1s ease 0.6s forwards;
+    pointer-events: none;
+    user-select: none;
+}
+
+/* Desktop hero scale down slightly (mobile stays as-is) */
+@media (min-width: 1024px){
+    .hero h1.hero-title{
+        font-size: clamp(5.0rem, 14.2vw, 14.0rem) !important;
+        margin-bottom: 1.55rem !important;
+    }
+    .hero-title .hero-line{
+        line-height: 0.86;
+        height: 0.86em;
+    }
+    .hero-title .hero-line + .hero-line{
+        margin-top: -0.075em;
+    }
+    .hero p.hero-subtitle{
+        font-size: clamp(1.55rem, 2.55vw, 2.8rem) !important;
+        max-width: 44ch !important;
+        line-height: 1.12;
+    }
+}
+
+/* Mobile: keep the existing ratio (as you said it already feels right) */
+@media (max-width: 768px){
+    .hero{
+        height: auto !important;
+        min-height: 100vh;
+        padding-top: calc(env(safe-area-inset-top) + 6.2rem) !important;
+        padding-bottom: 3.25rem !important;
+    }
+    @supports (height: 100svh) { .hero { min-height: 100svh; } }
+    @supports (height: 100dvh) { .hero { min-height: 100dvh; } }
+    .hero-content{ padding-inline: 6% !important; padding-bottom: 1.85rem; }
+}
+
+/* Selected Works: meta stack (Category above title, Year below description) */
+.project-category{
+    font-size: 1.15rem; /* match .project-description */
+    font-weight: 600;
+    color: var(--accent);
+    letter-spacing: 0.02em;
+}
+.project-category-top{
+    margin: 0 auto 0.9rem;
+    text-align: center;
+}
+.highlights-section .project-description{
+    margin-bottom: 1.25rem;
+}
+.project-year{
+    font-size: 1.15rem; /* match .project-description */
+    letter-spacing: 0.02em;
+    color: rgba(250,250,250,0.72);
+    text-align: center;
+}
+.project-year-below{
+    margin: 0 auto 1.25rem;
+}
+@media (max-width: 520px){
+    .project-category,
+    .project-year{
+        font-size: 1rem;
+    }
+    .project-category-top{ margin-bottom: 0.75rem; }
+    .highlights-section .project-description{ margin-bottom: 1.05rem; }
+    .project-year-below{ margin-bottom: 1.05rem; }
+}
+
+/* Make awards row always centered */
+.project-details .project-awards{
+    margin-top: 0 !important;
+    justify-content: center !important;
+}
+/* ===== /v43 ===== */
+
+
+
+/* ===== v45: Footer link casing (Title Case, no forced uppercase) ===== */
+.footer-social a{
+  text-transform: none !important;
+  letter-spacing: 0.02em !important;
+}
+
+  
+
+/* ===== midcheck polish: selected works + alignment ===== */
+:root{
+    --site-rail-max:1640px;
+    --full-bleed-width:100vw;
+    --full-bleed-offset:calc(50% - 50vw);
+}
+@supports (width:100dvw){
+    :root{
+        --full-bleed-width:100dvw;
+        --full-bleed-offset:calc(50% - 50dvw);
+    }
+}
+.highlights-section{
+    padding: 5.6rem 5% 9.8rem !important;
+}
+.logo{
+    font-size: clamp(0.96rem, 1.3vw, 1.22rem) !important;
+    letter-spacing: 0.055em !important;
+    transition: color 220ms ease;
+}
+.logo:hover,
+.logo:focus-visible,
+nav.on-light .logo:hover,
+nav.on-light .logo:focus-visible{
+    color: var(--accent) !important;
+}
+nav{
+    overflow:visible !important;
+    isolation:isolate;
+    backdrop-filter:none !important;
+    -webkit-backdrop-filter:none !important;
+}
+nav::before{
+    content:"";
+    position:absolute;
+    left:0;
+    right:0;
+    top:0;
+    height:calc(100% + clamp(1.6rem, 3vw, 3.25rem));
+    z-index:0;
+    pointer-events:none;
+    background:rgba(255,255,255,0.001);
+    backdrop-filter:blur(10px);
+    -webkit-backdrop-filter:blur(10px);
+    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 46%, rgba(0,0,0,0.72) 66%, transparent 100%);
+    mask-image:linear-gradient(to bottom, #000 0%, #000 46%, rgba(0,0,0,0.72) 66%, transparent 100%);
+}
+nav .nav-inner{
+    position:relative;
+    z-index:1;
+    width:min(var(--site-rail-max), 100%) !important;
+    max-width:var(--site-rail-max) !important;
+}
+.scroll-indicator{
+    bottom:clamp(1.65rem, 4.7vh, 3.05rem) !important;
+    gap:0 !important;
+    width:28px;
+    height:clamp(50px, 6.3vh, 70px);
+    justify-content:center;
+    animation:fadeInUp 1.05s cubic-bezier(.16, 1, .3, 1) 0.72s forwards !important;
+}
+.scroll-line{
+    --scroll-travel:calc(clamp(44px, 5.8vh, 62px) - 16px);
+    width:2px !important;
+    height:clamp(44px, 5.8vh, 62px) !important;
+    border-radius:999px !important;
+    overflow:hidden !important;
+    background:linear-gradient(
+        to bottom,
+        rgba(250,250,250,0.38) 0%,
+        rgba(250,250,250,0.34) 58%,
+        transparent 100%
+    ) !important;
+}
+.scroll-line::before{
+    content:"";
+    position:absolute;
+    left:0;
+    top:0;
+    width:100%;
+    height:16px;
+    background:linear-gradient(
+        to bottom,
+        transparent 0%,
+        rgba(14,26,223,0.44) 8%,
+        rgba(0,26,255,1) 50%,
+        transparent 100%
+    );
+    transform:translate3d(0, -18px, 0);
+    transform-origin:top center;
+    opacity:0;
+    animation:scrollCueTrace 2.35s linear infinite;
+    will-change:transform, opacity;
+}
+.scroll-line::after{
+    content:none !important;
+}
+.scroll-line-dot{
+    width:2px !important;
+    height:10px !important;
+    border-radius:999px !important;
+    background:linear-gradient(to bottom, transparent, #001cff 32%, #001cff 68%, transparent) !important;
+    box-shadow:none;
+    top:0 !important;
+    left:0 !important;
+    transform:translate3d(0, -10px, 0) !important;
+    animation:scrollCueDot 2.35s linear infinite !important;
+    will-change:transform, opacity;
+}
+@keyframes scrollCueDot{
+    0%{ opacity:1; transform:translate3d(0, 0, 0); animation-timing-function:linear; }
+    70%{ opacity:1; transform:translate3d(0, var(--scroll-travel), 0); animation-timing-function:cubic-bezier(.08, .86, .12, 1); }
+    82%{ opacity:.56; transform:translate3d(0, calc(var(--scroll-travel) + 2px), 0); animation-timing-function:cubic-bezier(.16, 1, .3, 1); }
+    92%{ opacity:.12; transform:translate3d(0, calc(var(--scroll-travel) + 3px), 0); animation-timing-function:cubic-bezier(.16, 1, .3, 1); }
+    100%{ opacity:0; transform:translate3d(0, calc(var(--scroll-travel) + 3px), 0); }
+}
+@keyframes scrollCueTrace{
+    0%{ opacity:.72; transform:translate3d(0, 0, 0); animation-timing-function:linear; }
+    70%{ opacity:.66; transform:translate3d(0, var(--scroll-travel), 0); animation-timing-function:cubic-bezier(.08, .86, .12, 1); }
+    82%{ opacity:.34; transform:translate3d(0, var(--scroll-travel), 0); animation-timing-function:cubic-bezier(.16, 1, .3, 1); }
+    92%{ opacity:.08; transform:translate3d(0, var(--scroll-travel), 0); animation-timing-function:cubic-bezier(.16, 1, .3, 1); }
+    100%{ opacity:0; transform:translate3d(0, var(--scroll-travel), 0); }
+}
+.selected-works-title{
+    font-family: 'Archivo', sans-serif;
+    font-size: clamp(2.55rem, 6.8vw, 5.95rem) !important;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: -0.015em;
+    line-height: 0.95;
+    margin: 0 auto 4.1rem;
+    max-width: var(--site-rail-max);
+    text-align: left;
+}
+.projects-grid{
+    max-width: var(--site-rail-max);
+    margin: 0 auto;
+    gap: 7rem;
+}
+.project-card{
+    max-width: none;
+    margin: 0 auto;
+    width: 100%;
+}
+.project-image{
+    width:var(--full-bleed-width) !important;
+    min-width:var(--full-bleed-width) !important;
+    margin-left:var(--full-bleed-offset) !important;
+    margin-right:var(--full-bleed-offset) !important;
+    height: min(72vh, 700px);
+}
+.project-details{
+    max-width: var(--site-rail-max);
+    margin: 0 auto;
+    padding: 0;
+    text-align: left;
+    width: 100%;
+    display:grid;
+    grid-template-columns:minmax(0, 1fr);
+    row-gap:0;
+    align-items:start;
+}
+.project-title,
+.project-description{
+    max-width: 62rem;
+    text-align: left !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    justify-self: start;
+}
+.project-title{
+    grid-column:1 / -1;
+    grid-row:2;
+    margin:0 0 0.98rem !important;
+}
+.project-description{
+    grid-column:1 / -1;
+    grid-row:3;
+    margin: 0 0 1.15rem !important;
+}
+.project-category-top{
+    grid-column:1;
+    grid-row:1;
+    margin-left: 0;
+    margin-right: 0;
+    text-align: left !important;
+}
+.project-year-below{
+    display:none !important;
+}
+.project-year{
+    display:none !important;
+}
+.project-details .project-awards{
+    grid-column:1 / -1;
+    grid-row:4;
+    justify-content: flex-start !important;
+    margin-top:0 !important;
+}
+.project-card.reveal{
+    opacity: 0 !important;
+    transform: translate3d(0, 32px, 0) !important;
+    transition: opacity 860ms ease, transform 1080ms cubic-bezier(.16,1,.3,1) !important;
+}
+.project-card.reveal.is-visible{
+    opacity: 1 !important;
+    transform: translate3d(0, 0, 0) !important;
+}
+.work-item.reveal{
+    opacity: 0 !important;
+    transform: translate3d(0, 34px, 0) !important;
+}
+.soft-reveal{
+    opacity:0;
+    transform:translate3d(0, 32px, 0);
+    transition:
+        opacity 760ms ease var(--reveal-delay, 0ms),
+        transform 940ms cubic-bezier(.16,1,.3,1) var(--reveal-delay, 0ms);
+    will-change:opacity, transform;
+}
+.soft-reveal.is-in{
+    opacity:1;
+    transform:translate3d(0, 0, 0);
+}
+.project-card.reveal .project-image img,
+.project-card.reveal .project-image video,
+.project-card.reveal .project-placeholder,
+.project-card.reveal.is-visible .project-image img,
+.project-card.reveal.is-visible .project-image video,
+.project-card.reveal.is-visible .project-placeholder{
+    opacity: 1 !important;
+    filter: none !important;
+    transform: translateY(var(--parallax, 0px)) scale(1) !important;
+}
+.project-image::before,
+.work-item-image::before{
+    display: none !important;
+}
+.project-image:hover::before,
+.work-item:hover .work-item-image::before{
+    opacity: 0 !important;
+}
+.project-image img,
+.project-image video,
+.project-placeholder,
+.work-item-image img,
+.work-item-image video,
+.work-item-image svg{
+    filter: none !important;
+}
+.project-image:hover img,
+.project-image:hover video,
+.project-image:hover .project-placeholder{
+    transform: translateY(var(--parallax, 0px)) scale(1.045) !important;
+    filter: none !important;
+}
+.project-card.reveal:hover .project-image img,
+.project-card.reveal:hover .project-image video,
+.project-card.reveal:hover .project-placeholder,
+.project-card.reveal.is-visible:hover .project-image img,
+.project-card.reveal.is-visible:hover .project-image video,
+.project-card.reveal.is-visible:hover .project-placeholder{
+    transform: translateY(var(--parallax, 0px)) scale(1.045) !important;
+}
+.work-item:hover .work-item-image img,
+.work-item:hover .work-item-image video,
+.work-item:hover .work-item-image svg{
+    transform: scale(1.03) !important;
+    filter: none !important;
+}
+.project-image video,
+.work-item-image video{
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    transform-origin:center;
+    transition: transform 0.8s ease, filter 0.8s ease;
+}
+.all-work{
+    padding: 7rem 5% 10.5rem !important;
+}
+.section-title{
+    text-align: left !important;
+    max-width: var(--site-rail-max);
+    margin-left: auto;
+    margin-right: auto;
+    font-size: clamp(2.55rem, 6.8vw, 5.95rem) !important;
+}
+.all-work .section-title{
+    margin-bottom:1.95rem !important;
+}
+.work-tabs{
+    justify-content: flex-start !important;
+    max-width: var(--site-rail-max);
+    margin:0 auto 4.2rem !important;
+    gap: 1rem 1.35rem;
+    flex-wrap: wrap;
+    padding: 0 !important;
+}
+.tab-button:focus{
+    outline:0 !important;
+}
+.tab-button:focus-visible{
+    color:var(--accent) !important;
+    border-color:var(--accent) !important;
+    background:rgba(14, 26, 223, 0.14) !important;
+    box-shadow:0 0 0 1px rgba(14, 26, 223, 0.38) !important;
+}
+.work-grid{
+    grid-template-columns: repeat(auto-fit, minmax(min(390px, 100%), 1fr));
+    column-gap: 1.25rem;
+    row-gap: clamp(4.8rem, 6.2vw, 6.8rem);
+    max-width: var(--site-rail-max);
+    justify-items: stretch;
+    align-items:start;
+    transition:min-height 860ms cubic-bezier(.16,1,.3,1);
+}
+.work-grid.is-filtering{
+    opacity:1 !important;
+}
+.work-item{
+    max-width: none;
+    text-align: left;
+    display:grid;
+    grid-template-columns:minmax(0, 1fr);
+    grid-template-rows:auto auto auto auto minmax(1.65rem, auto);
+    row-gap:0;
+    align-items:start;
+    transform-origin:center top;
+    backface-visibility:hidden;
+    transition: opacity 760ms cubic-bezier(.16,1,.3,1), transform 860ms cubic-bezier(.16,1,.3,1);
+}
+.work-grid.is-filtering .work-item{
+    will-change:opacity, transform;
+}
+.work-item-image{
+    grid-column:1 / -1;
+    grid-row:1;
+    margin-bottom:1rem !important;
+}
+.work-item-category,
+.work-item-title{
+    text-align: left !important;
+}
+.work-item-category{
+    grid-column:1;
+    grid-row:2;
+    min-height:1.2rem;
+    margin:0 0 0.42rem !important;
+}
+.work-item-year{
+    display:none !important;
+}
+.work-item-title{
+    grid-column:1 / -1;
+    grid-row:3;
+    margin:0 0 0.62rem !important;
+    min-height:0;
+    line-height:1.08;
+}
+.work-item-tagline{
+    grid-column:1 / -1;
+    grid-row:4;
+    white-space: normal !important;
+    overflow: visible !important;
+    text-overflow: clip !important;
+    max-width: none;
+    margin: 0 0 clamp(0.74rem, 0.86vw, 0.98rem) !important;
+    min-height: 0;
+    line-height: 1.42 !important;
+    text-align: left !important;
+    text-wrap: pretty;
+}
+.work-item-awards{
+    grid-column:1 / -1;
+    grid-row:5;
+    justify-content: flex-start !important;
+    align-items:center;
+    min-height: 1.65rem;
+    margin-top:0 !important;
+}
+.work-item-awards:empty{
+    visibility:hidden;
+}
+.work-award-badge .award-icon[src*="idea-symbol"]{
+    width:18px !important;
+    height:18px !important;
+    object-fit:contain !important;
+}
+.work-award-badge .award-icon[src*="spark"]{
+    width:17px !important;
+    height:17px !important;
+    object-fit:contain !important;
+}
+.project-awards .work-award-badge .award-icon[src*="idea-symbol"]{
+    width:18px !important;
+    height:18px !important;
+}
+.about-grid,
+.about-text,
+.about-bullets,
+.about-subtitle,
+.about-text p,
+.skill-item,
+.featured-in,
+.awards-section,
+.feature-item,
+.about-contact,
+.about-contact-item,
+.about-contact-links{
+    text-align: left !important;
+}
+.about-grid,
+.skills-grid,
+.featured-in,
+.awards-section,
+.about-contact{
+    max-width: var(--site-rail-max);
+}
+.about{
+    padding:10.5rem 5% 10.5rem !important;
+}
+.about-grid{
+    gap:2rem !important;
+}
+.about-grid > div:first-child,
+.about-subtitle{
+    justify-self:stretch;
+}
+.about-subtitle{
+    max-width:none !important;
+    margin-left:0 !important;
+    margin-right:0 !important;
+    text-align:left !important;
+    line-height:1.47 !important;
+    text-wrap:pretty;
+}
+.about-text,
+.about-text p,
+.about-bullets{
+    margin-left: 0;
+    margin-right: 0;
+}
+.about-contact{
+    margin-left: auto;
+    margin-right: auto;
+}
+.about-contact-item{
+    justify-self: stretch;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start;
+}
+.about-contact-value,
+.about-contact-link{
+    text-align:left !important;
+}
+.about-contact-links{
+    width:100%;
+    display:flex;
+    justify-content:flex-start !important;
+    align-items:flex-start !important;
+}
+.about-contact-link{
+    font-size:1.25rem !important;
+    line-height:1.35;
+}
+.about-ai-break{
+    display:block;
+}
+.skill-list{
+    padding-left: 0;
+}
+.about-role-break{
+    display:block;
+}
+footer.site-footer{
+    padding:4rem 5% !important;
+}
+.site-footer .footer-content{
+    width:min(var(--site-rail-max), 100%);
+    max-width:var(--site-rail-max) !important;
+    margin:0 auto;
+    display:flex;
+    flex-direction:column;
+    align-items:flex-start !important;
+    justify-content:flex-start !important;
+    gap:0 !important;
+    text-align:left !important;
+}
+.site-footer .footer-copyright{
+    font-size:0.85rem;
+    line-height:1.45;
+    letter-spacing:0.02em;
+    color:var(--gray);
+}
+.site-footer .footer-disclaimer{
+    max-width:72ch;
+    margin-top:0.55rem;
+    font-size:0.85rem;
+    line-height:1.5;
+    letter-spacing:0.01em;
+    color:rgba(0,0,0,0.42);
+}
+.site-footer .footer-social{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:flex-start !important;
+    gap:0.75rem 2rem;
+    margin-top:1.35rem;
+}
+.site-footer .footer-social a{
+    color:var(--gray);
+    font-size:0.85rem;
+    font-weight:500;
+    letter-spacing:0.02em !important;
+    text-decoration:none;
+    text-transform:none !important;
+    transition:color 220ms ease;
+}
+.site-footer .footer-social a:hover,
+.site-footer .footer-social a:focus-visible{
+    color:var(--accent);
+}
+.featured-in,
+.awards-section{
+    margin:5rem auto 0;
+    padding-top:4rem;
+    border-top:1px solid rgba(140, 140, 140, 0.28);
+}
+.featured-in .about-contact-label,
+.awards-section .about-contact-label{
+    margin-bottom:1.6rem;
+}
+.featured-grid{
+    display:grid;
+    grid-template-columns:repeat(4, minmax(0, 1fr));
+    gap:2.08rem 3rem;
+    align-items:start;
+}
+.feature-item{
+    min-width:0;
+}
+.feature-title{
+    font-size:clamp(1rem, 1.1vw, 1.16rem);
+    line-height:1.35;
+    font-weight:500;
+    letter-spacing:0.006em;
+    color:var(--black);
+    max-width:24ch;
+    text-wrap:balance;
+    word-break:keep-all;
+    overflow-wrap:normal;
+}
+.feature-title .keep{
+    white-space:nowrap;
+}
+.feature-title span{
+    color:var(--gray);
+    font-weight:400;
+}
+.skill-title{
+    font-size:clamp(1rem, 1.1vw, 1.16rem) !important;
+    line-height:1.35;
+    font-weight:500 !important;
+    letter-spacing:0.006em !important;
+    color:var(--black);
+}
+.feature-detail{
+    margin-top:0.45rem;
+    font-size:0.98rem;
+    line-height:1.42;
+    color:rgba(0,0,0,0.72);
+    letter-spacing:0.012em;
+}
+.feature-meta{
+    margin-top:0.47rem;
+    font-size:0.86rem;
+    line-height:1.42;
+    color:var(--gray);
+    letter-spacing:0.01em;
+    max-width:32ch;
+    text-wrap:pretty;
+    word-break:keep-all;
+}
+.feature-source,
+.feature-date,
+.feature-note{
+    display:block;
+}
+.feature-date,
+.feature-note{
+    margin-top:0.08rem;
+    white-space:nowrap;
+    color:rgba(0,0,0,0.48);
+}
+.feature-note{
+    white-space:normal;
+}
+@media (min-width: 721px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 5/4){
+    .hero{
+        height:auto !important;
+        min-height:100svh !important;
+        padding-top:calc(var(--nav-h) + 1.15rem) !important;
+        padding-bottom:2.25rem !important;
+        justify-content:center !important;
+    }
+    .hero h1.hero-title{
+        font-size:clamp(4.75rem, 12.7vw, 9.8rem) !important;
+        margin-bottom:1.1rem !important;
+    }
+    .hero-title .hero-line{
+        line-height:0.86 !important;
+        height:0.86em !important;
+    }
+    .hero-title .hero-line + .hero-line{
+        margin-top:-0.045em !important;
+    }
+    .hero p.hero-subtitle{
+        font-size:clamp(1.25rem, 2.55vw, 2rem) !important;
+        line-height:1.12 !important;
+        max-width:38ch !important;
+    }
+}
+@media (min-width: 721px) and (max-height: 700px){
+    .hero{
+        height:auto !important;
+        min-height:100svh !important;
+        padding-top:calc(var(--nav-h) + 1.2rem) !important;
+        padding-bottom:2.1rem !important;
+    }
+    .hero h1.hero-title{
+        font-size:clamp(3.75rem, 10.6vw, 7.8rem) !important;
+        margin-bottom:0.95rem !important;
+    }
+    .hero p.hero-subtitle{
+        font-size:clamp(1.15rem, 2.25vw, 1.75rem) !important;
+        line-height:1.1 !important;
+    }
+}
+@media (max-width: 1100px){
+    .project-image{
+        height:auto !important;
+        aspect-ratio:16 / 10;
+    }
+}
+@media (max-width: 1180px){
+    .skills-grid,
+    .awards-section .featured-grid,
+    .featured-grid{
+        grid-template-columns:repeat(2, minmax(0, 1fr)) !important;
+    }
+    .featured-grid{
+        gap:1.91rem 3rem;
+    }
+}
+@media (max-width: 768px){
+    .skills-grid,
+    .awards-section .featured-grid,
+    .featured-grid{
+        grid-template-columns:1fr !important;
+    }
+    .featured-grid{
+        gap:1.7rem;
+    }
+}
+@media (max-width: 720px){
+    .scroll-indicator{
+        bottom:clamp(1.35rem, 3.8vh, 2.1rem) !important;
+        height:50px;
+    }
+    .scroll-line{
+        --scroll-travel:28px;
+        height:42px !important;
+    }
+    .highlights-section{
+        padding:4.8rem 6% 7rem !important;
+    }
+    .selected-works-title{
+        margin-bottom: 2.4rem;
+    }
+    .logo{
+        font-size: clamp(0.9rem, 3.25vw, 1rem) !important;
+    }
+    .projects-grid{
+        gap: 5rem;
+    }
+    .project-image{
+        height:auto !important;
+        aspect-ratio:4 / 3;
+    }
+    .work-grid{
+        column-gap: 1.25rem;
+        row-gap: 3.6rem;
+    }
+    .all-work{
+        padding:5.6rem 6% 7rem !important;
+    }
+    .all-work .section-title{
+        margin-bottom:1.6rem !important;
+    }
+    .work-tabs{
+        margin-bottom:3.2rem !important;
+    }
+    .about{
+        padding:7rem 6% 7rem !important;
+    }
+    footer.site-footer{
+        padding:3.2rem 6% 3.4rem !important;
+    }
+    .site-footer .footer-social{
+        gap:0.65rem 1.4rem;
+    }
+    .featured-in,
+    .awards-section{
+        margin-top:4rem;
+        padding-top:2.8rem;
+    }
+    .featured-grid{
+        grid-template-columns:1fr;
+        gap:1.7rem;
+    }
+    .work-item-tagline{
+        min-height: 0;
+    }
+}
+@media (prefers-reduced-motion: reduce){
+    .project-card.reveal,
+    .work-item.reveal,
+    .soft-reveal{
+        opacity:1 !important;
+        transform:none !important;
+        transition:none !important;
+    }
+    .scroll-line::before,
+    .scroll-line-dot{
+        animation:none !important;
+        opacity:.58 !important;
+    }
+    .scroll-line-dot{
+        transform:translate3d(0, 16px, 0) !important;
+    }
+}
+/* ===== /midcheck polish: selected works + alignment ===== */
+
+  
+
+    /* ===== midcheck motion preset ===== */
+    body.motion-loco .reveal,
+    body.motion-loco .reveal.is-in,
+    body.motion-loco .project-card.reveal,
+    body.motion-loco .project-card.reveal.is-visible,
+    body.motion-loco .work-item.reveal,
+    body.motion-loco .soft-reveal,
+    body.motion-loco .soft-reveal.is-in{
+      opacity:1 !important;
+      transform:none !important;
+      transition:none !important;
+    }
+    body.motion-loco [data-reveal]{
+      --loco-y:44px;
+      --loco-scale:1;
+      --loco-duration:720ms;
+      opacity:0 !important;
+      transform:translate3d(0, var(--loco-y), 0) scale(var(--loco-scale)) !important;
+      transition:
+        opacity var(--loco-duration) cubic-bezier(.16,1,.3,1) var(--reveal-delay, 0ms),
+        transform var(--loco-duration) cubic-bezier(.16,1,.3,1) var(--reveal-delay, 0ms) !important;
+      will-change:opacity, transform;
+    }
+    body.motion-loco [data-reveal="media"]{
+      --loco-y:68px;
+      --loco-scale:1.018;
+      --loco-duration:900ms;
+    }
+    body.motion-loco [data-reveal-state="in"]{
+      opacity:1 !important;
+      transform:translate3d(0, 0, 0) scale(1) !important;
+    }
+    body.motion-loco .project-card[data-reveal],
+    body.motion-loco .work-item[data-reveal]{
+      --loco-y:0px;
+      --loco-scale:1;
+    }
+    body.motion-loco .project-image[data-reveal],
+    body.motion-loco .work-item-image[data-reveal],
+    body.motion-loco .hero-media[data-reveal],
+    body.motion-loco .shot-block[data-reveal]{
+      transform-origin:center bottom;
+    }
+    body.motion-loco .project-header[data-reveal]{
+      --loco-y:52px;
+      --loco-duration:860ms;
+    }
+    body.motion-loco .hero-media[data-reveal]{
+      --loco-y:82px;
+      --loco-scale:1.012;
+      --loco-duration:1080ms;
+    }
+    body.motion-loco .overview-section[data-reveal]{
+      --loco-y:54px;
+      --loco-duration:880ms;
+    }
+    body.motion-loco .shot-block[data-reveal]{
+      --loco-y:84px;
+      --loco-scale:1.01;
+      --loco-duration:1040ms;
+    }
+    @media (prefers-reduced-motion: reduce){
+      body.motion-loco [data-reveal]{
+        opacity:1 !important;
+        transform:none !important;
+        transition:none !important;
+      }
+    }
+    /* ===== /midcheck motion preset ===== */
+
+  </style>
+</head>
+<body class="motion-loco">
+<div id="top"></div>
+<nav>
+<div class="nav-inner">
+<a class="logo" href="#top">WKSEO</a>
+<ul class="nav-links">
+<li><a href="#highlights">Highlights</a></li>
+<li><a href="#portfolio">Projects</a></li>
+<li><a href="#about">About</a></li>
+</ul>
+</div>
+</nav>
+<section class="hero">
+<div class="hero-content">
+<h1 class="hero-title">
+<span class="hero-line">CRAFTING</span>
+<span class="hero-line typing-slot"><span id="typingText">STRATEGIC</span></span>
+<span class="hero-line">IDENTITIES</span>
+</h1>
+<p class="hero-subtitle">Specialist in brand experience design.<br/>Strategy. Design. Art direction. AI.</p>
+</div>
+<div aria-hidden="true" class="scroll-indicator">
+<div class="scroll-line"><div class="scroll-line-dot"></div></div>
+</div>
+</section>
+<section class="highlights-section" id="highlights">
+<h2 class="selected-works-title">Highlights</h2>
+<div class="projects-grid">
+<div class="project-card">
+<a aria-label="Open project: Odyssey OLED" class="project-image project-image-link" href="projects/odyssey-oled.html"><img src="assets/projects/odyssey-oled/01.jpg?v=658412-1773926212972819700" alt="Odyssey OLED — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<div class="project-details">
+<div class="project-category project-category-top">Brand identity</div>
+<h3 class="project-title">Odyssey OLED</h3>
+<p class="project-description">A new take on gaming branding</p>
+<div class="project-awards" data-awards="iF, Good Design"></div>
+
+</div>
+</div>
+<div class="project-card">
+<a aria-label="Open project: Ballie" class="project-image project-image-link" href="projects/ballie.html"><img src="assets/projects/ballie/01.jpg?v=423932-1773922865396875300" alt="Ballie — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<div class="project-details">
+<div class="project-category project-category-top">Packaging</div>
+<h3 class="project-title">Ballie</h3>
+<p class="project-description">An emotional packaging for the iconic robot</p>
+<div class="project-awards" data-awards="Good Design"></div>
+
+</div>
+</div>
+<div class="project-card">
+<a aria-label="Open project: The Premiere 8K" class="project-image project-image-link" href="projects/thepremiere-8k.html"><img src="assets/projects/thepremiere-8k/01.jpg?v=711574-1777904186570177200" alt="The Premiere 8K — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<div class="project-details">
+<div class="project-category project-category-top">Brand identity · Art direction</div>
+<h3 class="project-title">The Premiere 8K</h3>
+<p class="project-description">Crafting an ultra-premium visual narrative</p>
+<div class="project-awards" data-awards=""></div>
+
+</div>
+</div>
+<div class="project-card">
+<a aria-label="Open project: Samsung TV design book" class="project-image project-image-link" href="projects/designstory-book.html"><img src="assets/projects/designstory-book/01.jpg?v=261662-1561974077000000000" alt="Samsung TV design book — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<div class="project-details">
+<div class="project-category project-category-top">Art direction</div>
+<h3 class="project-title">Samsung TV design book</h3>
+<p class="project-description">A modular narrative of brand philosophy</p>
+<div class="project-awards" data-awards="iF, Good Design"></div>
+
+</div>
+</div>
+<div class="project-card">
+<a aria-label="Open project: QLED TV" class="project-image project-image-link" href="projects/qled-18.html"><img src="assets/projects/qled-18/03.jpg?v=833988-1777870663063700000" alt="QLED TV — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<div class="project-details">
+<div class="project-category project-category-top">Brand identity · Art direction</div>
+<h3 class="project-title">QLED TV</h3>
+<p class="project-description">Full-stack brand design for the premium flagship launching</p>
+<div class="project-awards" data-awards="Good Design"></div>
+
+</div>
+</div>
+</div>
+</section>
+<section class="all-work" id="portfolio">
+<h2 class="section-title">Projects</h2>
+<div class="work-tabs">
+<button class="tab-button active" data-category="all">All projects</button>
+<button class="tab-button" data-category="brand">Brand identity</button>
+<button class="tab-button" data-category="art">Art direction</button>
+<button class="tab-button" data-category="graphic">Graphic design</button>
+<button class="tab-button" data-category="packaging">Packaging</button>
+</div>
+<div class="work-grid" id="workGrid"></div>
+</section>
+<section class="about" id="about">
+<div class="about-grid">
+<div>
+<h2>Wonkyoung Seo</h2>
+<p class="about-subtitle">Currently at Samsung Electronics<br class="about-role-break">Senior Brand Designer · Design AI Specialist</p>
+</div>
+<div>
+
+<div class="about-text">
+<p>As a visual interpreter, I translate intangible brand values into cohesive and impactful design language.</p>
+<p>Currently, with a strong foundation in graphic design and AI literacy,<br class="about-ai-break">I create and manage Visual Identity Systems for consumer electronics—collaborating with relevant colleagues to develop brand guidelines and ensuring effective implementation across all types of consumer touchpoints.</p>
+</div>
+
+</div>
+</div>
+<div class="skills-grid">
+<div class="skill-item">
+<div class="skill-title">Brand design</div>
+<ul class="skill-list">
+<li>Design strategy</li>
+<li>Visual identity system</li>
+<li>Brand guidelines</li>
+<li>Creative execution</li>
+</ul>
+</div>
+<div class="skill-item">
+<div class="skill-title">Art direction</div>
+<ul class="skill-list">
+<li>Product photography</li>
+<li>Lifestyle photography</li>
+<li>Consumer experience</li>
+<li>Film</li>
+</ul>
+</div>
+<div class="skill-item">
+<div class="skill-title">AI literacy</div>
+<ul class="skill-list">
+<li>Creative workflow</li>
+<li>AX in design process</li>
+<li>Vibe coding</li>
+<li>Agent building</li>
+</ul>
+</div>
+<div class="skill-item">
+<div class="skill-title">Visual communication</div>
+<ul class="skill-list">
+<li>Graphic design</li>
+<li>Editorial design</li>
+<li>Visual storytelling</li>
+<li>Typography</li>
+</ul>
+</div>
+</div>
+<!-- Awards -->
+<div class="awards-section" aria-label="Awards">
+<div class="about-contact-label">Awards</div>
+<div class="featured-grid awards-grid">
+<div class="feature-item">
+<div class="feature-title">2026 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Visual Branding</span><span class="feature-note">The Movingstyle Visual Branding</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2025 SEC Award</div>
+<div class="feature-meta"><span class="feature-source">Silver (대표이사표창)</span><span class="feature-note">The Movingstyle</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2025 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">특허청장상 | Communication Design</span><span class="feature-note">Ballie Package</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2025 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Visual Branding</span><span class="feature-note">Odyssey OLED Brand Identity</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2023 SEC Award</div>
+<div class="feature-meta"><span class="feature-source">Silver (대표이사표창)</span><span class="feature-note">Odyssey OLED</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2023 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Brand Design</span><span class="feature-note">ViewFinity Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2022 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">Smart Monitor Visual Branding</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2021 IDEA</div>
+<div class="feature-meta"><span class="feature-source">Finalist | Branding</span><span class="feature-note">The Terrace Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2021 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">The Terrace Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2021 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">2020 QLED 8K Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2020 SEC Award</div>
+<div class="feature-meta"><span class="feature-source">Silver (대표이사표창)</span><span class="feature-note">QLED TV</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2020 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">The Terrace Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2020 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">2020 QLED 8K Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2020 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication</span><span class="feature-note">2019 VD Design Story Book</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2019 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Bronze Prize | Visual Communication</span><span class="feature-note">2019 VD Design Story Book</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2019 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Packaging</span><span class="feature-note">The Frame Package</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2019 iF Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Visual Identity</span><span class="feature-note">Wireless Audio VL Series Visual Identity System</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2018 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Consumer Product</span><span class="feature-note">The Frame Packaging</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2018 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">산업통상부장관상 | Brand Identity</span><span class="feature-note">2018 QLED TV Visual Identity</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2018 IDEA</div>
+<div class="feature-meta"><span class="feature-source">Gold Prize | Branding</span><span class="feature-note">Wireless Audio VL Series Visual Identity</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2018 IDEA</div>
+<div class="feature-meta"><span class="feature-source">Bronze Prize | Packaging</span><span class="feature-note">The Frame Visual Identity</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2017 SEC Award</div>
+<div class="feature-meta"><span class="feature-source">Grand (사업부표창)</span><span class="feature-note">QLED TV</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2017 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner | Communication Design</span><span class="feature-note">2017 QLED TV Visual Identity</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2015 Adobe Design Achievement Awards</div>
+<div class="feature-meta"><span class="feature-source">Semifinalist | Social Impact Design</span><span class="feature-note">Pathfinder Design Award</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2014 Spark Design Award</div>
+<div class="feature-meta"><span class="feature-source">Finalist | Communication Design</span><span class="feature-note">Creative Pool : Synchronized</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2014 Adobe Design Achievement Awards</div>
+<div class="feature-meta"><span class="feature-source">Semifinalist | Print Communication</span><span class="feature-note">Soldiers of the Queen</span></div>
+</div>
+</div>
+</div>
+<!-- /Awards -->
+<!-- Featured in -->
+<div class="featured-in" aria-label="Featured in">
+<div class="about-contact-label">Featured in</div>
+<div class="featured-grid">
+<div class="feature-item">
+<div class="feature-title">Book Exquisite</div>
+<div class="feature-meta"><span class="feature-source">SendPoints Publishing Co., Hong Kong</span><span class="feature-date">Jul 2018</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Flying in Seoul X New York</div>
+<div class="feature-meta"><span class="feature-source">Typography Seoul, Yoondesign</span><span class="feature-date">Jul 2015</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Hot Creator</div>
+<div class="feature-meta"><span class="feature-source">Notefolio</span><span class="feature-date">Jun 2015</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Hot Creator</div>
+<div class="feature-meta"><span class="feature-source">Notefolio</span><span class="feature-date">Feb 2015</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Hot Creator</div>
+<div class="feature-meta"><span class="feature-source">Notefolio</span><span class="feature-date">Nov 2014</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Letterseed 9 : Ornament</div>
+<div class="feature-meta"><span class="feature-source">Korean Society of Typography</span><span class="feature-date">Sep 2014</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">200th Issue: Up and Coming Designers</div>
+<div class="feature-meta"><span class="feature-source">CA Magazine, CA Korea</span><span class="feature-date">Jul 2014</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">My Portfolio Highlight</div>
+<div class="feature-meta"><span class="feature-source">CA Magazine, CA Korea</span><span class="feature-date">Mar 2014</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">Pathfinder</div>
+<div class="feature-meta"><span class="feature-source">Eloquence Magazine</span><span class="feature-date">Mar 2014</span></div>
+</div>
+</div>
+</div>
+<!-- /Featured in -->
+<div class="about-contact">
+<div class="about-contact-item">
+<div class="about-contact-label">Email</div>
+<a class="about-contact-value" href="mailto:swk0218@gmail.com">swk0218@gmail.com</a>
+</div>
+<div class="about-contact-item">
+<div class="about-contact-label">Location</div>
+<div class="about-contact-value">Seoul, South Korea</div>
+</div>
+<div class="about-contact-item">
+<div class="about-contact-label">Social</div>
+<div class="about-contact-links">
+<a class="about-contact-link" href="https://www.linkedin.com/in/wonseo/" rel="noopener noreferrer" target="_blank">LinkedIn</a>
+<a class="about-contact-link" href="https://be.net/wonkyoungseo" rel="noopener noreferrer" target="_blank">Behance</a>
+</div>
+</div>
+</div>
+</section>
+  <footer class="site-footer" data-reveal="text" aria-label="Footer">
+    <div class="footer-content">
+      <p class="footer-copyright">© 2026 WKSEO. All rights reserved.</p>
+      <p class="footer-disclaimer">Projects are presented for portfolio purposes only. Product names, trademarks, imagery, and related materials remain the property of their respective owners.</p>
+      <div class="footer-social" aria-label="Footer navigation">
+        <a href="#highlights">Highlights</a>
+        <a href="#portfolio">Projects</a>
+        <a href="#about">About</a>
+      </div>
+    </div>
+  </footer>
+<script>
+        // Typing
+        const words = ['STRATEGIC', 'REFINED', 'ICONIC', 'DISTINCT', 'BOLD', 'JUST COOL'];
+        let wordIndex = 0;
+        let charIndex = 0;
+        let isDeleting = false;
+
+        function typeTick() {
+            const el = document.getElementById('typingText');
+            if (!el) return;
+
+            const word = words[wordIndex];
+
+            if (!isDeleting) {
+                charIndex = Math.min(charIndex + 1, word.length);
+            } else {
+                charIndex = Math.max(charIndex - 1, 0);
+            }
+
+            el.textContent = word.slice(0, charIndex);
+
+            if (!isDeleting && charIndex === word.length) {
+                isDeleting = true;
+                setTimeout(typeTick, 1600);
+                return;
+            }
+
+            if (isDeleting && charIndex === 0) {
+                isDeleting = false;
+                wordIndex = (wordIndex + 1) % words.length;
+                setTimeout(typeTick, 450);
+                return;
+            }
+
+            setTimeout(typeTick, isDeleting ? 70 : 110);
+        }
+        setTimeout(typeTick, 650);
+
+        // Selected Works: reveal on scroll (rise + fade)
+        (function () {
+            const cards = Array.from(document.querySelectorAll('.project-card'));
+            if (!cards.length) return;
+
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+            // init state + stagger
+            cards.forEach((c, idx) => {
+                c.classList.add('reveal');
+                c.style.transitionDelay = `${Math.min(idx * 52, 156)}ms`;
+            });
+
+            if (reduce) {
+                cards.forEach(c => {
+                    c.classList.add('is-visible');
+                    c.classList.remove('reveal');
+                    c.style.transitionDelay = '0ms';
+                });
+                return;
+            }
+
+            const io = new IntersectionObserver((entries) => {
+                entries.forEach(e => {
+                    if (!e.isIntersecting) return;
+                    e.target.classList.add('is-visible');
+                    io.unobserve(e.target);
+                });
+            }, { threshold: 0.16, rootMargin: '0px 0px -6% 0px' });
+
+            cards.forEach(c => io.observe(c));
+        })();
+
+
+        // Portfolio data
+const projects = [
+  {
+    "title": "Micro RGB",
+    "slug": "mrgb",
+    "year": "2026",
+    "sortYear": 2026,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "A spectrum of pure micro-particles",
+    "awards": [],
+    "image": "assets/projects/mrgb/01.jpg?v=1460954-1777906777503594300",
+    "mediaType": "image"
+  },
+  {
+    "title": "Ballie",
+    "slug": "ballie",
+    "year": "2025",
+    "sortYear": 2025,
+    "category": "packaging",
+    "categories": [
+      "packaging"
+    ],
+    "categoryLabel": "Packaging",
+    "tagline": "An emotional packaging for the iconic robot",
+    "awards": [
+      "Good Design"
+    ],
+    "image": "assets/projects/ballie/01.jpg?v=423932-1773922865396875300",
+    "mediaType": "image"
+  },
+  {
+    "title": "The Movingstyle",
+    "slug": "themovingstyle",
+    "year": "2025",
+    "sortYear": 2025,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "Carry your experience in style",
+    "awards": [
+      "iF"
+    ],
+    "image": "assets/projects/themovingstyle/01.jpg?v=353525-1774706691911631700",
+    "mediaType": "image"
+  },
+  {
+    "title": "Odyssey OLED",
+    "slug": "odyssey-oled",
+    "year": "2024",
+    "sortYear": 2024,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "A new take on gaming branding",
+    "awards": [
+      "iF",
+      "Good Design"
+    ],
+    "image": "assets/projects/odyssey-oled/01.jpg?v=658412-1773926212972819700",
+    "mediaType": "image"
+  },
+  {
+    "title": "The Premiere",
+    "slug": "thepremiere-lsi",
+    "year": "2024",
+    "sortYear": 2024,
+    "category": "art",
+    "categories": [
+      "art"
+    ],
+    "categoryLabel": "Art direction",
+    "tagline": "Curating curated spaces",
+    "awards": [],
+    "image": "assets/projects/thepremiere-lsi/01.jpg?v=722823-1773757836408730600",
+    "mediaType": "image"
+  },
+  {
+    "title": "The Premiere 8K",
+    "slug": "thepremiere-8k",
+    "year": "2024",
+    "sortYear": 2024,
+    "category": "brand",
+    "categories": [
+      "brand",
+      "art"
+    ],
+    "categoryLabel": "Brand identity · Art direction",
+    "tagline": "Crafting an ultra-premium visual narrative",
+    "awards": [],
+    "image": "assets/projects/thepremiere-8k/01.jpg?v=711574-1777904186570177200",
+    "mediaType": "image"
+  },
+  {
+    "title": "Odyssey Series",
+    "slug": "odyssey-2023",
+    "year": "2023",
+    "sortYear": 2023,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "Orchestrating a cohesive dual identity",
+    "awards": [],
+    "image": "assets/projects/odyssey-2023/01.mp4?v=31683746-1679995802822201700",
+    "mediaType": "video"
+  },
+  {
+    "title": "The odyssey continues",
+    "slug": "monitor-os",
+    "year": "2021-2023",
+    "sortYear": 2023,
+    "category": "art",
+    "categories": [
+      "art"
+    ],
+    "categoryLabel": "Art direction",
+    "tagline": "A definitive image series for the Odyssey gaming lineup",
+    "awards": [],
+    "image": "assets/projects/monitor-os/00.mp4?v=42545010-1642739054000000000",
+    "mediaType": "video"
+  },
+  {
+    "title": "Viewfinity",
+    "slug": "viewfinity",
+    "year": "2023",
+    "sortYear": 2023,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "Everyday is an open canvas",
+    "awards": [
+      "Good Design"
+    ],
+    "image": "assets/projects/viewfinity/01.jpg?v=488673-1773749459020066500",
+    "mediaType": "image"
+  },
+  {
+    "title": "Ark",
+    "slug": "ark",
+    "year": "2022",
+    "sortYear": 2022,
+    "category": "art",
+    "categories": [
+      "art"
+    ],
+    "categoryLabel": "Art direction",
+    "tagline": "Defining gamer culture: A persona-driven visual strategy",
+    "awards": [],
+    "image": "assets/projects/ark/01.jpg?v=1011258-1773922153448949900",
+    "mediaType": "image"
+  },
+  {
+    "title": "Odyssey Neo",
+    "slug": "odyssey-neo",
+    "year": "2022",
+    "sortYear": 2022,
+    "category": "brand",
+    "categories": [
+      "brand",
+      "art"
+    ],
+    "categoryLabel": "Brand identity · Art direction",
+    "tagline": "The minimalistic futurism",
+    "awards": [],
+    "image": "assets/projects/odyssey-neo/01.jpg?v=1394473-1777860211551836500",
+    "mediaType": "image"
+  },
+  {
+    "title": "Neo QLED",
+    "slug": "qled-neo",
+    "year": "2021",
+    "sortYear": 2021,
+    "category": "brand",
+    "categories": [
+      "brand",
+      "art"
+    ],
+    "categoryLabel": "Brand identity · Art direction",
+    "tagline": "Vibrant evolution through fluid transparency.",
+    "awards": [],
+    "image": "assets/projects/qled-neo/01.jpg?v=1867179-1777822145654021000",
+    "mediaType": "image"
+  },
+  {
+    "title": "Smart Monitor",
+    "slug": "smart-monitor",
+    "year": "2021",
+    "sortYear": 2021,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "Harmonizing diverse rhythms of home-life",
+    "awards": [
+      "Good Design"
+    ],
+    "image": "assets/projects/smart-monitor/01.jpg?v=657645-1773755656529269600",
+    "mediaType": "image"
+  },
+  {
+    "title": "QLED 8K",
+    "slug": "qled-8k",
+    "year": "2020",
+    "sortYear": 2020,
+    "category": "brand",
+    "categories": [
+      "brand",
+      "art",
+      "packaging"
+    ],
+    "categoryLabel": "Brand identity · Art direction · Packaging",
+    "tagline": "Redefining immersion with boundary-less screen",
+    "awards": [
+      "iF",
+      "Good Design"
+    ],
+    "image": "assets/projects/qled-8k/01.jpg?v=944508-1777816480550296900",
+    "mediaType": "image"
+  },
+  {
+    "title": "The Terrace",
+    "slug": "theterrace",
+    "year": "2020",
+    "sortYear": 2020,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "Bringing people together under the open sky",
+    "awards": [
+      "iF",
+      "Good Design"
+    ],
+    "image": "assets/projects/theterrace/01.jpg?v=934900-1773929677088305700",
+    "mediaType": "image"
+  },
+  {
+    "title": "Samsung TV design book",
+    "slug": "designstory-book",
+    "year": "2019",
+    "sortYear": 2019,
+    "category": "art",
+    "categories": [
+      "art"
+    ],
+    "categoryLabel": "Art direction",
+    "tagline": "A modular narrative of brand philosophy",
+    "awards": [
+      "iF",
+      "Good Design"
+    ],
+    "image": "assets/projects/designstory-book/01.jpg?v=261662-1561974077000000000",
+    "mediaType": "image"
+  },
+  {
+    "title": "QLED TV",
+    "slug": "qled-18",
+    "year": "2017",
+    "sortYear": 2017,
+    "category": "brand",
+    "categories": [
+      "brand",
+      "art"
+    ],
+    "categoryLabel": "Brand identity · Art direction",
+    "tagline": "Full-stack brand design for the premium flagship launching",
+    "awards": [
+      "Good Design"
+    ],
+    "image": "assets/projects/qled-18/03.jpg?v=833988-1777870663063700000",
+    "mediaType": "image"
+  },
+  {
+    "title": "The Frame",
+    "slug": "theframe",
+    "year": "2017",
+    "sortYear": 2017,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "A decade of iconic identity at the intersection of art and tech",
+    "awards": [
+      "IDEA",
+      "iF",
+      "Good Design"
+    ],
+    "image": "assets/projects/theframe/01.jpg?v=881800-1773759176814691700",
+    "mediaType": "image"
+  },
+  {
+    "title": "Wireless Audio VL",
+    "slug": "wirelessaudio-vl",
+    "year": "2017",
+    "sortYear": 2017,
+    "category": "brand",
+    "categories": [
+      "brand"
+    ],
+    "categoryLabel": "Brand identity",
+    "tagline": "A rhythmic visual evolution redefining the emotive sound experience.",
+    "awards": [
+      "IDEA",
+      "iF"
+    ],
+    "image": "assets/projects/wirelessaudio-vl/01.jpg?v=978171-1773759403723719600",
+    "mediaType": "image"
+  },
+  {
+    "title": "Esse Blue",
+    "slug": "esse",
+    "year": "2015",
+    "sortYear": 2015,
+    "category": "packaging",
+    "categories": [
+      "packaging",
+      "graphic"
+    ],
+    "categoryLabel": "Packaging · Graphic design",
+    "tagline": "Iconic journey across Asia",
+    "awards": [],
+    "image": "assets/projects/esse/01.jpg?v=1481215-1777827415384052800",
+    "mediaType": "image"
+  },
+  {
+    "title": "Netflix korean title",
+    "slug": "netflix",
+    "year": "2015",
+    "sortYear": 2015,
+    "category": "graphic",
+    "categories": [
+      "graphic"
+    ],
+    "categoryLabel": "Graphic design",
+    "tagline": "Localizing global contents into Korean",
+    "awards": [],
+    "image": "assets/projects/netflix/01.jpg?v=3306717-1777989661157581600",
+    "mediaType": "image"
+  },
+  {
+    "title": "Three Two One",
+    "slug": "321-chi",
+    "year": "2015",
+    "sortYear": 2015,
+    "category": "art",
+    "categories": [
+      "art",
+      "graphic"
+    ],
+    "categoryLabel": "Art direction · Graphic design",
+    "tagline": "Exhibition directing for CHI 2015",
+    "awards": [],
+    "image": "assets/projects/321-chi/00.jpg?v=1383019-1777827167713961300",
+    "mediaType": "image"
+  },
+  {
+    "title": "Creative pool",
+    "slug": "cdp-exhibit",
+    "year": "2014",
+    "sortYear": 2014,
+    "category": "art",
+    "categories": [
+      "art",
+      "graphic"
+    ],
+    "categoryLabel": "Art direction · Graphic design",
+    "tagline": "Synchronized rhythm of Moire patterns",
+    "awards": [
+      "Spark"
+    ],
+    "image": "assets/projects/cdp-exhibit/01.gif?v=468036-1777784728425972200",
+    "mediaType": "image"
+  },
+  {
+    "title": "Ornament Re-composition",
+    "slug": "ornament-exhibit",
+    "year": "2014",
+    "sortYear": 2014,
+    "category": "art",
+    "categories": [
+      "art",
+      "graphic"
+    ],
+    "categoryLabel": "Art direction · Graphic design",
+    "tagline": "Printer’s flowers and typographer’s garden",
+    "awards": [],
+    "image": "assets/projects/ornament-exhibit/01.JPG?v=1089280-1777827196462873800",
+    "mediaType": "image"
+  },
+  {
+    "title": "Pathfinder Design Award",
+    "slug": "pathfinder-award",
+    "year": "2014",
+    "sortYear": 2014,
+    "category": "graphic",
+    "categories": [
+      "graphic"
+    ],
+    "categoryLabel": "Graphic design",
+    "tagline": "Deconstructing the illusion of authority in design",
+    "awards": [
+      "ADAA"
+    ],
+    "image": "assets/projects/pathfinder-award/03.webp?v=377342-1777613315062561600",
+    "mediaType": "image"
+  },
+  {
+    "title": "Soldiers of the Queen",
+    "slug": "soldiers-queen",
+    "year": "2013",
+    "sortYear": 2013,
+    "category": "graphic",
+    "categories": [
+      "graphic"
+    ],
+    "categoryLabel": "Graphic design",
+    "tagline": "Electronic Craftsmanship",
+    "awards": [
+      "ADAA"
+    ],
+    "image": "assets/projects/soldiers-queen/01.webp?v=69284-1777610707283680400",
+    "mediaType": "image"
+  }
+];
+
+        const cats = {
+            brand: 'Brand identity',
+            art: 'Art direction',
+            graphic: 'Graphic design',
+            packaging: 'Packaging'
+        };
+
+        const colors = [['#0E1ADF','#0080FF'], ['#1a1a1a','#333'], ['#fafafa','#e5e5e5']];
+        const grid = document.getElementById('workGrid');
+
+
+        const awardLogos = {
+            IDEA: {
+                src: "assets/awards/idea-symbol.png",
+                alt: "IDEA award logo"
+            },
+            IF: {
+                src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACIklEQVR42q2UvWsUURTFf3c+3cwacZNULhJ1TSzVEAQRwUL8qOwsBMH/wcbCIhapLSyEFAHFUtFKCUIIWPgBQjCIoCSKQsBkFDG7O7s7867F29nNmiwp9MDw5rzLHM47976RuFxR/gO8LTuOAyJgjOUidlXdylX7CDkOWq1Bs4nsLoIq2mja7z0PBLSVWh744PsdMa9XpIo3OYE7dpjW0zlwHbwDo6Bg4hhUcYaHATCrq5jva+B5ViwuVzTeP6brQ/v014VLapJEVVUbz+Z04/oNzVGfva/1uzMdXr05pevFYY1HxzUuV9SxbgSSBG/iGBKGAPinTuIMlbpZZBkSBJvS9bbJKDPI4CCNh4/xz5zGPTJO/fYdtFbvhuv7pEtLuC9f26N9/dYnI2ynms/ncRbfkX38hHvoYLca+KRvF8FxwRiy5RXrsEdIBE0S3ONHiaanAAguniOZme0IabXGriuXCa9dBaB2a5r01RtkoAAm2+RIBFotyDIr/OPnPwykCLiufc/XHGFIa34BoiKoIXv/AcIQjPaZ7D6QaIDk3gMaj55AlkKhgERR5wb0CrXbbDuZbeESRUhpr90zps8VUbWz0T6S7Bm01nNejKxA/vztOC5XNA9aRkYIzp+1umvrZMsreCcmraHPX0gXXkAY9DjpFcqDTlP090bbq4sEgR1KgMC3maju0LX20WSo1K0agxQK3Xr+a9mx/ZvDzbFNHtvhD4tvB1FytVqaAAAAAElFTkSuQmCC",
+                alt: "iF award logo"
+            },
+            ADAA: {
+                src: "assets/awards/adaa.png",
+                alt: "Adobe logo"
+            },
+            SPARK: {
+                src: "assets/awards/spark.png",
+                alt: "Spark award logo"
+            },
+            GOOD: {
+                src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAADQElEQVR42o1UTWhcVRT+7n0zk5gpnXfuC525974YhVAlUrpTWrCLFsSFuhGDRXQdpFEEF7oahZp2qy7sQkEQxCpu/UetrY2lk3TmdX5eZjLGliZjrTiIVpuZzDsu5qW+QAQvXM7i3vPd757vnE8gXh8CzgwwAICqax5zwEczUj78J/O8ZHF9TODNPvjsJvj9j7qdD14FIgYcEefcBgGAJVWYDsl8XifLN7wJrpB5fevOZTIvtpTlcLjPL5I5AAAc58otJuWcPTzGciEtxENjQqAT9ef3d9efr2I6AwCNVP9Un/nqKAQc4MAuiO8WyTwpgEHMDCLw9D2ZSF4cgLN3CCFuMp/c111/uYmpkb1Y2fgquyc/mUl/HQlM32J+TwJPOxDsANxDdGhft/O9LAKCI5xKC+waHYKcSIIsZPfk78ykvsxKMX2To6f2d9efiSJ+IS0gpIAcsHi7pPUYyq55NCTLq8rngPRxAGhiagQAzoyP62VlqmuezyXKzwDAN5gcBYDA1cdaynJbWQ7IzCIg8/ENb4IrOf1KEuSc55kW2dq653NJ2ScAoApkkrFMhdk1z+cKmYuokBkErjk5vDAs7DnPMw0y9avK55JrHhk+gJFYQAEAJSANAGVXz60oy6i45tmtgyIgq7v9qRqZ1aayHJLp1WjIFAAuuIVDV5QNLqn8/duY5QqPp7DDEnHsgTEunWJAhXQP4lOC/GyT0U9JwQyIWjJpp68tep6pkw3jQvaqZLipLLfI/nKW8vcBwCdxLcuunmsry/9Z7PPKt3UyjZayXCfLIZnOhRhkNVauTIXZa57PAeklGTHe/TWKsNtxigHp43uxstHE1MjB366t/S2dI33mtgB3/xLRkQe612urmBy9G1duBa4+lhXOWxvMYBbvoAjICulv23FPXCYzn2S2kMvfdSlmkuihuZay3FSWy64Oy/l8FvGI3BuS/aNGJvpxCHYiKXFSocDVz7WU5SqZwTLZqObqB7dNfjlnD4dkfm8ryz8pnwMqvDZkgdRtmeOeWVGWl8n0K6SPJh1gm400yHzR2MFGAtIv/exNcFNZbpD5YYnMwSSI+N/GJvFGn3FmE9HperdzeuZf+xgAwD+0gIW3rTpECwAAAABJRU5ErkJggg==",
+                alt: "Good Design award logo"
+            }
+        };
+
+
+        function awardKey(name) {
+            const n = (name || '').toLowerCase();
+            if (n.includes('idea')) return 'IDEA';
+            if (n.includes('adaa') || n.includes('adobe design achievement')) return 'ADAA';
+            if (n.includes('if')) return 'IF';
+            if (n.includes('spark')) return 'SPARK';
+            if (n.includes('good')) return 'GOOD';
+            if (n.includes('red')) return 'GOOD';
+            return null;
+        }
+
+        const fallbackAwardIcon = `<svg class="award-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+            <path d="M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+        </svg>`;
+
+        function renderAwardChip(name) {
+            const displayName = (name || '').toLowerCase().includes('red') ? 'Good Design' : name;
+            const key = awardKey(displayName);
+            const meta = key ? awardLogos[key] : null;
+            const icon = meta
+                ? `<img class="award-icon" src="${meta.src}" alt="${meta.alt}" loading="lazy" decoding="async">`
+                : fallbackAwardIcon;
+
+            return `<span class="work-award-badge">${icon}<span class="award-label">${displayName}</span></span>`;
+        }
+
+        // Highlight awards (static cards)
+        document.querySelectorAll('.project-awards[data-awards]').forEach((el) => {
+            const raw = (el.getAttribute('data-awards') || '').split(',').map(s => s.trim()).filter(Boolean);
+            if (!raw.length) return;
+            el.innerHTML = raw.map(renderAwardChip).join('');
+        });
+
+        projects.forEach((p, i) => {
+    const c = colors[i % colors.length];
+    const div = document.createElement('div');
+    const catsArr = (Array.isArray(p.categories) && p.categories.length)
+        ? p.categories
+        : (p.category ? [p.category] : []);
+    const catLabel = catsArr.map(c => cats[c] || c).join(' · ');
+    div.className = `work-item ${catsArr.join(' ')} reveal`;
+    div.setAttribute('data-categories', catsArr.join(','));
+    div.setAttribute('data-category', catsArr[0] || p.category || '');
+
+    const slug = (p.slug || p.title.toLowerCase()
+        .replace(/[^a-z0-9]+/g,'-')
+        .replace(/(^-|-$)/g,''));
+
+    const href = `projects/${slug}.html`;
+
+    const tagline = p.tagline
+        ? `<div class="work-item-tagline">${p.tagline}</div>`
+        : '';
+
+    const awardMarkup = (p.awards && p.awards.length)
+        ? p.awards.map(renderAwardChip).join('')
+        : '';
+    const awards = `<div class="work-item-awards"${awardMarkup ? ' aria-label="Recognition"' : ' aria-hidden="true"'}>${awardMarkup}</div>`;
+
+    const placeholderSvg = `
+            <svg viewBox="0 0 1600 900" aria-hidden="true" focusable="false">
+                <defs>
+                    <linearGradient id="g${i}">
+                        <stop offset="0%" stop-color="${c[0]}"/>
+                        <stop offset="100%" stop-color="${c[1]}"/>
+                    </linearGradient>
+                </defs>
+                <rect width="1600" height="900" fill="url(#g${i})"/>
+                <text x="50%" y="50%" text-anchor="middle"
+                      fill="${c[0] === '#fafafa' ? '#000' : '#fff'}"
+                      font-size="120" font-family="Archivo" opacity="0.28">
+                      ${(i+5).toString().padStart(2,'0')}
+                </text>
+            </svg>
+    `;
+
+    const thumbAlt = (p.thumbAlt || p.title);
+    const mediaType = (p.mediaType || '').toLowerCase();
+    const isVideoThumb = mediaType === 'video' || /\.(mp4|mov)(?:[?#].*)?$/i.test(p.image || '');
+    const thumb = p.image
+        ? (isVideoThumb
+            ? `<video src="${p.image}" aria-label="${thumbAlt}" muted autoplay loop playsinline preload="metadata"></video>`
+            : `<img src="${p.image}" alt="${thumbAlt}" loading="lazy" decoding="async">`)
+        : placeholderSvg;
+
+    div.innerHTML = `
+        <a class="work-item-image work-image-link" href="${href}" aria-label="Open project: ${p.title}">
+            ${thumb}
+            <span class="image-cta" aria-hidden="true">Open project</span>
+        </a>
+        <div class="work-item-category">${catLabel || cats[p.category] || ''}</div>
+        <h3 class="work-item-title">${p.title}</h3>
+        ${tagline}
+        ${awards}
+    `;
+
+    grid.appendChild(div);
+});
+
+        const items = Array.from(document.querySelectorAll('.work-item'));
+
+        // Reveal once (no re-trigger on tabs)
+        const revealObs = new IntersectionObserver(entries => {
+            entries.forEach(e => {
+                if (!e.isIntersecting) return;
+                revealItem(e.target);
+            });
+        }, {threshold: 0.15});
+
+        function revealItem(item) {
+            item.classList.remove('reveal');
+            revealObs.unobserve(item);
+        }
+
+        function revealVisibleItems() {
+            const vh = window.innerHeight || document.documentElement.clientHeight;
+            items.forEach(item => {
+                if (!item.classList.contains('reveal')) return;
+                const rect = item.getBoundingClientRect();
+                if (rect.top < vh * 0.96 && rect.bottom > 0) revealItem(item);
+            });
+        }
+
+        items.forEach(item => revealObs.observe(item));
+        requestAnimationFrame(revealVisibleItems);
+        window.addEventListener('load', revealVisibleItems, { once: true });
+        window.addEventListener('hashchange', () => requestAnimationFrame(revealVisibleItems));
+
+        // Tabs (FLIP-like)
+        const workGrid = document.getElementById('workGrid');
+        const tabButtons = document.querySelectorAll('.tab-button');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+        let filterTimer;
+        let filterSeq = 0;
+
+        function filterTo(category) {
+            const seq = ++filterSeq;
+            const gridHeight = workGrid.getBoundingClientRect().height;
+            workGrid.style.minHeight = `${gridHeight}px`;
+            workGrid.classList.add('is-filtering');
+            window.clearTimeout(filterTimer);
+
+            const states = items.map(item => {
+                const list = (item.dataset.categories || item.dataset.category || '').split(',').map(s => s.trim()).filter(Boolean);
+                const show = category === 'all' || list.includes(category);
+                return { item, show };
+            });
+
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            items.forEach(item => item.getAnimations().forEach(animation => animation.cancel()));
+
+            if (reduce) {
+                states.forEach(({item, show}) => {
+                    item.classList.toggle('hidden', !show);
+                    if (show) item.classList.remove('reveal');
+                });
+                workGrid.classList.remove('is-filtering');
+                workGrid.style.minHeight = '';
+                return;
+            }
+
+            const visibleItems = items.filter(item => !item.classList.contains('hidden'));
+            visibleItems.forEach((item, order) => {
+                item.animate(
+                    [
+                        {opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)'},
+                        {opacity: 0, transform: 'translate3d(0, 8px, 0) scale(.992)'}
+                    ],
+                    {
+                        duration: 260,
+                        delay: Math.min(order * 8, 64),
+                        easing: 'cubic-bezier(.4, 0, .2, 1)',
+                        fill: 'forwards'
+                    }
+                );
+            });
+
+            window.setTimeout(() => {
+                if (seq !== filterSeq) return;
+
+                states.forEach(({item, show}) => {
+                    item.classList.toggle('hidden', !show);
+                    if (show) item.classList.remove('reveal');
+                });
+
+                requestAnimationFrame(() => {
+                    if (seq !== filterSeq) return;
+                    workGrid.style.minHeight = `${workGrid.scrollHeight}px`;
+
+                    states.filter(({show}) => show).forEach(({item}, order) => {
+                        item.animate(
+                            [
+                                {opacity: 0, transform: 'translate3d(0, 12px, 0) scale(.992)'},
+                                {opacity: 1, transform: 'translate3d(0, 0, 0) scale(1)'}
+                            ],
+                            {
+                                duration: 660,
+                                delay: Math.min(order * 18, 150),
+                                easing: 'cubic-bezier(.16, 1, .3, 1)',
+                                fill: 'both'
+                            }
+                        );
+                    });
+                });
+
+                filterTimer = window.setTimeout(() => {
+                    if (seq !== filterSeq) return;
+                    workGrid.classList.remove('is-filtering');
+                    workGrid.style.minHeight = '';
+                }, 860);
+            }, visibleItems.length ? 260 : 0);
+        }
+
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const cat = btn.dataset.category;
+                tabButtons.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                filterTo(cat);
+            });
+        });
+
+        // Nav theme switch (dark → light from About onwards)
+        const nav = document.querySelector('nav');
+        
+        // Keep CSS in sync with actual fixed-nav height (prevents hero overlap on desktop)
+        function setNavHeightVar(){
+            if (!nav) return;
+            document.documentElement.style.setProperty('--nav-h', `${nav.offsetHeight}px`);
+        }
+        window.addEventListener('resize', setNavHeightVar);
+        setNavHeightVar();
+        requestAnimationFrame(setNavHeightVar);
+        setTimeout(setNavHeightVar, 250);
+const about = document.getElementById('about');
+
+        function updateNavTheme() {
+            if (!nav || !about) return;
+            const trigger = about.getBoundingClientRect().top <= nav.offsetHeight + 16;
+            nav.classList.toggle('on-light', trigger);
+        }
+        window.addEventListener('scroll', updateNavTheme, {passive: true});
+        window.addEventListener('resize', updateNavTheme);
+        updateNavTheme();
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(a => {
+            const href = a.getAttribute('href');
+
+            a.addEventListener('click', e => {
+                if (!href || href === '#') {
+                    e.preventDefault();
+                    return;
+                }
+                e.preventDefault();
+                document.querySelector(href)?.scrollIntoView({behavior: 'smooth'});
+            });
+        });
+    </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+  </script>
+<script>
+        // Viewport rail/full-bleed sync (midcheck)
+        (function () {
+            const root = document.documentElement;
+            if (!root) return;
+
+            function syncFullBleed() {
+                const width = Math.max(root.clientWidth || 0, window.innerWidth || 0);
+                const safeWidth = root.clientWidth || width;
+                if (!safeWidth) return;
+                root.style.setProperty('--full-bleed-width', `${safeWidth}px`);
+                root.style.setProperty('--full-bleed-offset', `calc(50% - ${safeWidth / 2}px)`);
+            }
+
+            syncFullBleed();
+            window.addEventListener('resize', syncFullBleed, { passive: true });
+            window.addEventListener('orientationchange', syncFullBleed, { passive: true });
+        })();
+        // /Viewport rail/full-bleed sync (midcheck)
+
+        // Locopopo-inspired scroll reveal (midcheck)
+        (function () {
+            if (!document.body || !document.body.classList.contains('motion-loco')) return;
+
+            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+            const revealables = [];
+            const seen = new Set();
+
+            function add(el, type = 'text', delay = 0) {
+                if (!el || seen.has(el)) return;
+                seen.add(el);
+                el.setAttribute('data-reveal', type);
+                el.style.setProperty('--reveal-delay', `${Math.max(0, Math.round(delay))}ms`);
+                revealables.push(el);
+            }
+
+            document.querySelectorAll('.project-card').forEach((card, index) => {
+                const base = Math.min((index % 4) * 90, 270);
+                add(card.querySelector('.project-image'), 'media', base);
+                add(card.querySelector('.project-details'), 'text', base + 115);
+            });
+
+            document.querySelectorAll('.work-item').forEach((item, index) => {
+                const base = Math.min((index % 6) * 55, 275);
+                add(item.querySelector('.work-item-image'), 'media', base);
+                add(item.querySelector('.work-item-category'), 'text', base + 82);
+                add(item.querySelector('.work-item-title'), 'text', base + 104);
+                add(item.querySelector('.work-item-tagline'), 'text', base + 126);
+                add(item.querySelector('.work-item-awards'), 'text', base + 142);
+            });
+
+            [
+                '.selected-works-title',
+                '.all-work .section-title',
+                '.work-tabs',
+                '.about-grid > div',
+                '.skill-item',
+                '.awards-section .about-contact-label',
+                '.awards-section .feature-item',
+                '.featured-in .about-contact-label',
+                '.featured-in .feature-item',
+                '.about-contact-item',
+                '.site-footer',
+                '.project-header',
+                '.hero-media',
+                '.overview-section',
+                '.shot-block',
+                '.next'
+            ].forEach((selector) => {
+                document.querySelectorAll(selector).forEach((el, index) => {
+                    const media = el.matches('.hero-media, .shot-block');
+                    const delay = media ? Math.min((index % 6) * 62, 310) : Math.min((index % 8) * 54, 270);
+                    add(el, media ? 'media' : 'text', delay);
+                });
+            });
+
+            if (!revealables.length) return;
+
+            let observer = null;
+
+            function reveal(el) {
+                el.setAttribute('data-reveal-state', 'in');
+                if (observer) observer.unobserve(el);
+            }
+
+            if (reduce) {
+                revealables.forEach((el) => reveal(el));
+                return;
+            }
+
+            function revealVisible() {
+                const vh = window.innerHeight || document.documentElement.clientHeight;
+                revealables.forEach((el) => {
+                    if (el.getAttribute('data-reveal-state') === 'in') return;
+                    const rect = el.getBoundingClientRect();
+                    if (rect.top < vh * 0.92 && rect.bottom > 0) reveal(el);
+                });
+            }
+
+            if ('IntersectionObserver' in window) {
+                observer = new IntersectionObserver((entries) => {
+                    entries.forEach((entry) => {
+                        if (entry.isIntersecting) reveal(entry.target);
+                    });
+                }, { threshold: 0.13, rootMargin: '0px 0px -7% 0px' });
+                revealables.forEach((el) => observer.observe(el));
+            }
+
+            requestAnimationFrame(revealVisible);
+            window.addEventListener('load', revealVisible, { once: true });
+            window.addEventListener('hashchange', () => requestAnimationFrame(revealVisible));
+        })();
+        // /Locopopo-inspired scroll reveal (midcheck)
+  </script>
+</body>
+</html>

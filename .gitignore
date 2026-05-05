@@ -1,0 +1,19 @@
+# Local/editor files
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+
+# Runtime/cache files
+__pycache__/
+*.pyc
+.cache/
+
+# Source-workflow and backup folders should not be committed to the deployment repo.
+metadata-normalization-backup/
+portfolio-midcheck/
+Portfolio-Full-ready/
+build_midcheck.py
+adaa_profile_candidate.jpg
+spark_awards_logo_source.jpg

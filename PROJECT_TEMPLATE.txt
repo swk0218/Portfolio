@@ -1,0 +1,34 @@
+[PROJECT]
+Slug: <lowercase-kebab-case>            # e.g. odyssey-oled
+Title: <Project title>
+Year: <YYYY>
+Category: <Brand identity | Art direction | Graphic design | Packaging>
+Role: <Your role>                       # e.g. Lead designer
+Scope: <Short scope>                    # e.g. Branding · VIS
+
+One-liner  한 줄 요약(메인 카드 아래에 들어갈 문장):
+<One sentence. Max ~140 chars preferred.>
+
+Overview:
+<2–4 sentences describing the project. You can use line breaks for paragraphs.>
+
+Watch brand film : <URL> (overview 밑에 링크 연결)   # optional
+
+Overview TAGS:
+- Strategy
+- Visual identity system
+- Experience design
+- <Add more…>
+
+AWARDS  (선택) :
+- <Award name> / <Year> / <Winner|Finalist|Nominee>
+- <Award name> / <Year> / <Winner|Finalist|Nominee>
+
+IMAGES  (파일명은 폴더 안 실제 파일과 1:1로) :
+01: MAIN / 메인 이미지(메인 썸네일 + 상세 히어로에 사용)
+02
+03
+04
+05
+06
+07
