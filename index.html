@@ -1960,8 +1960,19 @@ nav .nav-inner{
     margin-left:0 !important;
     margin-right:0 !important;
     text-align:left !important;
-    line-height:1.47 !important;
+    line-height:1.55 !important;
     text-wrap:pretty;
+}
+.about-role-line{
+    display:block;
+    margin-top:0.18em;
+}
+.about-education{
+    display:block;
+    margin-top:clamp(0.55rem, 0.72vw, 0.78rem);
+    font-size:0.92em;
+    line-height:1.48;
+    color:rgba(0,0,0,0.62);
 }
 .about-text,
 .about-text p,
@@ -2124,6 +2135,17 @@ footer.site-footer{
 }
 .feature-note{
     white-space:normal;
+}
+@media (min-width: 1024px){
+    .hero h1.hero-title{
+        font-size:clamp(4.7rem, 12.8vw, 12.8rem) !important;
+        margin-bottom:1.35rem !important;
+    }
+    .hero p.hero-subtitle{
+        font-size:clamp(1.34rem, 2.08vw, 2.18rem) !important;
+        line-height:1.14 !important;
+        max-width:42ch !important;
+    }
 }
 @media (min-width: 721px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 5/4){
     .hero{
@@ -2404,12 +2426,12 @@ footer.site-footer{
 </div>
 </div>
 <div class="project-card">
-<a aria-label="Open project: Samsung TV design book" class="project-image project-image-link" href="projects/designstory-book.html"><img src="assets/projects/designstory-book/01.jpg?v=261662-1561974077000000000" alt="Samsung TV design book — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: Ark" class="project-image project-image-link" href="projects/ark.html"><img src="assets/projects/ark/01.jpg?v=1011258-1773922153448949900" alt="Ark — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Art direction</div>
-<h3 class="project-title">Samsung TV design book</h3>
-<p class="project-description">A modular narrative of brand philosophy</p>
-<div class="project-awards" data-awards="iF, Good Design"></div>
+<h3 class="project-title">Ark</h3>
+<p class="project-description">Defining gamer culture: A persona-driven visual strategy</p>
+<div class="project-awards" data-awards=""></div>
 
 </div>
 </div>
@@ -2440,7 +2462,7 @@ footer.site-footer{
 <div class="about-grid">
 <div>
 <h2>Wonkyoung Seo</h2>
-<p class="about-subtitle">Currently at Samsung Electronics<br class="about-role-break">Senior Brand Designer · Design AI Specialist</p>
+<p class="about-subtitle"><span>Currently at Samsung Electronics</span><span class="about-role-line">Senior Brand Designer · Design AI Specialist</span><span class="about-education">BFA in Visual Communication Design, Kookmin University</span></p>
 </div>
 <div>
 
@@ -3349,6 +3371,7 @@ const projects = [
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
         const tabButtons = document.querySelectorAll('.tab-button');
+
 
 
 
