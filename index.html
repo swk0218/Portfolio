@@ -1963,11 +1963,13 @@ nav .nav-inner{
 }
 .about-subtitle{
     max-width:none !important;
+    margin-top:clamp(1rem, 1.15vw, 1.35rem) !important;
     margin-left:0 !important;
     margin-right:0 !important;
     text-align:left !important;
     line-height:1.55 !important;
     text-wrap:pretty;
+    color:var(--accent) !important;
 }
 .about-subtitle span{
     display:block;
@@ -3380,6 +3382,7 @@ const projects = [
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
         const tabButtons = document.querySelectorAll('.tab-button');
+
 
 
 
