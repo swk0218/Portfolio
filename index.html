@@ -1519,6 +1519,7 @@ nav.on-light{
 /* ===== midcheck polish: selected works + alignment ===== */
 :root{
     --site-rail-max:1640px;
+    --detail-rail-max:1120px;
     --full-bleed-width:100vw;
     --full-bleed-offset:calc(50% - 50vw);
 }
@@ -1526,6 +1527,11 @@ nav.on-light{
     :root{
         --full-bleed-width:100dvw;
         --full-bleed-offset:calc(50% - 50dvw);
+    }
+}
+@media (min-width: 1800px){
+    :root{
+        --site-rail-max:var(--detail-rail-max);
     }
 }
 .highlights-section{
@@ -1963,16 +1969,19 @@ nav .nav-inner{
     line-height:1.55 !important;
     text-wrap:pretty;
 }
+.about-subtitle span{
+    display:block;
+}
 .about-role-line{
     display:block;
-    margin-top:0.18em;
+    margin-top:0;
 }
 .about-education{
     display:block;
-    margin-top:clamp(0.55rem, 0.72vw, 0.78rem);
-    font-size:0.92em;
-    line-height:1.48;
-    color:rgba(0,0,0,0.62);
+    margin-top:0;
+    font:inherit;
+    letter-spacing:inherit;
+    color:inherit;
 }
 .about-text,
 .about-text p,
@@ -3371,6 +3380,7 @@ const projects = [
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
         const tabButtons = document.querySelectorAll('.tab-button');
+
 
 
 
