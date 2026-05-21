@@ -1665,7 +1665,8 @@ nav .nav-inner{
     min-width:var(--full-bleed-width) !important;
     margin-left:var(--full-bleed-offset) !important;
     margin-right:var(--full-bleed-offset) !important;
-    height: min(72vh, 700px);
+    aspect-ratio:16 / 9 !important;
+    height:auto !important;
 }
 @media (min-width: 1800px){
     .project-image{
@@ -2168,7 +2169,7 @@ footer.site-footer{
 @media (max-width: 1100px){
     .project-image{
         height:auto !important;
-        aspect-ratio:16 / 10;
+        aspect-ratio:16 / 9 !important;
     }
 }
 @media (max-width: 1180px){
@@ -2214,7 +2215,7 @@ footer.site-footer{
     }
     .project-image{
         height:auto !important;
-        aspect-ratio:4 / 3;
+        aspect-ratio:16 / 9 !important;
     }
     .work-grid{
         column-gap: 1.25rem;
@@ -3348,6 +3349,7 @@ const projects = [
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
         const tabButtons = document.querySelectorAll('.tab-button');
+
 
 
 
