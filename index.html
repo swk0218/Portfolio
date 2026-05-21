@@ -1519,7 +1519,7 @@ nav.on-light{
 /* ===== midcheck polish: selected works + alignment ===== */
 :root{
     --site-rail-max:1640px;
-    --detail-rail-max:1120px;
+    --wide-rail-max:1400px;
     --full-bleed-width:100vw;
     --full-bleed-offset:calc(50% - 50vw);
 }
@@ -1531,7 +1531,7 @@ nav.on-light{
 }
 @media (min-width: 1800px){
     :root{
-        --site-rail-max:var(--detail-rail-max);
+        --site-rail-max:var(--wide-rail-max);
     }
 }
 .highlights-section{
@@ -3380,6 +3380,7 @@ const projects = [
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
         const tabButtons = document.querySelectorAll('.tab-button');
+
 
 
 
