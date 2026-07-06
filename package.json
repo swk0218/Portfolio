@@ -1,0 +1,19 @@
+{
+  "name": "wkseo-portfolio-shadergradient-experiment",
+  "private": true,
+  "scripts": {
+    "build:shadergradient": "esbuild src/hero-shadergradient.js --bundle --format=iife --global-name=HeroShaderGradient --outfile=assets/hero-shadergradient.js --minify"
+  },
+  "dependencies": {
+    "@react-three/fiber": "^9.6.1",
+    "@shadergradient/react": "^2.4.20",
+    "camera-controls": "^3.1.2",
+    "react": "^19.2.7",
+    "react-dom": "^19.2.7",
+    "three": "^0.185.1",
+    "three-stdlib": "^2.36.1"
+  },
+  "devDependencies": {
+    "esbuild": "^0.28.1"
+  }
+}

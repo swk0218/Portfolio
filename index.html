@@ -4,10 +4,11 @@
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet"/>
 <title>WKSEO</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="shortcut icon" href="assets/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
 <style>
         * {
             margin: 0;
@@ -16,9 +17,9 @@
         }
 
         :root {
-            --black: #0a0a0a;
-            --white: #fafafa;
-            --accent: #0e1adf;
+            --black: #111111;
+            --white: #f8f9f6;
+            --accent: #0f1bff;
             --gray: #8c8c8c;
         }
 
@@ -27,7 +28,7 @@
             background: var(--black);
             color: var(--white);
             overflow-x: hidden;
-            letter-spacing: 0.01em;
+            letter-spacing: 0.03em;
         }
 
         /* Navigation */
@@ -42,12 +43,12 @@
             justify-content: space-between;
             align-items: center;
             z-index: 1000;
-            background: linear-gradient(to bottom, rgba(14, 26, 223, 0.26) 0%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(15, 27, 255, 0.26) 0%, transparent 100%);
         }
 
         
         nav.on-light {
-            background: linear-gradient(to bottom, rgba(14, 26, 223, 0.14) 0%, transparent 100%);
+            background: linear-gradient(to bottom, rgba(15, 27, 255, 0.14) 0%, transparent 100%);
         }
 
         nav.on-light .logo,
@@ -57,7 +58,7 @@
 .logo {
             font-family: 'Archivo', sans-serif;
             font-size: 1.32rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.1em;
         
             color: var(--white);
@@ -104,10 +105,74 @@
             justify-content: center;
             align-items: center;
             position: relative;
+            isolation: isolate;
+            overflow: hidden;
+            background: #111111;
         }
 
         .hero-content {
+            position: relative;
+            z-index: 2;
             text-align: center;
+        }
+
+        .hero-shader-gradient {
+            --hero-sphere-x: -50%;
+            --hero-sphere-y: -50%;
+            --hero-sphere-scale-x: 1.12;
+            position: absolute;
+            left: 50%;
+            top: 54%;
+            width: clamp(24rem, 70vw, 68rem);
+            height: clamp(24rem, 70vw, 68rem);
+            z-index: 0;
+            pointer-events: none;
+            background: #111111;
+            opacity: 0;
+            transform: translate3d(var(--hero-sphere-x), var(--hero-sphere-y), 0) scaleX(var(--hero-sphere-scale-x)) scale(0.96);
+            animation: heroGradientReveal 1.2s ease 0.05s forwards;
+            will-change: opacity, transform;
+        }
+
+        .hero-shader-gradient canvas {
+            display: block;
+            width: 100% !important;
+            height: 100% !important;
+        }
+
+        .hero-shader-gradient::after {
+            content: '';
+            position: absolute;
+            inset: 0;
+            display: block;
+            pointer-events: none;
+            background: linear-gradient(
+                to bottom,
+                rgba(17, 17, 17, 0) 0%,
+                rgba(17, 17, 17, 0) 42%,
+                rgba(17, 17, 17, 0.06) 48%,
+                rgba(17, 17, 17, 0.16) 54%,
+                rgba(17, 17, 17, 0.3) 60%,
+                rgba(17, 17, 17, 0.48) 66%,
+                rgba(17, 17, 17, 0.68) 72%,
+                rgba(17, 17, 17, 0.84) 78%,
+                rgba(17, 17, 17, 0.95) 84%,
+                #111111 90%,
+                #111111 100%
+            );
+        }
+
+        .hero-shader-gradient--failed {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .hero-shader-gradient {
+                --hero-sphere-scale-x: 1.08;
+                top: 50%;
+                width: clamp(21rem, 108vw, 37rem);
+                height: clamp(21rem, 108vw, 37rem);
+            }
         }
 
         .hero-eyebrow {
@@ -125,7 +190,7 @@
             font-family: 'Archivo', sans-serif;
             /* Bigger, more commanding hero scale */
             font-size: clamp(6.2rem, 19vw, 16.5rem);
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: -0.03em;
             margin-bottom: 2rem;
             animation: fadeInUp 1s ease 0.2s forwards;
@@ -210,7 +275,7 @@
 .scroll-line{
     width: 2px;
     height: 46px;
-    background: rgba(250, 250, 250, 0.22);
+    background: rgba(248, 249, 246, 0.22);
     border-radius: 999px;
     position: relative;
     overflow: hidden;
@@ -266,7 +331,7 @@
             content: '';
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(14, 26, 223, 0.55) 0%, transparent 60%);
+            background: linear-gradient(135deg, rgba(15, 27, 255, 0.55) 0%, transparent 60%);
             opacity: 0;
             transition: opacity 0.6s ease;
             z-index: 1;
@@ -371,7 +436,7 @@
             font-size: 1rem;
             color: var(--accent);
             margin-bottom: 1rem;
-            font-weight: 800;
+            font-weight: 700;
             letter-spacing: 0.04em;
             text-transform: none;
             }
@@ -379,7 +444,7 @@
         .project-title {
             font-family: 'Archivo', sans-serif;
             font-size: clamp(2rem, 4.2vw, 3.6rem);
-            font-weight: 800;
+            font-weight: 700;
             text-transform: none;
             letter-spacing: -0.01em;
             margin: 0 auto 1.4rem;
@@ -432,7 +497,7 @@
             display: inline-flex;
             align-items: center;
             padding: 0.5rem 1rem;
-            background: rgba(14, 26, 223, 0.1);
+            background: rgba(15, 27, 255, 0.1);
             border: 1px solid var(--accent);
             color: var(--accent);
             font-size: 0.75rem;
@@ -472,8 +537,8 @@
         .section-title {
             font-family: 'Archivo', sans-serif;
             font-size: clamp(3rem, 8vw, 7rem);
-            font-weight: 800;
-            text-transform: uppercase;
+            font-weight: 700;
+            text-transform: none;
             letter-spacing: -0.015em;
             margin-bottom: 5rem;
             text-align: center;
@@ -608,7 +673,7 @@
         .work-item-title {
             font-family: 'Archivo', sans-serif;
             font-size: 1.8rem;
-            font-weight: 800;
+            font-weight: 700;
             text-transform: none;
             letter-spacing: -0.01em;
             margin-bottom: 0.45rem;
@@ -629,7 +694,7 @@
 
 
         .work-item-category {
-            font-size: 0.8rem;
+            font-size: 0.95rem;
             text-transform: none;
             letter-spacing: 0.02em;
             color: var(--accent);
@@ -658,15 +723,15 @@
             align-items: center;
             gap: 0.45rem;
             padding: 0.38rem 0.65rem;
-            border: 1px solid rgba(250,250,250,0.18);
+            border: 1px solid rgba(248,249,246,0.18);
             border-radius: 999px;
-            background: rgba(250,250,250,0.03);
+            background: rgba(248,249,246,0.03);
         }
         .work-award-badge .award-icon{
             height: 22px;
             width: auto;
             display: block;
-            color: rgba(250,250,250,0.85);
+            color: rgba(248,249,246,0.85);
             flex: 0 0 auto;
         }
         .work-award-badge .award-label{
@@ -696,7 +761,7 @@
                 .about h2 {
             font-family: 'Archivo', sans-serif;
             font-size: clamp(1.9rem, 3.2vw, 2.8rem);
-            font-weight: 800;
+            font-weight: 700;
             text-transform: none;
             letter-spacing: -0.01em;
             margin-bottom: 0.9rem;
@@ -767,7 +832,7 @@
         }
 
                 .skill-title {
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.12rem;
             text-transform: none;
             letter-spacing: 0.02em;
@@ -889,6 +954,17 @@
             to {
                 opacity: 1;
                 transform: translateY(0);
+            }
+        }
+
+        @keyframes heroGradientReveal {
+            from {
+                opacity: 0;
+                transform: translate3d(var(--hero-sphere-x), var(--hero-sphere-y), 0) scaleX(var(--hero-sphere-scale-x)) scale(0.88);
+            }
+            to {
+                opacity: 1;
+                transform: translate3d(var(--hero-sphere-x), var(--hero-sphere-y), 0) scaleX(var(--hero-sphere-scale-x)) scale(1);
             }
         }
 
@@ -1086,7 +1162,7 @@
 
         /* ===== v18: Archivo spacing/leading tuning (readability) ===== */
         body{
-            letter-spacing: 0.02em;
+            letter-spacing: 0.03em;
         }
 
         /* Body / UI text: slightly looser tracking for Archivo */
@@ -1129,10 +1205,10 @@
 /* ===== v21 Editorial (B) ===== */
 nav{
     padding: 1.9rem 5%;
-    background: linear-gradient(to bottom, rgba(14, 26, 223, 0.34) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(15, 27, 255, 0.34) 0%, transparent 100%);
 }
 nav.on-light{
-    background: linear-gradient(to bottom, rgba(14, 26, 223, 0.18) 0%, transparent 100%);
+    background: linear-gradient(to bottom, rgba(15, 27, 255, 0.18) 0%, transparent 100%);
 }
 nav .nav-inner{
     width: min(1400px, 100%);
@@ -1221,7 +1297,7 @@ nav .nav-inner{
         .about h2 {
             font-family: 'Archivo', sans-serif;
             font-size: clamp(1.9rem, 3.2vw, 2.8rem);
-            font-weight: 800;
+            font-weight: 700;
             text-transform: none;
             letter-spacing: -0.01em;
             margin-bottom: 0.9rem;
@@ -1238,7 +1314,7 @@ nav .nav-inner{
             text-align: center;
         }
         .skill-title {
-            font-weight: 800;
+            font-weight: 700;
             font-size: 1.12rem;
             text-transform: none;
             letter-spacing: 0.02em;
@@ -1297,17 +1373,17 @@ nav .nav-inner{
 nav{
     padding: 2.35rem 5% 2.1rem !important;
     background: linear-gradient(to bottom,
-        rgba(14, 26, 223, 0.72) 0%,
-        rgba(14, 26, 223, 0.22) 62%,
-        rgba(14, 26, 223, 0.00) 100%) !important;
+        rgba(15, 27, 255, 0.72) 0%,
+        rgba(15, 27, 255, 0.22) 62%,
+        rgba(15, 27, 255, 0.00) 100%) !important;
     backdrop-filter: blur(10px);
     -webkit-backdrop-filter: blur(10px);
 }
 nav.on-light{
     background: linear-gradient(to bottom,
-        rgba(14, 26, 223, 0.40) 0%,
-        rgba(14, 26, 223, 0.14) 62%,
-        rgba(14, 26, 223, 0.00) 100%) !important;
+        rgba(15, 27, 255, 0.40) 0%,
+        rgba(15, 27, 255, 0.14) 62%,
+        rgba(15, 27, 255, 0.00) 100%) !important;
 }
 
 /* Mobile nav: smaller tap targets / typography */
@@ -1358,8 +1434,8 @@ nav.on-light{
 }
 .tab-button{
     position: relative;
-    border: 1px solid rgba(250,250,250,0.18) !important;
-    background: rgba(250,250,250,0.02) !important;
+    border: 1px solid rgba(248,249,246,0.18) !important;
+    background: rgba(248,249,246,0.02) !important;
     color: var(--gray) !important;
     border-radius: 999px !important;
     padding: 0.60rem 1.05rem !important;
@@ -1371,12 +1447,12 @@ nav.on-light{
 .tab-button:hover{
     color: var(--accent) !important;
     border-color: var(--accent) !important;
-    background: rgba(14, 26, 223, 0.12) !important;
+    background: rgba(15, 27, 255, 0.12) !important;
 }
 .tab-button.active{
     color: var(--accent) !important;
     border-color: var(--accent) !important;
-    background: rgba(14, 26, 223, 0.14) !important;
+    background: rgba(15, 27, 255, 0.14) !important;
 }
 .tab-button::after,
 .tab-button::before{ content: none !important; display:none !important; }
@@ -1447,7 +1523,7 @@ nav.on-light{
         margin-top: -0.075em;
     }
     .hero p.hero-subtitle{
-        font-size: clamp(1.55rem, 2.55vw, 2.8rem) !important;
+        font-size: clamp(1.68rem, 2.72vw, 2.95rem) !important;
         max-width: 44ch !important;
         line-height: 1.12;
     }
@@ -1464,6 +1540,28 @@ nav.on-light{
     @supports (height: 100svh) { .hero { min-height: 100svh; } }
     @supports (height: 100dvh) { .hero { min-height: 100dvh; } }
     .hero-content{ padding-inline: 6% !important; padding-bottom: 1.85rem; }
+    .hero p.hero-subtitle{
+        width: min(calc(100vw - 2rem), 38ch) !important;
+        max-width: none !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        position: relative;
+        left: 50%;
+        transform: translateX(-50%);
+        text-wrap: wrap !important;
+    }
+}
+
+@media (min-width: 421px) and (max-width: 768px){
+    .hero p.hero-subtitle{
+        font-size: clamp(1.25rem, 3.4vw, 1.62rem) !important;
+    }
+}
+
+@media (max-width: 420px){
+    .hero p.hero-subtitle{
+        font-size: clamp(1.03rem, 5.15vw, 1.25rem) !important;
+    }
 }
 
 /* Selected Works: meta stack (Category above title, Year below description) */
@@ -1483,7 +1581,7 @@ nav.on-light{
 .project-year{
     font-size: 1.15rem; /* match .project-description */
     letter-spacing: 0.02em;
-    color: rgba(250,250,250,0.72);
+    color: rgba(248,249,246,0.72);
     text-align: center;
 }
 .project-year-below{
@@ -1563,11 +1661,11 @@ nav::before{
     height:calc(100% + clamp(1.6rem, 3vw, 3.25rem));
     z-index:0;
     pointer-events:none;
-    background:rgba(255,255,255,0.001);
+    background:rgba(248,249,246,0.001);
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
-    -webkit-mask-image:linear-gradient(to bottom, #000 0%, #000 46%, rgba(0,0,0,0.72) 66%, transparent 100%);
-    mask-image:linear-gradient(to bottom, #000 0%, #000 46%, rgba(0,0,0,0.72) 66%, transparent 100%);
+    -webkit-mask-image:linear-gradient(to bottom, #111111 0%, #111111 46%, rgba(17,17,17,0.72) 66%, transparent 100%);
+    mask-image:linear-gradient(to bottom, #111111 0%, #111111 46%, rgba(17,17,17,0.72) 66%, transparent 100%);
 }
 nav .nav-inner{
     position:relative;
@@ -1591,8 +1689,8 @@ nav .nav-inner{
     overflow:hidden !important;
     background:linear-gradient(
         to bottom,
-        rgba(250,250,250,0.38) 0%,
-        rgba(250,250,250,0.34) 58%,
+        rgba(248,249,246,0.38) 0%,
+        rgba(248,249,246,0.34) 58%,
         transparent 100%
     ) !important;
 }
@@ -1606,8 +1704,8 @@ nav .nav-inner{
     background:linear-gradient(
         to bottom,
         transparent 0%,
-        rgba(14,26,223,0.44) 8%,
-        rgba(0,26,255,1) 50%,
+        rgba(15,27,255,0.44) 8%,
+        rgba(15,27,255,1) 50%,
         transparent 100%
     );
     transform:translate3d(0, -18px, 0);
@@ -1623,7 +1721,7 @@ nav .nav-inner{
     width:2px !important;
     height:10px !important;
     border-radius:999px !important;
-    background:linear-gradient(to bottom, transparent, #001cff 32%, #001cff 68%, transparent) !important;
+    background:linear-gradient(to bottom, transparent, #0f1bff 32%, #0f1bff 68%, transparent) !important;
     box-shadow:none;
     top:0 !important;
     left:0 !important;
@@ -1647,9 +1745,9 @@ nav .nav-inner{
 }
 .selected-works-title{
     font-family: 'Archivo', sans-serif;
-    font-size: clamp(2.55rem, 6.8vw, 5.95rem) !important;
-    font-weight: 800;
-    text-transform: uppercase;
+    font-size: clamp(2.4rem, 6vw, 5.25rem) !important;
+    font-weight: 700;
+    text-transform: none;
     letter-spacing: -0.015em;
     line-height: 0.95;
     margin: 0 auto 4.1rem;
@@ -1818,7 +1916,7 @@ nav .nav-inner{
     max-width: var(--site-rail-max);
     margin-left: auto;
     margin-right: auto;
-    font-size: clamp(2.55rem, 6.8vw, 5.95rem) !important;
+    font-size: clamp(2.4rem, 6vw, 5.25rem) !important;
 }
 .all-work .section-title{
     margin-bottom:1.95rem !important;
@@ -1837,8 +1935,8 @@ nav .nav-inner{
 .tab-button:focus-visible{
     color:var(--accent) !important;
     border-color:var(--accent) !important;
-    background:rgba(14, 26, 223, 0.14) !important;
-    box-shadow:0 0 0 1px rgba(14, 26, 223, 0.38) !important;
+    background:rgba(15, 27, 255, 0.14) !important;
+    box-shadow:0 0 0 1px rgba(15, 27, 255, 0.38) !important;
 }
 .work-grid{
     grid-template-columns: repeat(auto-fit, minmax(min(390px, 100%), 1fr));
@@ -2050,7 +2148,7 @@ footer.site-footer{
     font-size:0.85rem;
     line-height:1.5;
     letter-spacing:0.01em;
-    color:rgba(0,0,0,0.42);
+    color:rgba(17,17,17,0.42);
 }
 .site-footer .footer-social{
     display:flex;
@@ -2120,7 +2218,7 @@ footer.site-footer{
     margin-top:0.45rem;
     font-size:0.98rem;
     line-height:1.42;
-    color:rgba(0,0,0,0.72);
+    color:rgba(17,17,17,0.72);
     letter-spacing:0.012em;
 }
 .feature-meta{
@@ -2142,18 +2240,18 @@ footer.site-footer{
 .feature-note{
     margin-top:0.08rem;
     white-space:nowrap;
-    color:rgba(0,0,0,0.48);
+    color:rgba(17,17,17,0.48);
 }
 .feature-note{
     white-space:normal;
 }
 @media (min-width: 1024px){
     .hero h1.hero-title{
-        font-size:clamp(4.7rem, 12.8vw, 12.8rem) !important;
+        font-size:clamp(4.25rem, 11.5vw, 11.5rem) !important;
         margin-bottom:1.35rem !important;
     }
     .hero p.hero-subtitle{
-        font-size:clamp(1.34rem, 2.08vw, 2.18rem) !important;
+        font-size:clamp(1.5rem, 2.3vw, 2.42rem) !important;
         line-height:1.14 !important;
         max-width:42ch !important;
     }
@@ -2178,7 +2276,7 @@ footer.site-footer{
         margin-top:-0.045em !important;
     }
     .hero p.hero-subtitle{
-        font-size:clamp(1.25rem, 2.55vw, 2rem) !important;
+        font-size:clamp(1.5rem, 3vw, 2.3rem) !important;
         line-height:1.12 !important;
         max-width:38ch !important;
     }
@@ -2195,10 +2293,155 @@ footer.site-footer{
         margin-bottom:0.95rem !important;
     }
     .hero p.hero-subtitle{
-        font-size:clamp(1.15rem, 2.25vw, 1.75rem) !important;
+        font-size:clamp(1.28rem, 2.55vw, 1.98rem) !important;
         line-height:1.1 !important;
     }
 }
+
+.hero p.hero-subtitle{
+    --hero-subtitle-x: 0%;
+    font-size: clamp(1.03rem, calc(0.3rem + 3.5vw), 2.12rem) !important;
+    animation: fadeInUpSubtitle 1s ease 0.4s both !important;
+    opacity: 0;
+}
+
+@keyframes fadeInUpSubtitle{
+    from{
+        opacity: 0;
+        transform: translate(var(--hero-subtitle-x), 28px);
+    }
+    to{
+        opacity: 1;
+        transform: translate(var(--hero-subtitle-x), 0);
+    }
+}
+
+@media (max-width: 768px){
+    .hero p.hero-subtitle{
+        --hero-subtitle-x: -50%;
+        line-height: 1.1 !important;
+    }
+}
+
+/* Hero depth and scale tuning */
+@media (min-width: 1024px){
+    .hero h1.hero-title{
+        font-size:clamp(4.46rem, 12.08vw, 12.08rem) !important;
+        margin-bottom:1.42rem !important;
+    }
+}
+
+@media (min-width: 721px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 5/4){
+    .hero h1.hero-title{
+        font-size:clamp(4.99rem, 13.34vw, 10.29rem) !important;
+        margin-bottom:1.16rem !important;
+    }
+}
+
+@media (min-width: 721px) and (max-height: 700px){
+    .hero h1.hero-title{
+        font-size:clamp(3.94rem, 11.13vw, 8.19rem) !important;
+        margin-bottom:1rem !important;
+    }
+}
+
+.hero-title .hero-line + .hero-line{
+    margin-top:-0.06em !important;
+}
+
+@media (min-width: 721px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 5/4){
+    .hero-title .hero-line + .hero-line{
+        margin-top:-0.038em !important;
+    }
+}
+
+.hero p.hero-subtitle{
+    font-size:clamp(1.08rem, calc(0.315rem + 3.675vw), 2.23rem) !important;
+}
+
+#typingText{
+    color:var(--white) !important;
+}
+
+#typingText::after{
+    background:var(--accent) !important;
+}
+
+.hero-shader-gradient::after{
+    background:linear-gradient(
+        to bottom,
+        rgba(17, 17, 17, 0) 0%,
+        rgba(17, 17, 17, 0) 34%,
+        rgba(17, 17, 17, 0.08) 40%,
+        rgba(17, 17, 17, 0.2) 47%,
+        rgba(17, 17, 17, 0.38) 54%,
+        rgba(17, 17, 17, 0.6) 61%,
+        rgba(17, 17, 17, 0.78) 68%,
+        rgba(17, 17, 17, 0.91) 75%,
+        #111111 83%,
+        #111111 100%
+    ) !important;
+}
+
+@media (max-width: 768px){
+    .hero h1.hero-title{
+        font-size:clamp(3.57rem, 15.23vw, 7.56rem) !important;
+        margin-bottom:1.16rem !important;
+    }
+    .hero-title .hero-line + .hero-line{
+        margin-top:-0.052em !important;
+    }
+    .hero-shader-gradient{
+        top:52% !important;
+        width:clamp(30rem, 170vw, 54rem) !important;
+        height:clamp(30rem, 170vw, 54rem) !important;
+    }
+}
+
+@media (max-width: 420px){
+    .hero h1.hero-title{
+        font-size:clamp(3.25rem, 14.7vw, 6.72rem) !important;
+    }
+}
+
+@media (min-width: 1024px) and (min-aspect-ratio: 16/10){
+    .hero-shader-gradient{
+        top:58.5% !important;
+    }
+}
+
+@media (min-width: 1024px) and (min-aspect-ratio: 16/9){
+    .hero-shader-gradient{
+        top:59.5% !important;
+    }
+}
+
+nav{
+    padding-top: calc(env(safe-area-inset-top) + clamp(1.35rem, 2.6vw, 2.35rem)) !important;
+    padding-bottom: clamp(1.25rem, 2.25vw, 2.1rem) !important;
+    background: linear-gradient(to bottom,
+        rgba(15, 27, 255, 0.72) 0%,
+        rgba(15, 27, 255, 0.22) 62%,
+        rgba(15, 27, 255, 0.00) 100%) !important;
+}
+nav.on-light{
+    background: linear-gradient(to bottom,
+        rgba(15, 27, 255, 0.40) 0%,
+        rgba(15, 27, 255, 0.14) 62%,
+        rgba(15, 27, 255, 0.00) 100%) !important;
+}
+nav::before{
+    height: calc(100% + clamp(2.4rem, 5vw, 4.5rem)) !important;
+    -webkit-mask-image: linear-gradient(to bottom, #111111 0%, #111111 52%, rgba(17,17,17,0.68) 74%, transparent 100%) !important;
+    mask-image: linear-gradient(to bottom, #111111 0%, #111111 52%, rgba(17,17,17,0.68) 74%, transparent 100%) !important;
+}
+.nav-links{
+    gap: clamp(0.95rem, 2.15vw, 2.25rem) !important;
+}
+.nav-links a{
+    font-size: clamp(0.72rem, calc(0.55rem + 0.45vw), 0.95rem) !important;
+}
+
 @media (max-width: 1100px){
     .project-image{
         height:auto !important;
@@ -2286,6 +2529,11 @@ footer.site-footer{
     }
 }
 @media (prefers-reduced-motion: reduce){
+    .hero-shader-gradient{
+        animation:none !important;
+        opacity:1 !important;
+        transform:translate3d(var(--hero-sphere-x), var(--hero-sphere-y), 0) scaleX(var(--hero-sphere-scale-x)) scale(1) !important;
+    }
     .project-card.reveal,
     .work-item.reveal,
     .soft-reveal{
@@ -2391,6 +2639,7 @@ footer.site-footer{
 </div>
 </nav>
 <section class="hero">
+<div aria-hidden="true" class="hero-shader-gradient" id="heroShaderGradient"></div>
 <div class="hero-content">
 <h1 class="hero-title">
 <span class="hero-line">CRAFTING</span>
@@ -2398,9 +2647,6 @@ footer.site-footer{
 <span class="hero-line">IDENTITIES</span>
 </h1>
 <p class="hero-subtitle">Specialist in brand experience design.<br/>Strategy. Design. Art direction. AI.</p>
-</div>
-<div aria-hidden="true" class="scroll-indicator">
-<div class="scroll-line"><div class="scroll-line-dot"></div></div>
 </div>
 </section>
 <section class="highlights-section" id="highlights">
@@ -2705,9 +2951,17 @@ footer.site-footer{
       </div>
     </div>
   </footer>
+<script src="assets/hero-shadergradient.js" defer></script>
 <script>
         // Typing
         const words = ['STRATEGIC', 'REFINED', 'ICONIC', 'DISTINCT', 'BOLD', 'JUST COOL'];
+        const typingTiming = {
+            type: 132,
+            delete: 88,
+            hold: 1850,
+            nextWord: 560,
+            start: 780
+        };
         let wordIndex = 0;
         let charIndex = 0;
         let isDeleting = false;
@@ -2728,20 +2982,20 @@ footer.site-footer{
 
             if (!isDeleting && charIndex === word.length) {
                 isDeleting = true;
-                setTimeout(typeTick, 1600);
+                setTimeout(typeTick, typingTiming.hold);
                 return;
             }
 
             if (isDeleting && charIndex === 0) {
                 isDeleting = false;
                 wordIndex = (wordIndex + 1) % words.length;
-                setTimeout(typeTick, 450);
+                setTimeout(typeTick, typingTiming.nextWord);
                 return;
             }
 
-            setTimeout(typeTick, isDeleting ? 70 : 110);
+            setTimeout(typeTick, isDeleting ? typingTiming.delete : typingTiming.type);
         }
-        setTimeout(typeTick, 650);
+        setTimeout(typeTick, typingTiming.start);
 
         // Selected Works: reveal on scroll (rise + fade)
         (function () {
@@ -3223,7 +3477,7 @@ const projects = [
             packaging: 'Packaging'
         };
 
-        const colors = [['#0E1ADF','#0080FF'], ['#1a1a1a','#333'], ['#fafafa','#e5e5e5']];
+        const colors = [['#0f1bff','#0080FF'], ['#1a1a1a','#333'], ['#f8f9f6','#e5e5e5']];
         const grid = document.getElementById('workGrid');
 
 
@@ -3320,7 +3574,7 @@ const projects = [
                 </defs>
                 <rect width="1600" height="900" fill="url(#g${i})"/>
                 <text x="50%" y="50%" text-anchor="middle"
-                      fill="${c[0] === '#fafafa' ? '#000' : '#fff'}"
+                      fill="${c[0] === '#f8f9f6' ? '#111111' : '#f8f9f6'}"
                       font-size="120" font-family="Archivo" opacity="0.28">
                       ${(i+5).toString().padStart(2,'0')}
                 </text>

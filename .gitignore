@@ -9,6 +9,8 @@ desktop.ini
 __pycache__/
 *.pyc
 .cache/
+node_modules/
+npm-debug.log*
 
 # Source-workflow and backup folders should not be committed to the deployment repo.
 metadata-normalization-backup/
