@@ -8,7 +8,7 @@
 <title>WKSEO</title>
   <link rel="icon" type="image/png" href="assets/favicon.png">
   <link rel="shortcut icon" href="assets/favicon.ico">
-<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
 <style>
         * {
             margin: 0;
@@ -190,7 +190,7 @@
             font-family: 'Archivo', sans-serif;
             /* Bigger, more commanding hero scale */
             font-size: clamp(6.2rem, 19vw, 16.5rem);
-            font-weight: 700;
+            font-weight: 800;
             letter-spacing: -0.03em;
             margin-bottom: 2rem;
             animation: fadeInUp 1s ease 0.2s forwards;
@@ -2326,21 +2326,21 @@ footer.site-footer{
 /* Hero depth and scale tuning */
 @media (min-width: 1024px){
     .hero h1.hero-title{
-        font-size:clamp(4.46rem, 12.08vw, 12.08rem) !important;
+        font-size:clamp(4.65rem, 12.35vw, 12.35rem) !important;
         margin-bottom:1.42rem !important;
     }
 }
 
 @media (min-width: 721px) and (min-aspect-ratio: 3/4) and (max-aspect-ratio: 5/4){
     .hero h1.hero-title{
-        font-size:clamp(4.99rem, 13.34vw, 10.29rem) !important;
+        font-size:clamp(5.05rem, 13.35vw, 10.3rem) !important;
         margin-bottom:1.16rem !important;
     }
 }
 
 @media (min-width: 721px) and (max-height: 700px){
     .hero h1.hero-title{
-        font-size:clamp(3.94rem, 11.13vw, 8.19rem) !important;
+        font-size:clamp(4rem, 11.1vw, 8.2rem) !important;
         margin-bottom:1rem !important;
     }
 }
@@ -2356,7 +2356,7 @@ footer.site-footer{
 }
 
 .hero p.hero-subtitle{
-    font-size:clamp(1.08rem, calc(0.315rem + 3.675vw), 2.23rem) !important;
+    font-size:clamp(1.18rem, calc(0.34rem + 4.05vw), 2.55rem) !important;
 }
 
 #typingText{
@@ -2385,8 +2385,12 @@ footer.site-footer{
 
 @media (max-width: 768px){
     .hero h1.hero-title{
-        font-size:clamp(3.57rem, 15.23vw, 7.56rem) !important;
+        font-size:clamp(3.58rem, 15.3vw, 7.55rem) !important;
         margin-bottom:1.16rem !important;
+    }
+    .hero p.hero-subtitle{
+        white-space:nowrap !important;
+        text-wrap:nowrap !important;
     }
     .hero-title .hero-line + .hero-line{
         margin-top:-0.052em !important;
@@ -2400,7 +2404,10 @@ footer.site-footer{
 
 @media (max-width: 420px){
     .hero h1.hero-title{
-        font-size:clamp(3.25rem, 14.7vw, 6.72rem) !important;
+        font-size:clamp(3.26rem, 14.75vw, 6.7rem) !important;
+    }
+    .hero p.hero-subtitle{
+        font-size:clamp(1.03rem, 5.05vw, 1.25rem) !important;
     }
 }
 
@@ -2773,6 +2780,18 @@ nav::before{
 <div class="about-contact-label">Awards</div>
 <div class="featured-grid awards-grid">
 <div class="feature-item">
+<div class="feature-title">2026 IDEA</div>
+<div class="feature-meta"><span class="feature-source">Bronze</span><span class="feature-note">Micro RGB</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2026 Good Design Award</div>
+<div class="feature-meta"><span class="feature-source">Winner</span><span class="feature-note">Micro RGB</span></div>
+</div>
+<div class="feature-item">
+<div class="feature-title">2026 Red Dot Award</div>
+<div class="feature-meta"><span class="feature-source">Winner</span><span class="feature-note">The Movingstyle</span></div>
+</div>
+<div class="feature-item">
 <div class="feature-title">2026 iF Design Award</div>
 <div class="feature-meta"><span class="feature-source">Winner | Visual Branding</span><span class="feature-note">The Movingstyle Visual Branding</span></div>
 </div>
@@ -3044,7 +3063,10 @@ const projects = [
     ],
     "categoryLabel": "Brand identity",
     "tagline": "A spectrum of pure micro-particles",
-    "awards": [],
+    "awards": [
+      "IDEA",
+      "Good Design"
+    ],
     "image": "assets/projects/mrgb/01.jpg?v=1460954-1777906777503594300",
     "mediaType": "image"
   },
@@ -3077,7 +3099,8 @@ const projects = [
     "categoryLabel": "Brand identity",
     "tagline": "Carry your experience in style",
     "awards": [
-      "iF"
+      "iF",
+      "Red Dot"
     ],
     "image": "assets/projects/themovingstyle/01.jpg?v=353525-1774706691911631700",
     "mediaType": "image"
@@ -3487,7 +3510,7 @@ const projects = [
                 alt: "IDEA award logo"
             },
             IF: {
-                src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAACIklEQVR42q2UvWsUURTFf3c+3cwacZNULhJ1TSzVEAQRwUL8qOwsBMH/wcbCIhapLSyEFAHFUtFKCUIIWPgBQjCIoCSKQsBkFDG7O7s7867F29nNmiwp9MDw5rzLHM47976RuFxR/gO8LTuOAyJgjOUidlXdylX7CDkOWq1Bs4nsLoIq2mja7z0PBLSVWh744PsdMa9XpIo3OYE7dpjW0zlwHbwDo6Bg4hhUcYaHATCrq5jva+B5ViwuVzTeP6brQ/v014VLapJEVVUbz+Z04/oNzVGfva/1uzMdXr05pevFYY1HxzUuV9SxbgSSBG/iGBKGAPinTuIMlbpZZBkSBJvS9bbJKDPI4CCNh4/xz5zGPTJO/fYdtFbvhuv7pEtLuC9f26N9/dYnI2ynms/ncRbfkX38hHvoYLca+KRvF8FxwRiy5RXrsEdIBE0S3ONHiaanAAguniOZme0IabXGriuXCa9dBaB2a5r01RtkoAAm2+RIBFotyDIr/OPnPwykCLiufc/XHGFIa34BoiKoIXv/AcIQjPaZ7D6QaIDk3gMaj55AlkKhgERR5wb0CrXbbDuZbeESRUhpr90zps8VUbWz0T6S7Bm01nNejKxA/vztOC5XNA9aRkYIzp+1umvrZMsreCcmraHPX0gXXkAY9DjpFcqDTlP090bbq4sEgR1KgMC3maju0LX20WSo1K0agxQK3Xr+a9mx/ZvDzbFNHtvhD4tvB1FytVqaAAAAAElFTkSuQmCC",
+                src: "assets/awards/if.svg",
                 alt: "iF award logo"
             },
             ADAA: {
@@ -3499,8 +3522,12 @@ const projects = [
                 alt: "Spark award logo"
             },
             GOOD: {
-                src: "data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAYAAABWzo5XAAADQElEQVR42o1UTWhcVRT+7n0zk5gpnXfuC525974YhVAlUrpTWrCLFsSFuhGDRXQdpFEEF7oahZp2qy7sQkEQxCpu/UetrY2lk3TmdX5eZjLGliZjrTiIVpuZzDsu5qW+QAQvXM7i3vPd757vnE8gXh8CzgwwAICqax5zwEczUj78J/O8ZHF9TODNPvjsJvj9j7qdD14FIgYcEefcBgGAJVWYDsl8XifLN7wJrpB5fevOZTIvtpTlcLjPL5I5AAAc58otJuWcPTzGciEtxENjQqAT9ef3d9efr2I6AwCNVP9Un/nqKAQc4MAuiO8WyTwpgEHMDCLw9D2ZSF4cgLN3CCFuMp/c111/uYmpkb1Y2fgquyc/mUl/HQlM32J+TwJPOxDsANxDdGhft/O9LAKCI5xKC+waHYKcSIIsZPfk78ykvsxKMX2To6f2d9efiSJ+IS0gpIAcsHi7pPUYyq55NCTLq8rngPRxAGhiagQAzoyP62VlqmuezyXKzwDAN5gcBYDA1cdaynJbWQ7IzCIg8/ENb4IrOf1KEuSc55kW2dq653NJ2ScAoApkkrFMhdk1z+cKmYuokBkErjk5vDAs7DnPMw0y9avK55JrHhk+gJFYQAEAJSANAGVXz60oy6i45tmtgyIgq7v9qRqZ1aayHJLp1WjIFAAuuIVDV5QNLqn8/duY5QqPp7DDEnHsgTEunWJAhXQP4lOC/GyT0U9JwQyIWjJpp68tep6pkw3jQvaqZLipLLfI/nKW8vcBwCdxLcuunmsry/9Z7PPKt3UyjZayXCfLIZnOhRhkNVauTIXZa57PAeklGTHe/TWKsNtxigHp43uxstHE1MjB366t/S2dI33mtgB3/xLRkQe612urmBy9G1duBa4+lhXOWxvMYBbvoAjICulv23FPXCYzn2S2kMvfdSlmkuihuZay3FSWy64Oy/l8FvGI3BuS/aNGJvpxCHYiKXFSocDVz7WU5SqZwTLZqObqB7dNfjlnD4dkfm8ryz8pnwMqvDZkgdRtmeOeWVGWl8n0K6SPJh1gm400yHzR2MFGAtIv/exNcFNZbpD5YYnMwSSI+N/GJvFGn3FmE9HperdzeuZf+xgAwD+0gIW3rTpECwAAAABJRU5ErkJggg==",
+                src: "assets/awards/good.png",
                 alt: "Good Design award logo"
+            },
+            RED_DOT: {
+                src: "assets/awards/red-dot.png",
+                alt: "Red Dot award icon"
             }
         };
 
@@ -3512,7 +3539,7 @@ const projects = [
             if (n.includes('if')) return 'IF';
             if (n.includes('spark')) return 'SPARK';
             if (n.includes('good')) return 'GOOD';
-            if (n.includes('red')) return 'GOOD';
+            if (n.includes('red')) return 'RED_DOT';
             return null;
         }
 
@@ -3521,7 +3548,7 @@ const projects = [
         </svg>`;
 
         function renderAwardChip(name) {
-            const displayName = (name || '').toLowerCase().includes('red') ? 'Good Design' : name;
+            const displayName = name;
             const key = awardKey(displayName);
             const meta = key ? awardLogos[key] : null;
             const icon = meta
