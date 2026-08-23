@@ -1651,6 +1651,10 @@ nav{
     isolation:isolate;
     backdrop-filter:none !important;
     -webkit-backdrop-filter:none !important;
+    transform:translate3d(0, 0, 0);
+    -webkit-transform:translate3d(0, 0, 0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
 }
 nav::before{
     content:"";
@@ -1664,6 +1668,10 @@ nav::before{
     background:rgba(248,249,246,0.001);
     backdrop-filter:blur(10px);
     -webkit-backdrop-filter:blur(10px);
+    transform:translate3d(0, 0, 0);
+    -webkit-transform:translate3d(0, 0, 0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
     -webkit-mask-image:linear-gradient(to bottom, #111111 0%, #111111 46%, rgba(17,17,17,0.72) 66%, transparent 100%);
     mask-image:linear-gradient(to bottom, #111111 0%, #111111 46%, rgba(17,17,17,0.72) 66%, transparent 100%);
 }
@@ -1672,6 +1680,18 @@ nav .nav-inner{
     z-index:1;
     width:min(var(--site-rail-max), 100%) !important;
     max-width:var(--site-rail-max) !important;
+    transform:translate3d(0, 0, 0);
+    -webkit-transform:translate3d(0, 0, 0);
+    backface-visibility:hidden;
+    -webkit-backface-visibility:hidden;
+}
+.nav-theme-sentinel{
+    display:block;
+    width:0;
+    height:1px;
+    margin:0;
+    padding:0;
+    pointer-events:none;
 }
 .scroll-indicator{
     bottom:clamp(1.65rem, 4.7vh, 3.05rem) !important;
@@ -3863,49 +3883,61 @@ const projects = [
             });
         });
 
-        // Nav theme switch (dark → light from About onwards)
+        // Nav theme switch without per-scroll layout or class work.
         const nav = document.querySelector('nav');
-        
-        // Keep CSS in sync with actual fixed-nav height (prevents hero overlap on desktop)
-        function setNavHeightVar(){
-            if (!nav) return;
-            document.documentElement.style.setProperty('--nav-h', `${nav.offsetHeight}px`);
-        }
-        window.addEventListener('resize', setNavHeightVar);
-        setNavHeightVar();
-        requestAnimationFrame(setNavHeightVar);
-        setTimeout(setNavHeightVar, 250);
-const about = document.getElementById('about');
-
+        const about = document.getElementById('about');
+        const navThemeSentinel = document.createElement('span');
+        let navHeight = 0;
         let navThemeTrigger = Number.POSITIVE_INFINITY;
-        let navThemeFrame = 0;
+        let navOnLight = nav ? nav.classList.contains('on-light') : false;
+        let navMetricFrame = 0;
 
-        function updateNavTheme() {
-            if (!nav || !about) return;
-            nav.classList.toggle('on-light', window.scrollY >= navThemeTrigger);
+        navThemeSentinel.className = 'nav-theme-sentinel';
+        navThemeSentinel.setAttribute('aria-hidden', 'true');
+        if (about) about.before(navThemeSentinel);
+
+        function setNavTheme(onLight) {
+            if (!nav || navOnLight === onLight) return;
+            navOnLight = onLight;
+            nav.classList.toggle('on-light', onLight);
         }
 
-        function measureNavTheme() {
-            if (!nav || !about) return;
-            navThemeTrigger = window.scrollY + about.getBoundingClientRect().top - nav.offsetHeight - 16;
-            updateNavTheme();
+        function syncNavHeight() {
+            if (!nav) return false;
+            const nextHeight = Math.round(nav.getBoundingClientRect().height * 100) / 100;
+            if (Math.abs(nextHeight - navHeight) < 0.25) return false;
+            navHeight = nextHeight;
+            document.documentElement.style.setProperty('--nav-h', `${nextHeight}px`);
+            return true;
         }
 
-        function queueNavThemeUpdate() {
-            if (navThemeFrame) return;
-            navThemeFrame = requestAnimationFrame(() => {
-                navThemeFrame = 0;
-                updateNavTheme();
-            });
+        function syncNavTheme() {
+            setNavTheme(window.scrollY >= navThemeTrigger);
         }
 
-        window.addEventListener('scroll', queueNavThemeUpdate, {passive: true});
-        window.addEventListener('resize', measureNavTheme);
-        window.addEventListener('load', measureNavTheme, { once: true });
-        if ('ResizeObserver' in window && workGrid) {
-            new ResizeObserver(() => requestAnimationFrame(measureNavTheme)).observe(workGrid);
+        function refreshNavMetrics() {
+            navMetricFrame = 0;
+            syncNavHeight();
+            if (about) {
+                navThemeTrigger = window.scrollY + navThemeSentinel.getBoundingClientRect().top - navHeight - 16;
+            }
+            syncNavTheme();
         }
-        measureNavTheme();
+
+        function queueNavMetricRefresh() {
+            if (navMetricFrame) return;
+            navMetricFrame = requestAnimationFrame(refreshNavMetrics);
+        }
+
+        syncNavHeight();
+        refreshNavMetrics();
+        window.addEventListener('scroll', syncNavTheme, { passive: true });
+        window.addEventListener('orientationchange', queueNavMetricRefresh, { passive: true });
+        if ('ResizeObserver' in window) {
+            const navLayoutObserver = new ResizeObserver(queueNavMetricRefresh);
+            if (nav) navLayoutObserver.observe(nav);
+            if (workGrid) navLayoutObserver.observe(workGrid);
+        }
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(a => {
