@@ -53,7 +53,6 @@ if (mount) {
   const shaderSpeed = 0.1;
 
   const shaderProps = {
-    animate: prefersReducedMotion ? 'off' : 'on',
     axesHelper: 'off',
     bgColor1: '#111111',
     bgColor2: '#111111',
@@ -89,30 +88,60 @@ if (mount) {
     uAmplitude: 2.75,
     uDensity: 1.75,
     uFrequency: 5.5,
-    uSpeed: prefersReducedMotion ? 0 : shaderSpeed,
+    uSpeed: shaderSpeed,
     uStrength: 1,
     uTime: 0,
     wireframe: false,
     zoomOut: false
   };
 
-  try {
-    createRoot(mount).render(
-      React.createElement(
-        ShaderGradientCanvas,
-        {
-          style: {
-            position: 'absolute',
-            inset: 0,
-            width: '100%',
-            height: '100%'
-          },
-          pixelDensity: 1,
-          fov: 140
+  function HeroShader() {
+    const [heroVisible, setHeroVisible] = React.useState(true);
+    const [pageVisible, setPageVisible] = React.useState(!document.hidden);
+
+    React.useEffect(() => {
+      if (!('IntersectionObserver' in window)) {
+        return undefined;
+      }
+
+      const observer = new IntersectionObserver(([entry]) => {
+        setHeroVisible(entry.isIntersecting && entry.intersectionRatio > 0.01);
+      }, { threshold: [0, 0.01, 0.15] });
+
+      observer.observe(mount);
+      return () => observer.disconnect();
+    }, []);
+
+    React.useEffect(() => {
+      const handleVisibility = () => setPageVisible(!document.hidden);
+      document.addEventListener('visibilitychange', handleVisibility);
+      return () => document.removeEventListener('visibilitychange', handleVisibility);
+    }, []);
+
+    const running = !prefersReducedMotion && heroVisible && pageVisible;
+
+    return React.createElement(
+      ShaderGradientCanvas,
+      {
+        style: {
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%'
         },
-        React.createElement(ShaderGradient, shaderProps)
-      )
+        pixelDensity: 1,
+        fov: 140
+      },
+      React.createElement(ShaderGradient, {
+        ...shaderProps,
+        animate: running ? 'on' : 'off',
+        uSpeed: running ? shaderSpeed : 0
+      })
     );
+  }
+
+  try {
+    createRoot(mount).render(React.createElement(HeroShader));
   } catch (error) {
     mount.classList.add('hero-shader-gradient--failed');
     console.warn('Hero ShaderGradient failed to initialize.', error);

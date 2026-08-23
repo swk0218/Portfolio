@@ -1908,6 +1908,11 @@ nav .nav-inner{
     transform-origin:center;
     transition: transform 0.8s ease, filter 0.8s ease;
 }
+.media-picture{
+    display:block;
+    width:100%;
+    height:100%;
+}
 .all-work{
     padding: 7rem 5% 10.5rem !important;
 }
@@ -1960,6 +1965,7 @@ nav .nav-inner{
     align-items:start;
     transform-origin:center top;
     backface-visibility:hidden;
+    will-change:auto;
     transition: opacity 760ms cubic-bezier(.16,1,.3,1), transform 860ms cubic-bezier(.16,1,.3,1);
 }
 .work-grid.is-filtering .work-item{
@@ -2582,7 +2588,7 @@ nav::before{
       transition:
         opacity var(--loco-duration) cubic-bezier(.16,1,.3,1) var(--reveal-delay, 0ms),
         transform var(--loco-duration) cubic-bezier(.16,1,.3,1) var(--reveal-delay, 0ms) !important;
-      will-change:opacity, transform;
+      will-change:auto;
     }
     body.motion-loco [data-reveal="media"]{
       --loco-y:68px;
@@ -2592,6 +2598,11 @@ nav::before{
     body.motion-loco [data-reveal-state="in"]{
       opacity:1 !important;
       transform:translate3d(0, 0, 0) scale(1) !important;
+    }
+    body.motion-loco [data-reveal-settled]{
+      will-change:auto !important;
+      transform:none !important;
+      transition:none !important;
     }
     body.motion-loco .project-card[data-reveal],
     body.motion-loco .work-item[data-reveal]{
@@ -2660,7 +2671,7 @@ nav::before{
 <h2 class="selected-works-title">Highlights</h2>
 <div class="projects-grid">
 <div class="project-card">
-<a aria-label="Open project: Odyssey OLED" class="project-image project-image-link" href="projects/odyssey-oled.html"><img src="assets/projects/odyssey-oled/01.jpg?v=658412-1773926212972819700" alt="Odyssey OLED — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: Odyssey OLED" class="project-image project-image-link" href="projects/odyssey-oled.html"><picture class="media-picture"><source type="image/webp" media="(max-width: 1799px)" srcset="assets/thumbs/list/odyssey-oled-01-960.webp?v=658412-1773926212972819700 960w, assets/thumbs/list/odyssey-oled-01-1600.webp?v=658412-1773926212972819700 1600w, assets/thumbs/list/odyssey-oled-01-2048.webp?v=658412-1773926212972819700 2048w" sizes="100vw"><img src="assets/projects/odyssey-oled/01.jpg?v=658412-1773926212972819700" alt="Odyssey OLED — key visual" width="2048" height="1152" loading="lazy" decoding="async"></picture><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Brand identity</div>
 <h3 class="project-title">Odyssey OLED</h3>
@@ -2670,7 +2681,7 @@ nav::before{
 </div>
 </div>
 <div class="project-card">
-<a aria-label="Open project: Ballie" class="project-image project-image-link" href="projects/ballie.html"><img src="assets/projects/ballie/01.jpg?v=423932-1773922865396875300" alt="Ballie — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: Ballie" class="project-image project-image-link" href="projects/ballie.html"><picture class="media-picture"><source type="image/webp" media="(max-width: 1799px)" srcset="assets/thumbs/list/ballie-01-960.webp?v=423932-1773922865396875300 960w, assets/thumbs/list/ballie-01-1600.webp?v=423932-1773922865396875300 1600w, assets/thumbs/list/ballie-01-2560.webp?v=423932-1773922865396875300 2560w, assets/thumbs/list/ballie-01-3000.webp?v=423932-1773922865396875300 3000w" sizes="100vw"><img src="assets/projects/ballie/01.jpg?v=423932-1773922865396875300" alt="Ballie — key visual" width="3000" height="1849" loading="lazy" decoding="async"></picture><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Packaging</div>
 <h3 class="project-title">Ballie</h3>
@@ -2680,7 +2691,7 @@ nav::before{
 </div>
 </div>
 <div class="project-card">
-<a aria-label="Open project: The Premiere 8K" class="project-image project-image-link" href="projects/thepremiere-8k.html"><img src="assets/projects/thepremiere-8k/01.jpg?v=711574-1777904186570177200" alt="The Premiere 8K — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: The Premiere 8K" class="project-image project-image-link" href="projects/thepremiere-8k.html"><picture class="media-picture"><source type="image/webp" media="(max-width: 1799px)" srcset="assets/thumbs/list/thepremiere-8k-01-960.webp?v=711574-1777904186570177200 960w, assets/thumbs/list/thepremiere-8k-01-1600.webp?v=711574-1777904186570177200 1600w, assets/thumbs/list/thepremiere-8k-01-2560.webp?v=711574-1777904186570177200 2560w, assets/thumbs/list/thepremiere-8k-01-2574.webp?v=711574-1777904186570177200 2574w" sizes="100vw"><img src="assets/projects/thepremiere-8k/01.jpg?v=711574-1777904186570177200" alt="The Premiere 8K — key visual" width="2574" height="1710" loading="lazy" decoding="async"></picture><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Brand identity · Art direction</div>
 <h3 class="project-title">The Premiere 8K</h3>
@@ -2690,7 +2701,7 @@ nav::before{
 </div>
 </div>
 <div class="project-card">
-<a aria-label="Open project: Ark" class="project-image project-image-link" href="projects/ark.html"><img src="assets/projects/ark/01.jpg?v=1011258-1773922153448949900" alt="Ark — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: Ark" class="project-image project-image-link" href="projects/ark.html"><picture class="media-picture"><source type="image/webp" media="(max-width: 1799px)" srcset="assets/thumbs/list/ark-01-960.webp?v=1011258-1773922153448949900 960w, assets/thumbs/list/ark-01-1600.webp?v=1011258-1773922153448949900 1600w, assets/thumbs/list/ark-01-2560.webp?v=1011258-1773922153448949900 2560w, assets/thumbs/list/ark-01-3000.webp?v=1011258-1773922153448949900 3000w" sizes="100vw"><img src="assets/projects/ark/01.jpg?v=1011258-1773922153448949900" alt="Ark — key visual" width="3000" height="1915" loading="lazy" decoding="async"></picture><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Art direction</div>
 <h3 class="project-title">Ark</h3>
@@ -2700,7 +2711,7 @@ nav::before{
 </div>
 </div>
 <div class="project-card">
-<a aria-label="Open project: QLED TV" class="project-image project-image-link" href="projects/qled-18.html"><img src="assets/projects/qled-18/03.jpg?v=833988-1777870663063700000" alt="QLED TV — key visual" loading="lazy" decoding="async"><span aria-hidden="true" class="image-cta">Open project</span></a>
+<a aria-label="Open project: QLED TV" class="project-image project-image-link" href="projects/qled-18.html"><picture class="media-picture"><source type="image/webp" media="(max-width: 1799px)" srcset="assets/thumbs/list/qled-18-03-960.webp?v=833988-1777870663063700000 960w, assets/thumbs/list/qled-18-03-1600.webp?v=833988-1777870663063700000 1600w, assets/thumbs/list/qled-18-03-2560.webp?v=833988-1777870663063700000 2560w, assets/thumbs/list/qled-18-03-3000.webp?v=833988-1777870663063700000 3000w" sizes="100vw"><img src="assets/projects/qled-18/03.jpg?v=833988-1777870663063700000" alt="QLED TV — key visual" width="3000" height="1859" loading="lazy" decoding="async"></picture><span aria-hidden="true" class="image-cta">Open project</span></a>
 <div class="project-details">
 <div class="project-category project-category-top">Brand identity · Art direction</div>
 <h3 class="project-title">QLED TV</h3>
@@ -2971,6 +2982,7 @@ nav::before{
     </div>
   </footer>
 <script src="assets/hero-shadergradient.js" defer></script>
+<script src="assets/thumbs/list/manifest.js"></script>
 <script>
         // Typing
         const words = ['STRATEGIC', 'REFINED', 'ICONIC', 'DISTINCT', 'BOLD', 'JUST COOL'];
@@ -3015,40 +3027,6 @@ nav::before{
             setTimeout(typeTick, isDeleting ? typingTiming.delete : typingTiming.type);
         }
         setTimeout(typeTick, typingTiming.start);
-
-        // Selected Works: reveal on scroll (rise + fade)
-        (function () {
-            const cards = Array.from(document.querySelectorAll('.project-card'));
-            if (!cards.length) return;
-
-            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-
-            // init state + stagger
-            cards.forEach((c, idx) => {
-                c.classList.add('reveal');
-                c.style.transitionDelay = `${Math.min(idx * 52, 156)}ms`;
-            });
-
-            if (reduce) {
-                cards.forEach(c => {
-                    c.classList.add('is-visible');
-                    c.classList.remove('reveal');
-                    c.style.transitionDelay = '0ms';
-                });
-                return;
-            }
-
-            const io = new IntersectionObserver((entries) => {
-                entries.forEach(e => {
-                    if (!e.isIntersecting) return;
-                    e.target.classList.add('is-visible');
-                    io.unobserve(e.target);
-                });
-            }, { threshold: 0.16, rootMargin: '0px 0px -6% 0px' });
-
-            cards.forEach(c => io.observe(c));
-        })();
-
 
         // Portfolio data
 const projects = [
@@ -3166,7 +3144,8 @@ const projects = [
     "categoryLabel": "Brand identity",
     "tagline": "Orchestrating a cohesive dual identity",
     "awards": [],
-    "image": "assets/projects/odyssey-2023/01.mp4?v=31683746-1679995802822201700",
+    "image": "assets/thumbs/video/odyssey-2023-preview.mp4?v=481083-1777989600000000000",
+    "poster": "assets/thumbs/list/odyssey-2023-03-1600.webp?v=614939-1773926212972819700",
     "mediaType": "video"
   },
   {
@@ -3181,7 +3160,8 @@ const projects = [
     "categoryLabel": "Art direction",
     "tagline": "A definitive image series for the Odyssey gaming lineup",
     "awards": [],
-    "image": "assets/projects/monitor-os/00.mp4?v=42545010-1642739054000000000",
+    "image": "assets/thumbs/video/monitor-os-preview.mp4?v=5357569-1777989600000000000",
+    "poster": "assets/thumbs/list/monitor-os-01-1600.webp?v=1575595-1773926212972819700",
     "mediaType": "video"
   },
   {
@@ -3503,6 +3483,38 @@ const projects = [
         const colors = [['#0f1bff','#0080FF'], ['#1a1a1a','#333'], ['#f8f9f6','#e5e5e5']];
         const grid = document.getElementById('workGrid');
 
+        const thumbnailManifest = window.PORTFOLIO_THUMBNAILS || {};
+        const workImageSizes = '(max-width: 720px) 90vw, (max-width: 1100px) 45vw, min(45vw, 680px)';
+
+        function escapeAttribute(value) {
+            return String(value || '')
+                .replace(/&/g, '&amp;')
+                .replace(/"/g, '&quot;')
+                .replace(/</g, '&lt;')
+                .replace(/>/g, '&gt;');
+        }
+
+        function responsiveImageMarkup(src, alt) {
+            const cleanSrc = (src || '').split('?')[0];
+            const version = (src || '').includes('?') ? (src || '').slice((src || '').indexOf('?')) : '';
+            const metadata = thumbnailManifest[cleanSrc];
+            const safeSrc = escapeAttribute(src);
+            const safeAlt = escapeAttribute(alt);
+
+            if (!metadata || !Array.isArray(metadata.variants)) {
+                return `<img src="${safeSrc}" alt="${safeAlt}" loading="lazy" decoding="async">`;
+            }
+
+            const srcset = metadata.variants
+                .map((variant) => `${variant.src}${version} ${variant.width}w`)
+                .join(', ');
+
+            return `<picture class="media-picture">
+                <source type="image/webp" media="(max-width: 1799px)" srcset="${srcset}" sizes="${workImageSizes}">
+                <img src="${safeSrc}" alt="${safeAlt}" width="${metadata.width}" height="${metadata.height}" loading="lazy" decoding="async">
+            </picture>`;
+        }
+
 
         const awardLogos = {
             IDEA: {
@@ -3572,7 +3584,7 @@ const projects = [
         ? p.categories
         : (p.category ? [p.category] : []);
     const catLabel = catsArr.map(c => cats[c] || c).join(' · ');
-    div.className = `work-item ${catsArr.join(' ')} reveal`;
+    div.className = `work-item ${catsArr.join(' ')}`;
     div.setAttribute('data-categories', catsArr.join(','));
     div.setAttribute('data-category', catsArr[0] || p.category || '');
 
@@ -3613,8 +3625,8 @@ const projects = [
     const isVideoThumb = mediaType === 'video' || /\.(mp4|mov)(?:[?#].*)?$/i.test(p.image || '');
     const thumb = p.image
         ? (isVideoThumb
-            ? `<video src="${p.image}" aria-label="${thumbAlt}" muted autoplay loop playsinline preload="metadata"></video>`
-            : `<img src="${p.image}" alt="${thumbAlt}" loading="lazy" decoding="async">`)
+            ? `<video data-video-src="${p.image}" poster="${p.poster || ''}" aria-label="${thumbAlt}" muted loop playsinline preload="none" disablepictureinpicture></video>`
+            : responsiveImageMarkup(p.image, thumbAlt))
         : placeholderSvg;
 
     div.innerHTML = `
@@ -3633,32 +3645,60 @@ const projects = [
 
         const items = Array.from(document.querySelectorAll('.work-item'));
 
-        // Reveal once (no re-trigger on tabs)
-        const revealObs = new IntersectionObserver(entries => {
-            entries.forEach(e => {
-                if (!e.isIntersecting) return;
-                revealItem(e.target);
-            });
-        }, {threshold: 0.15});
+        // Video previews keep their original source, but only decode and play near the viewport.
+        const previewVideos = Array.from(document.querySelectorAll('video[data-video-src]'));
+        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-        function revealItem(item) {
-            item.classList.remove('reveal');
-            revealObs.unobserve(item);
+        function prepareVideo(video) {
+            if (video.src) return;
+            video.src = video.dataset.videoSrc;
+            video.load();
         }
 
-        function revealVisibleItems() {
-            const vh = window.innerHeight || document.documentElement.clientHeight;
-            items.forEach(item => {
-                if (!item.classList.contains('reveal')) return;
-                const rect = item.getBoundingClientRect();
-                if (rect.top < vh * 0.96 && rect.bottom > 0) revealItem(item);
-            });
+        function playVideo(video) {
+            if (reduceMotion || document.hidden) return;
+            prepareVideo(video);
+            const playPromise = video.play();
+            if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
         }
 
-        items.forEach(item => revealObs.observe(item));
-        requestAnimationFrame(revealVisibleItems);
-        window.addEventListener('load', revealVisibleItems, { once: true });
-        window.addEventListener('hashchange', () => requestAnimationFrame(revealVisibleItems));
+        if ('IntersectionObserver' in window) {
+            const videoLoadObserver = new IntersectionObserver((entries, observer) => {
+                entries.forEach((entry) => {
+                    if (!entry.isIntersecting) return;
+                    prepareVideo(entry.target);
+                    observer.unobserve(entry.target);
+                });
+            }, { rootMargin: '700px 0px', threshold: 0 });
+
+            const videoPlaybackObserver = new IntersectionObserver((entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting && entry.intersectionRatio >= 0.12) {
+                        playVideo(entry.target);
+                    } else {
+                        entry.target.pause();
+                    }
+                });
+            }, { threshold: [0, 0.12, 0.5] });
+
+            previewVideos.forEach((video) => {
+                videoLoadObserver.observe(video);
+                videoPlaybackObserver.observe(video);
+            });
+        } else {
+            previewVideos.forEach((video) => prepareVideo(video));
+        }
+
+        document.addEventListener('visibilitychange', () => {
+            previewVideos.forEach((video) => {
+                if (document.hidden) {
+                    video.pause();
+                    return;
+                }
+                const rect = video.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) playVideo(video);
+            });
+        });
 
         // Tabs (FLIP-like)
         const workGrid = document.getElementById('workGrid');
@@ -3837,14 +3877,35 @@ const projects = [
         setTimeout(setNavHeightVar, 250);
 const about = document.getElementById('about');
 
+        let navThemeTrigger = Number.POSITIVE_INFINITY;
+        let navThemeFrame = 0;
+
         function updateNavTheme() {
             if (!nav || !about) return;
-            const trigger = about.getBoundingClientRect().top <= nav.offsetHeight + 16;
-            nav.classList.toggle('on-light', trigger);
+            nav.classList.toggle('on-light', window.scrollY >= navThemeTrigger);
         }
-        window.addEventListener('scroll', updateNavTheme, {passive: true});
-        window.addEventListener('resize', updateNavTheme);
-        updateNavTheme();
+
+        function measureNavTheme() {
+            if (!nav || !about) return;
+            navThemeTrigger = window.scrollY + about.getBoundingClientRect().top - nav.offsetHeight - 16;
+            updateNavTheme();
+        }
+
+        function queueNavThemeUpdate() {
+            if (navThemeFrame) return;
+            navThemeFrame = requestAnimationFrame(() => {
+                navThemeFrame = 0;
+                updateNavTheme();
+            });
+        }
+
+        window.addEventListener('scroll', queueNavThemeUpdate, {passive: true});
+        window.addEventListener('resize', measureNavTheme);
+        window.addEventListener('load', measureNavTheme, { once: true });
+        if ('ResizeObserver' in window && workGrid) {
+            new ResizeObserver(() => requestAnimationFrame(measureNavTheme)).observe(workGrid);
+        }
+        measureNavTheme();
 
         // Smooth scroll
         document.querySelectorAll('a[href^="#"]').forEach(a => {
@@ -3943,6 +4004,20 @@ const about = document.getElementById('about');
             function reveal(el) {
                 el.setAttribute('data-reveal-state', 'in');
                 if (observer) observer.unobserve(el);
+
+                let settled = false;
+                const settle = () => {
+                    if (settled) return;
+                    settled = true;
+                    el.setAttribute('data-reveal-settled', '');
+                    el.removeEventListener('transitionend', onTransitionEnd);
+                };
+                const onTransitionEnd = (event) => {
+                    if (event.target === el) settle();
+                };
+
+                el.addEventListener('transitionend', onTransitionEnd);
+                window.setTimeout(settle, 1750);
             }
 
             if (reduce) {
