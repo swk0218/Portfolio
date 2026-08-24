@@ -2662,6 +2662,41 @@ nav::before{
     }
     /* ===== /midcheck motion preset ===== */
 
+
+/* Hero award constellation: six major design awards */
+.hero-award-stars{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:clamp(0.48rem, 0.62vw, 0.68rem);
+    margin:0 auto clamp(1.15rem, 1.35vw, 1.55rem);
+    color:var(--white);
+    opacity:0;
+    animation:fadeInUp 0.9s ease 0.08s forwards;
+}
+.hero-award-stars svg{
+    display:block;
+    width:clamp(7px, 0.56vw, 10px);
+    height:auto;
+    flex:none;
+    fill:currentColor;
+}
+@media (max-width: 768px){
+    .hero-award-stars{
+        gap:0.48rem;
+        margin-bottom:0.92rem;
+    }
+    .hero-award-stars svg{
+        width:7px;
+    }
+}
+@media (prefers-reduced-motion: reduce){
+    .hero-award-stars{
+        opacity:1;
+        animation:none;
+    }
+}
+
   </style>
 </head>
 <body class="motion-loco">
@@ -2679,6 +2714,14 @@ nav::before{
 <section class="hero">
 <div aria-hidden="true" class="hero-shader-gradient" id="heroShaderGradient"></div>
 <div class="hero-content">
+<div class="hero-award-stars" role="img" aria-label="Six major design awards">
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+<svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
+</div>
 <h1 class="hero-title">
 <span class="hero-line">CRAFTING</span>
 <span class="hero-line typing-slot"><span id="typingText">STRATEGIC</span></span>
