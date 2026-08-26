@@ -2672,7 +2672,7 @@ nav::before{
     margin:0 auto clamp(1.5rem, 1.9vw, 2rem);
     color:var(--white);
     opacity:0;
-    animation:fadeInUp 0.9s ease 0.08s forwards;
+    animation:heroAwardStarsReveal 0.9s cubic-bezier(.16,1,.3,1) 0.08s forwards;
 }
 .hero-award-stars svg{
     position:absolute;
@@ -2689,6 +2689,31 @@ nav::before{
 .hero-award-stars svg:nth-child(4){ left:61%; bottom:72%; }
 .hero-award-stars svg:nth-child(5){ left:80%; bottom:50%; }
 .hero-award-stars svg:nth-child(6){ left:94%; bottom:0; }
+@keyframes heroAwardStarsReveal{
+    from{
+        opacity:0;
+        transform:translateY(18px);
+    }
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
+}
+@media (min-width: 1024px) and (min-aspect-ratio: 4/3){
+    .hero-content{
+        transform:translateY(clamp(0.55rem, 1.4vh, 1rem));
+    }
+    .hero h1.hero-title{
+        font-size:clamp(7.5rem, min(11.8vw, 18.4vh), 11.8rem) !important;
+        margin-bottom:clamp(1.08rem, 1.28vw, 1.32rem) !important;
+    }
+    .hero p.hero-subtitle{
+        font-size:clamp(1.85rem, min(2.55rem, 4.8vh), 2.55rem) !important;
+    }
+    .hero-award-stars{
+        margin-bottom:clamp(1.3rem, 1.55vw, 1.75rem);
+    }
+}
 @media (max-width: 768px){
     .hero-award-stars{
         width:108px;
