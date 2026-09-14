@@ -2115,6 +2115,15 @@ nav .nav-inner{
     display:block;
     margin-top:0;
 }
+.about-role-line .about-role-title{
+    display:inline-block;
+    white-space:nowrap;
+}
+.about-role-line .about-role-separator{ display:inline; }
+@media (max-width:600px){
+    .about-role-line .about-role-title{ display:block; }
+    .about-role-line .about-role-separator{ display:none; }
+}
 .about-education{
     display:block;
     margin-top:0;
@@ -2847,7 +2856,7 @@ nav::before{
 <div class="about-grid">
 <div>
 <h2>Wonkyoung Seo</h2>
-<p class="about-subtitle"><span>Currently at Samsung Electronics</span><span class="about-role-line">Senior Brand Designer · Design AI Specialist</span><span class="about-education">BFA in Visual Communication Design, Kookmin University</span></p>
+<p class="about-subtitle"><span>Currently at Samsung Electronics</span><span class="about-role-line"><span class="about-role-title">Senior Brand Designer</span><span class="about-role-separator"> · </span><span class="about-role-title">Design AI Specialist</span></span><span class="about-education">BFA in Visual Communication Design, Kookmin University</span></p>
 </div>
 <div>
 
