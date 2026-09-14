@@ -42,6 +42,15 @@ The `.nojekyll` file is included so GitHub Pages serves all static assets direct
 
 ## Internal Handoff
 
+Project detail pages share `assets/project.css`, `assets/project-motion.js`, and
+`assets/project-lightbox.js`. Keep CSS declaration order intact when maintaining
+the shared stylesheet. Each project stores its viewer media in the `projectMedia`
+JSON script block. Update asset version queries on all detail pages when changing
+shared assets, and check desktop/mobile layout and keyboard viewer navigation.
+
+Project titles and taglines also appear in the main page's project data, featured
+cards, and neighboring pages' next-project links. Keep these copies consistent.
+
 For an internal GitHub or static hosting setup, upload the contents of this folder to the repository root.
 
 Do not upload the broader `New project 5` working folder. That folder contains local backups, cache files, generation scripts, and workspace-specific paths that are not needed for deployment.

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 
-<html lang="ko">
+<html lang="en">
 <head>
 <meta charset="utf-8"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
@@ -2782,7 +2782,7 @@ nav::before{
 <div class="project-details">
 <div class="project-category project-category-top">Packaging</div>
 <h3 class="project-title">Ballie</h3>
-<p class="project-description">An emotional packaging for the iconic robot</p>
+<p class="project-description">Emotional packaging for the iconic robot</p>
 <div class="project-awards" data-awards="Good Design"></div>
 
 </div>
@@ -2812,7 +2812,7 @@ nav::before{
 <div class="project-details">
 <div class="project-category project-category-top">Brand identity · Art direction</div>
 <h3 class="project-title">QLED TV</h3>
-<p class="project-description">Full-stack brand design for the premium flagship launching</p>
+<p class="project-description">Full-stack brand design for the premium flagship launch</p>
 <div class="project-awards" data-awards="Good Design"></div>
 
 </div>
@@ -2822,11 +2822,11 @@ nav::before{
 <section class="all-work" id="portfolio">
 <h2 class="section-title">Projects</h2>
 <div class="work-tabs">
-<button class="tab-button active" data-category="all">All projects</button>
-<button class="tab-button" data-category="brand">Brand identity</button>
-<button class="tab-button" data-category="art">Art direction</button>
-<button class="tab-button" data-category="graphic">Graphic design</button>
-<button class="tab-button" data-category="packaging">Packaging</button>
+<button class="tab-button active" data-category="all" aria-pressed="true">All projects</button>
+<button class="tab-button" data-category="brand" aria-pressed="false">Brand identity</button>
+<button class="tab-button" data-category="art" aria-pressed="false">Art direction</button>
+<button class="tab-button" data-category="graphic" aria-pressed="false">Graphic design</button>
+<button class="tab-button" data-category="packaging" aria-pressed="false">Packaging</button>
 </div>
 <div class="work-grid" id="workGrid"></div>
 </section>
@@ -3155,7 +3155,7 @@ const projects = [
       "packaging"
     ],
     "categoryLabel": "Packaging",
-    "tagline": "An emotional packaging for the iconic robot",
+    "tagline": "Emotional packaging for the iconic robot",
     "awards": [
       "Good Design"
     ],
@@ -3262,7 +3262,7 @@ const projects = [
     "mediaType": "video"
   },
   {
-    "title": "Viewfinity",
+    "title": "ViewFinity",
     "slug": "viewfinity",
     "year": "2023",
     "sortYear": 2023,
@@ -3271,7 +3271,7 @@ const projects = [
       "brand"
     ],
     "categoryLabel": "Brand identity",
-    "tagline": "Everyday is an open canvas",
+    "tagline": "Every day is an open canvas",
     "awards": [
       "Good Design"
     ],
@@ -3335,7 +3335,7 @@ const projects = [
       "brand"
     ],
     "categoryLabel": "Brand identity",
-    "tagline": "Harmonizing diverse rhythms of home-life",
+    "tagline": "Harmonizing diverse rhythms of home life",
     "awards": [
       "Good Design"
     ],
@@ -3354,7 +3354,7 @@ const projects = [
       "packaging"
     ],
     "categoryLabel": "Brand identity · Art direction · Packaging",
-    "tagline": "Redefining immersion with boundary-less screen",
+    "tagline": "Redefining immersion with a borderless screen",
     "awards": [
       "iF",
       "Good Design"
@@ -3409,7 +3409,7 @@ const projects = [
       "art"
     ],
     "categoryLabel": "Brand identity · Art direction",
-    "tagline": "Full-stack brand design for the premium flagship launching",
+    "tagline": "Full-stack brand design for the premium flagship launch",
     "awards": [
       "Good Design"
     ],
@@ -3470,7 +3470,7 @@ const projects = [
     "mediaType": "image"
   },
   {
-    "title": "Netflix korean title",
+    "title": "Netflix Korean titles",
     "slug": "netflix",
     "year": "2015",
     "sortYear": 2015,
@@ -3479,7 +3479,7 @@ const projects = [
       "graphic"
     ],
     "categoryLabel": "Graphic design",
-    "tagline": "Localizing global contents into Korean",
+    "tagline": "Localizing global content into Korean",
     "awards": [],
     "image": "assets/projects/netflix/01.jpg?v=3306717-1777989661157581600",
     "mediaType": "image"
@@ -3954,8 +3954,12 @@ const projects = [
         tabButtons.forEach(btn => {
             btn.addEventListener('click', () => {
                 const cat = btn.dataset.category;
-                tabButtons.forEach(b => b.classList.remove('active'));
+                tabButtons.forEach(b => {
+                    b.classList.remove('active');
+                    b.setAttribute('aria-pressed', 'false');
+                });
                 btn.classList.add('active');
+                btn.setAttribute('aria-pressed', 'true');
                 filterTo(cat);
             });
         });
