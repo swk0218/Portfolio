@@ -48,6 +48,43 @@ function clampThreeClockDelta() {
 if (mount) {
   clampThreeClockDelta();
 
+  function failShader(error) {
+    mount.classList.add('hero-shader-gradient--failed');
+    console.warn('Hero ShaderGradient is unavailable.', error);
+  }
+
+  // Canvas errors must stay inside the decorative layer, not the page content.
+  class HeroShaderBoundary extends React.Component {
+    state = { failed: false };
+
+    static getDerivedStateFromError() {
+      return { failed: true };
+    }
+
+    componentDidCatch(error) {
+      failShader(error);
+    }
+
+    handleContextFailure = (event) => {
+      failShader(event.type);
+      this.setState({ failed: true });
+    };
+
+    componentDidMount() {
+      mount.addEventListener('webglcontextlost', this.handleContextFailure, true);
+      mount.addEventListener('webglcontextcreationerror', this.handleContextFailure, true);
+    }
+
+    componentWillUnmount() {
+      mount.removeEventListener('webglcontextlost', this.handleContextFailure, true);
+      mount.removeEventListener('webglcontextcreationerror', this.handleContextFailure, true);
+    }
+
+    render() {
+      return this.state.failed ? null : this.props.children;
+    }
+  }
+
   const prefersReducedMotion = window.matchMedia &&
     window.matchMedia('(prefers-reduced-motion: reduce)').matches;
   const shaderSpeed = 0.1;
@@ -141,9 +178,10 @@ if (mount) {
   }
 
   try {
-    createRoot(mount).render(React.createElement(HeroShader));
+    createRoot(mount, { onUncaughtError: failShader }).render(
+      React.createElement(HeroShaderBoundary, null, React.createElement(HeroShader))
+    );
   } catch (error) {
-    mount.classList.add('hero-shader-gradient--failed');
-    console.warn('Hero ShaderGradient failed to initialize.', error);
+    failShader(error);
   }
 }

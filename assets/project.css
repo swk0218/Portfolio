@@ -157,6 +157,12 @@
       line-height: 1;
       white-space: nowrap;
     }
+    .award-chip--categorized{ max-width:100%; }
+    .award-chip--categorized .award-label{
+      white-space:normal;
+      line-height:1.35;
+    }
+    .award-category{ display:inline-block; }
     @media (max-width: 720px){
       .award-logo{ height: 15px; }
       .award-icon{ width: 15px; height: 15px; }
