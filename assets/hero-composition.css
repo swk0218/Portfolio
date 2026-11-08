@@ -1,0 +1,42 @@
+/* The original hero stays in place. Only the shader layer becomes a project-image field. */
+/* Keep the existing full-bleed reveal overscan from creating horizontal scrolling. */
+html { overflow-x: clip; }
+.hero-workfield {
+  position: absolute; inset: 0; z-index: 0; overflow: hidden;
+  pointer-events: none; perspective: 1000px;
+  --pointer-x: 0px; --pointer-y: 0px;
+}
+.hero-workfield::after {
+  content: ''; position: absolute; inset: 0; z-index: 3;
+  background: radial-gradient(ellipse 55% 72% at 50% 49%, #111 10%, rgba(17,17,17,.84) 42%, rgba(17,17,17,.1) 100%);
+}
+.hero-workfield-tile {
+  position: absolute; width: clamp(180px,24vw,340px); aspect-ratio: 14/9;
+  overflow: hidden; border-radius: 0; opacity: .74;
+  transform: translate3d(calc(var(--pointer-x) * var(--depth)),calc(var(--pointer-y) * var(--depth)),0) rotate(var(--rotation));
+  transition: transform 800ms cubic-bezier(.22,1,.36,1);
+  box-shadow: 0 24px 80px rgba(0,0,0,.4);
+}
+.hero-workfield-tile:nth-child(1) { left: -3%; top: 13%; --rotation: -12deg; --depth: .65; }
+.hero-workfield-tile:nth-child(2) { right: -3%; top: 25%; --rotation: 10deg; --depth: -1; }
+.hero-workfield-tile:nth-child(3) { left: 5%; bottom: 6%; width: clamp(140px,20vw,260px); --rotation: 8deg; --depth: 1.4; }
+.hero-workfield-tile:nth-child(4) { right: 5%; bottom: 3%; width: clamp(160px,22vw,300px); --rotation: -9deg; --depth: -.7; }
+.hero-workfield-tile img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+.hero-workfield-tile .hero-media-current { z-index: 1; }
+.hero-image-trail { position: absolute; width: clamp(120px,15vw,200px); aspect-ratio: 14/9; object-fit: cover; z-index: 2; pointer-events: none; box-shadow: 0 20px 70px rgba(0,0,0,.45); }
+#typingText.flip-slot { display: inline-grid; place-items: center; }
+.flip-word { grid-area: 1/1; display: inline-flex; white-space: pre; align-items: center; justify-content: center; }
+.flip-word > span { display: inline-block; }
+.flip-word.is-leaving { position: absolute; inset: 0; }
+@media (max-width: 767px) {
+  .hero-workfield-tile { width: 155px; opacity: .56; }
+  .hero-workfield-tile:nth-child(1) { left: -16%; top: 18%; }
+  .hero-workfield-tile:nth-child(2) { right: -18%; top: 36%; }
+  .hero-workfield-tile:nth-child(3) { left: -14%; bottom: 13%; width: 150px; }
+  .hero-workfield-tile:nth-child(4) { right: -12%; bottom: 7%; width: 155px; }
+  .hero-workfield::after { background: radial-gradient(ellipse 64% 74% at 50% 44%, #111 18%, rgba(17,17,17,.86) 47%, rgba(17,17,17,.08) 100%); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-workfield-tile { transition: none; }
+  #typingText::after { animation: none !important; }
+}
