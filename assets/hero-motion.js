@@ -8,11 +8,20 @@
   let index = 0;
   let current = slot.querySelector('.flip-word');
   let cleanup;
+  const modules = [...document.querySelectorAll('.hero-grid-module')];
+  let reveal;
 
   function flip() {
     clearTimeout(cleanup);
     slot.querySelectorAll('.is-leaving').forEach(node => node.remove());
     index = (index + 1) % words.length;
+    clearTimeout(reveal);
+    modules.forEach(module => module.classList.remove('is-active'));
+    if (modules.length) {
+      const next = modules[index % modules.length];
+      if (preference.matches) next.classList.add('is-active');
+      else reveal = setTimeout(() => next.classList.add('is-active'), 190);
+    }
     const previous = current;
     current = document.createElement('span');
     current.className = 'flip-word';
