@@ -15,10 +15,10 @@ html { overflow-x: clip; }
 }
 .flip-word > span { display: inline-block; }
 .flip-word.is-leaving { position: absolute; inset: 0; }
-.flip-word.is-leaving { animation: word-leave 280ms ease-out both; }
+.flip-word.is-leaving { animation: word-leave 420ms ease-out both; }
 .flip-word.is-entering > span {
-  animation: letter-enter 460ms cubic-bezier(.22,1,.36,1) both;
-  animation-delay: calc(180ms + var(--letter-index) * 28ms);
+  animation: letter-enter 720ms cubic-bezier(.25,.75,.25,1) both;
+  animation-delay: calc(300ms + var(--letter-index) * 36ms);
 }
 @keyframes word-leave {
   to { opacity: 0; transform: translateX(-.025em) rotateX(-20deg); filter: blur(6px); }
@@ -38,6 +38,7 @@ body .hero h1.hero-title {
   text-align: left;
   width: 100%;
   min-width: 0;
+  margin-bottom: clamp(1.8rem, 3.8vh, 2.7rem) !important;
 }
 body .hero { grid-template-columns: minmax(0, 1fr); }
 body .hero-content {
@@ -92,7 +93,7 @@ body .hero-title .hero-line + .hero-line { margin-top: -.035em !important; }
   overflow: hidden;
   opacity: 0;
   clip-path: inset(0 100% 0 0);
-  transition: opacity 180ms ease, clip-path 360ms cubic-bezier(.22,1,.36,1);
+  transition: opacity 300ms ease, clip-path 640ms cubic-bezier(.25,.75,.25,1);
 }
 .hero-grid-module.is-active {
   opacity: .92;

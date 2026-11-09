@@ -63,7 +63,7 @@
       module.style.setProperty('--image-y', `${best.y}px`);
       module.style.setProperty('--image-w', `${best.w}px`);
       module.style.setProperty('--image-h', `${best.h}px`);
-      module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${order * 70}ms`);
+      module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${order * 90}ms`);
       module.classList.add('is-active');
     });
     hero.dataset.keyword = words[scene];
@@ -90,16 +90,16 @@
     slot.append(current);
     if (previous) {
       if (preference.matches) previous.remove();
-      else cleanup = setTimeout(() => previous.remove(), 300);
+      else cleanup = setTimeout(() => previous.remove(), 440);
     }
     if (preference.matches) arrange(index);
-    else reveal = setTimeout(() => arrange(index), 320);
+    else reveal = setTimeout(() => arrange(index), 460);
   }
 
   let started = false;
   const start = () => {
     arrange(index);
-    if (!started) { started = true; setInterval(flip, 3600); }
+    if (!started) { started = true; setInterval(flip, 2900); }
   };
   const fontFallback = setTimeout(start, 1500);
   if (document.fonts) document.fonts.ready.then(() => { clearTimeout(fontFallback); start(); });
