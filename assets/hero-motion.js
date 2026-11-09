@@ -1,86 +1,61 @@
-/* Keyword scenes cycle 2 / 3 / 1 images. Every image belongs to its own module. */
+/* Two fixed grid compositions alternate between two and three images. */
 (() => {
   const hero = document.querySelector('.hero');
   const slot = document.getElementById('typingText');
   const grid = document.querySelector('.hero-work-grid');
   if (!hero || !slot || !grid) return;
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
-  const counts = [2, 3, 1, 2, 3, 1];
-  // Each scene has a dominant image and smaller, offset companions.
-  const layouts = [
-    [{span: [6, 4], anchor: [.96, .84]}, {span: [2, 2], anchor: [.67, .08]}],
-    [{span: [5, 4], anchor: [.95, .84]}, {span: [3, 2], anchor: [.62, .10]}, {span: [2, 2], anchor: [.95, .05]}],
-    [{span: [6, 4], anchor: [.95, .35]}],
-    [{span: [6, 4], anchor: [.96, .78]}, {span: [2, 2], anchor: [.88, .06]}],
-    [{span: [6, 4], anchor: [.95, .30]}, {span: [3, 2], anchor: [.91, .92]}, {span: [2, 2], anchor: [.60, .07]}],
-    [{span: [6, 4], anchor: [.88, .70]}]
-  ];
+  const sceneSlots = [['A', 'B'], ['C', 'D', 'E'], ['A', 'B'], ['C', 'D', 'E'], ['A', 'B'], ['C', 'D', 'E']];
+  // [zone, column, row, column span, row span]. Shared slots never follow word width.
+  const desktopCells = {
+    A: ['upper', 8, 0, 4, 4], B: ['middle', 10, 0, 2, 2],
+    C: ['lower', 8, 0, 4, 4], D: ['upper', 5, 0, 3, 3], E: ['middle', 10, 2, 2, 2]
+  };
+  const tabletCells = {...desktopCells, B: ['upper', 6, 0, 2, 2]};
+  const mobileCells = {
+    A: ['upper', 2, 0, 4, 4], B: ['upper', 0, 0, 2, 2],
+    C: ['lower', 0, 0, 4, 4], D: ['lower', 4, 0, 2, 2], E: ['lower', 4, 2, 2, 2]
+  };
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const modules = [...grid.querySelectorAll('.hero-grid-module')];
   let index = 0;
   let current = slot.querySelector('.flip-word');
   let cleanup, reveal, resize;
 
-  const overlaps = (a, b, gap = 0) => a.x < b.x + b.w + gap && a.x + a.w > b.x - gap && a.y < b.y + b.h + gap && a.y + a.h > b.y - gap;
-
   function arrange(scene, entranceDelay = 0) {
     const bounds = grid.getBoundingClientRect();
-    const word = slot.getBoundingClientRect();
+    const line = slot.closest('.hero-line').getBoundingClientRect();
+    const title = hero.querySelector('.hero-title').getBoundingClientRect();
+    const subtitle = hero.querySelector('.hero-subtitle').getBoundingClientRect();
     const mobile = matchMedia('(max-width: 768px)').matches;
-    const columns = mobile ? 6 : 12;
-    const rows = 24;
     const gap = mobile ? 12 : 18;
-    const pitch = (bounds.width + gap) / columns;
-    const rowPitch = bounds.height / rows;
-    const protectedWord = {x: word.left - bounds.left - 18, y: word.top - bounds.top - 12, w: word.width + 36, h: word.height + 24};
-    const protectedRects = [protectedWord];
-    const subtitle = hero.querySelector('.hero-subtitle');
-    for (const node of subtitle.childNodes) {
-      if (node.nodeType !== Node.TEXT_NODE || !node.textContent.trim()) continue;
-      const range = document.createRange();
-      range.selectNodeContents(node);
-      for (const rect of range.getClientRects()) protectedRects.push({x: rect.left - bounds.left - 10, y: rect.top - bounds.top - 8, w: rect.width + 20, h: rect.height + 16});
-    }
-    const placed = [];
+    const columnPitch = (bounds.width + gap) / (mobile ? 6 : 12);
+    const bandHeight = Math.max(72, line.top - bounds.top - gap - 8);
+    const rowPitch = (bandHeight + gap) / 4;
+    const origins = {
+      upper: 0,
+      middle: line.top - bounds.top,
+      lower: (matchMedia('(max-width: 1023px)').matches ? subtitle.bottom : title.bottom) - bounds.top + gap + 8
+    };
+    const requiredHeight = bounds.top - hero.getBoundingClientRect().top + origins.lower + bandHeight + 32;
+    hero.style.setProperty('--hero-layout-min-height', `${Math.ceil(requiredHeight)}px`);
+    const cells = mobile ? mobileCells : matchMedia('(max-width: 1023px)').matches ? tabletCells : desktopCells;
     const active = modules.filter(module => Number(module.dataset.scene) === scene);
-    const single = counts[scene] === 1;
     active.forEach((module, order) => {
       module.classList.remove('is-active');
-      const {span: [maxSpan, minSpan], anchor} = layouts[scene][order];
-      let best;
-      for (let span = maxSpan; span >= minSpan && !best; span--) {
-        const w = span * pitch - gap;
-        const h = w / (single ? 16 / 9 : 16 / 10);
-        const candidates = [];
-        for (let col = 0; col <= columns - span; col++) {
-          for (let row = 0; row < rows; row++) {
-            const rect = {x: col * pitch, y: row * rowPitch, w, h, span, col, row};
-            if (rect.y + h > bounds.height || protectedRects.some(reserved => overlaps(rect, reserved)) || placed.some(other => overlaps(rect, other, gap))) continue;
-            const near = (a, b, tolerance) => Math.abs(a - b) < tolerance;
-            let alignment = 0;
-            for (const other of placed) {
-              if (near(rect.x, other.x, pitch * .4) || near(rect.x + w, other.x + other.w, pitch * .4) || near(rect.x + w / 2, other.x + other.w / 2, pitch * .35)) alignment += .14;
-              if (near(rect.y, other.y, rowPitch * .8) || near(rect.y + h / 2, other.y + other.h / 2, rowPitch * .8)) alignment += .18;
-            }
-            const score = Math.hypot((rect.x + w / 2) / bounds.width - anchor[0], (rect.y + h / 2) / bounds.height - anchor[1]) + alignment;
-            candidates.push({...rect, score});
-          }
-        }
-        candidates.sort((a, b) => a.score - b.score);
-        best = candidates[0];
-      }
-      if (!best) return;
-      placed.push(best);
-      module.style.setProperty('--image-x', `${best.x}px`);
-      module.style.setProperty('--image-y', `${best.y}px`);
-      module.style.setProperty('--image-w', `${best.w}px`);
-      module.style.setProperty('--image-h', `${best.h}px`);
-      module.dataset.gridSpan = String(best.span);
+      const name = sceneSlots[scene][order];
+      if (!name) return;
+      const [zone, col, row, cols, rows] = cells[name];
+      module.style.setProperty('--image-x', `${col * columnPitch}px`);
+      module.style.setProperty('--image-y', `${origins[zone] + row * rowPitch}px`);
+      module.style.setProperty('--image-w', `${cols * columnPitch - gap}px`);
+      module.style.setProperty('--image-h', `${rows * rowPitch - gap}px`);
       module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${entranceDelay + order * 90}ms`);
+      module.dataset.gridSlot = name;
       module.classList.add('is-active');
     });
     hero.dataset.keyword = words[scene];
-    hero.dataset.imageCount = String(placed.length);
+    hero.dataset.imageCount = String(Math.min(active.length, sceneSlots[scene].length));
   }
 
   function flip() {

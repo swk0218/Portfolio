@@ -49,7 +49,10 @@ body .hero h1.hero-title {
   min-width: 0;
   margin-bottom: clamp(1.8rem, 3.8vh, 2.7rem) !important;
 }
-body .hero { grid-template-columns: minmax(0, 1fr); }
+body .hero {
+  grid-template-columns: minmax(0, 1fr);
+  min-height: max(100svh, var(--hero-layout-min-height, 0px)) !important;
+}
 body .hero-content {
   text-align: left;
   box-sizing: border-box;
@@ -121,6 +124,7 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !impor
   filter: blur(0);
   transition-delay: var(--image-delay, 0ms);
 }
+.hero-grid-module[data-project="ballie"] img { object-position: center top; }
 @media (min-width: 1024px) {
   .hero h1.hero-title {
     font-size: clamp(7.75rem, min(14.5vw, 21vh), 14rem) !important;
