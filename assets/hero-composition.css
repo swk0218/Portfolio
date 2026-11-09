@@ -27,6 +27,15 @@ html { overflow-x: clip; }
   from { opacity: 0; transform: translateX(.035em) rotateX(35deg); filter: blur(.1em); }
   to { opacity: 1; transform: translateX(0) rotateX(0); filter: blur(0); }
 }
+/* First paint uses the same blur reveal without moving the line boxes. */
+@keyframes hero-first-in {
+  from { opacity: 0; filter: blur(.1em); }
+  to { opacity: 1; filter: blur(0); }
+}
+@keyframes hero-copy-in {
+  from { opacity: 0; filter: blur(.28em); }
+  to { opacity: 1; filter: blur(0); }
+}
 /* The hero is a display treatment. All typography below it uses the original rules. */
 body .hero h1.hero-title {
   animation: none !important;
@@ -52,18 +61,24 @@ body .hero-content {
   align-self: start;
   transform: none !important;
 }
-body .hero-title .hero-line { justify-content: flex-start; }
+body .hero-title .hero-line {
+  justify-content: flex-start;
+  animation: hero-first-in 900ms cubic-bezier(.25,.75,.25,1) 80ms backwards;
+}
+body .hero-title .hero-line:nth-child(2) { animation-delay: 200ms; }
+body .hero-title .hero-line:nth-child(3) { animation-delay: 320ms; }
 body .hero-title .typing-slot { width: 100% !important; min-width: 0; }
 body .hero-title .hero-line,
 body #typingText.flip-slot { height: .96em !important; line-height: .96 !important; }
-body .hero-title .hero-line + .hero-line { margin-top: -.035em !important; }
+/* Funnel Display 600 needs .91em between baselines; retain 1px ink clearance. */
+body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !important; }
 .hero p.hero-subtitle {
-  animation: none !important;
-  opacity: 1 !important;
+  animation: hero-copy-in 800ms cubic-bezier(.25,.75,.25,1) 480ms backwards !important;
+  opacity: 1;
   transform: none !important;
   --hero-subtitle-x: 0% !important;
   font-size: clamp(1.28rem, calc(.36rem + 4.3vw), 2.75rem) !important;
-  line-height: 1.16 !important;
+  line-height: 1.28 !important;
   left: auto !important;
   margin: 0 !important;
   width: min(100%, 46ch) !important;
@@ -134,6 +149,11 @@ body .hero-title .hero-line + .hero-line { margin-top: -.035em !important; }
   .hero p.hero-subtitle { font-size: clamp(1.08rem, 5.3vw, 1.35rem) !important; }
 }
 @media (prefers-reduced-motion: reduce) {
+  body .hero-title .hero-line, .hero p.hero-subtitle {
+    animation: none !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
   .flip-word, .flip-word > span { animation: none !important; transform: none !important; filter: none !important; opacity: 1 !important; }
   .flip-word.is-leaving { opacity: 0 !important; }
   .hero-grid-module { transition: none; }

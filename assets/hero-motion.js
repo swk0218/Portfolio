@@ -14,7 +14,7 @@
 
   const overlaps = (a, b, gap = 0) => a.x < b.x + b.w + gap && a.x + a.w > b.x - gap && a.y < b.y + b.h + gap && a.y + a.h > b.y - gap;
 
-  function arrange(scene) {
+  function arrange(scene, entranceDelay = 0) {
     const bounds = grid.getBoundingClientRect();
     const word = slot.getBoundingClientRect();
     const mobile = matchMedia('(max-width: 768px)').matches;
@@ -63,7 +63,7 @@
       module.style.setProperty('--image-y', `${best.y}px`);
       module.style.setProperty('--image-w', `${best.w}px`);
       module.style.setProperty('--image-h', `${best.h}px`);
-      module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${order * 90}ms`);
+      module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${entranceDelay + order * 90}ms`);
       module.classList.add('is-active');
     });
     hero.dataset.keyword = words[scene];
@@ -98,8 +98,10 @@
 
   let started = false;
   const start = () => {
-    arrange(index);
-    if (!started) { started = true; setInterval(flip, 2900); }
+    if (started) { arrange(index); return; }
+    started = true;
+    arrange(index, preference.matches ? 0 : 420);
+    setInterval(flip, 2900);
   };
   const fontFallback = setTimeout(start, 1500);
   if (document.fonts) document.fonts.ready.then(() => { clearTimeout(fontFallback); start(); });
