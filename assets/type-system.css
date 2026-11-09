@@ -18,6 +18,9 @@ body, body h1, body h2, body h3, body p, body a, body button,
 body input, body select, body textarea, body .lede, body .body {
   font-family: Manrope, system-ui, sans-serif !important;
 }
-body .hero h1.hero-title {
+body .hero h1.hero-title,
+body #highlights h2,
+body #portfolio h2,
+body #about h2 {
   font-family: "Funnel Display", Manrope, sans-serif !important;
 }

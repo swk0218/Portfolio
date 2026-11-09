@@ -15,18 +15,34 @@ html { overflow-x: clip; }
 }
 .flip-word > span { display: inline-block; }
 .flip-word.is-leaving { position: absolute; inset: 0; }
+.flip-word.is-leaving { animation: word-leave 280ms ease-out both; }
+.flip-word.is-entering > span {
+  animation: letter-enter 460ms cubic-bezier(.22,1,.36,1) both;
+  animation-delay: calc(var(--letter-index) * 28ms);
+}
+@keyframes word-leave {
+  to { opacity: 0; transform: translateY(-.09em); filter: blur(6px); }
+}
+@keyframes letter-enter {
+  from { opacity: 0; transform: translateY(.1em); filter: blur(4px); }
+  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+}
 /* The hero is a display treatment. All typography below it uses the original rules. */
 body .hero h1.hero-title {
   font-weight: 600;
   letter-spacing: -.015em;
+  text-transform: none;
 }
+body .hero-title .hero-line,
+body #typingText.flip-slot { height: .96em !important; line-height: .96 !important; }
+body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
 .hero p.hero-subtitle {
   font-size: clamp(1.28rem, calc(.36rem + 4.3vw), 2.75rem) !important;
   line-height: 1.16 !important;
 }
 @media (min-width: 1024px) {
   .hero h1.hero-title {
-    font-size: clamp(7.75rem, min(12.8vw, 19.6vh), 12.8rem) !important;
+    font-size: clamp(7.75rem, min(14.5vw, 21vh), 14rem) !important;
   }
   .hero p.hero-subtitle {
     font-size: clamp(1.9rem, min(2.75rem, 5.1vh), 2.75rem) !important;
@@ -37,7 +53,7 @@ body .hero h1.hero-title {
   .hero p.hero-subtitle { font-size: clamp(1.28rem, 3.8vh, 2rem) !important; }
 }
 @media (max-width: 768px) {
-  .hero h1.hero-title { font-size: clamp(3.65rem, 16.1vw, 7.8rem) !important; }
+  .hero h1.hero-title { font-size: clamp(3.65rem, 18vw, 7.8rem) !important; }
   .hero p.hero-subtitle {
     font-size: clamp(1.1rem, 4.4vw, 1.75rem) !important;
     white-space: normal !important;
@@ -45,9 +61,10 @@ body .hero h1.hero-title {
   }
 }
 @media (max-width: 420px) {
-  .hero h1.hero-title { font-size: clamp(3.35rem, 15.5vw, 6.95rem) !important; }
+  .hero h1.hero-title { font-size: clamp(3.65rem, 18vw, 6.95rem) !important; }
   .hero p.hero-subtitle { font-size: clamp(1.08rem, 5.3vw, 1.35rem) !important; }
 }
 @media (prefers-reduced-motion: reduce) {
-  .flip-word, .flip-word > span { transform: none !important; filter: none !important; opacity: 1 !important; }
+  .flip-word, .flip-word > span { animation: none !important; transform: none !important; filter: none !important; opacity: 1 !important; }
+  .flip-word.is-leaving { opacity: 0 !important; }
 }
