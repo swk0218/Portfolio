@@ -13,48 +13,11 @@
   font-style: normal;
   font-display: swap;
 }
-:root {
-  --font-sans: Manrope, "Noto Sans KR", system-ui, sans-serif;
-  --type-display: 64px;
-  --type-section: 32px;
-}
+/* Keep the original Archivo typography rules; change the family only. */
 body, body h1, body h2, body h3, body p, body a, body button,
 body input, body select, body textarea, body .lede, body .body {
-  font-family: var(--font-sans) !important;
+  font-family: Manrope, system-ui, sans-serif !important;
 }
-body { font-weight: 500; }
-body nav .logo { font-size: 18px !important; font-weight: 500 !important; }
-body nav .nav-links a { font-size: 14px !important; font-weight: 400 !important; line-height: 24px !important; }
-body .hero h1.hero-title { font-family: "Funnel Display", var(--font-sans) !important; font-weight: 600; letter-spacing: -.01em; }
-body h1.project-title { font-size: var(--type-display) !important; font-weight: 600 !important; line-height: 1.3 !important; letter-spacing: -.01em !important; }
-body .selected-works-title, body h2.section-title, body .about h2 {
-  font-size: var(--type-section) !important; font-weight: 500 !important; line-height: 1.4 !important; letter-spacing: 0 !important;
-}
-body h3.project-title, body .work-item-title, body .next-link, body .lede {
-  font-size: 24px !important; font-weight: 500 !important; line-height: 1.3 !important; letter-spacing: 0 !important;
-}
-body .hero p.hero-subtitle, body .about-text, body .about-text p,
-body .about-subtitle, body .body, body .meta-value, body .feature-title,
-body .skill-title, body .about-contact-value, body .about-contact-link {
-  font-size: 16px !important; font-weight: 500 !important; line-height: 1.5 !important; letter-spacing: 0 !important;
-}
-body .hero p.hero-subtitle { white-space: normal !important; text-wrap: wrap !important; }
-body .project-description, body .project-category, body .project-year,
-body .work-item-tagline, body .work-item-category, body .tab-button,
-body .meta-label, body .project-kicker, body .shot-caption,
-body .feature-meta, body .skill-list, body .about-contact-label,
-body .site-footer p, body .site-footer a, body .award-label,
-body .next .label, body .back-top, body .lightbox-caption, body .lightbox-counter {
-  font-size: 14px !important; font-weight: 500 !important; line-height: 1.3 !important; letter-spacing: 0 !important;
-}
-body .skill-list { line-height: 1.7 !important; }
-@media (min-width: 768px) and (max-width: 1099px) {
-  :root { --type-display: 48px; --type-section: 26px; }
-}
-@media (max-width: 767px) {
-  :root { --type-display: 38px; --type-section: 22px; }
-  body nav .logo { font-size: 16px !important; }
-}
-@media (max-width: 359px) {
-  body nav .nav-links a { font-size: 12px !important; }
+body .hero h1.hero-title {
+  font-family: "Funnel Display", Manrope, sans-serif !important;
 }
