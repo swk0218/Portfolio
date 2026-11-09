@@ -10,7 +10,7 @@
   const modules = [...grid.querySelectorAll('.hero-grid-module')];
   let index = 0;
   let current = slot.querySelector('.flip-word');
-  let cleanup, reveal, leading, resize;
+  let cleanup, reveal, resize;
 
   const overlaps = (a, b, gap = 0) => a.x < b.x + b.w + gap && a.x + a.w > b.x - gap && a.y < b.y + b.h + gap && a.y + a.h > b.y - gap;
 
@@ -73,15 +73,10 @@
   function flip() {
     clearTimeout(cleanup);
     clearTimeout(reveal);
-    clearTimeout(leading);
     slot.querySelectorAll('.is-leaving').forEach(node => node.remove());
     const previous = current;
     index = (index + 1) % words.length;
     modules.forEach(module => module.classList.remove('is-active'));
-    // Expand before a descender enters; tighten after the previous one leaves.
-    if (words[index] === 'Strategic') hero.dataset.descender = 'true';
-    else if (preference.matches) hero.dataset.descender = 'false';
-    else leading = setTimeout(() => { hero.dataset.descender = 'false'; }, 300);
     current = document.createElement('span');
     current.className = 'flip-word';
     if (!preference.matches) current.classList.add('is-entering');

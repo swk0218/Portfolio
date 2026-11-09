@@ -56,8 +56,6 @@ body .hero-title .typing-slot { width: 100% !important; min-width: 0; }
 body .hero-title .hero-line,
 body #typingText.flip-slot { height: .96em !important; line-height: .96 !important; }
 body .hero-title .hero-line + .hero-line { margin-top: -.035em !important; }
-body .hero-title .hero-line:last-child { transition: margin-top 160ms ease; }
-body .hero[data-descender="false"] .hero-title .hero-line:last-child { margin-top: -.235em !important; }
 .hero p.hero-subtitle {
   animation: none !important;
   opacity: 1 !important;
@@ -135,5 +133,5 @@ body .hero[data-descender="false"] .hero-title .hero-line:last-child { margin-to
 @media (prefers-reduced-motion: reduce) {
   .flip-word, .flip-word > span { animation: none !important; transform: none !important; filter: none !important; opacity: 1 !important; }
   .flip-word.is-leaving { opacity: 0 !important; }
-  .hero-grid-module, body .hero-title .hero-line:last-child { transition: none; }
+  .hero-grid-module { transition: none; }
 }
