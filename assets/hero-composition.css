@@ -18,17 +18,19 @@ html { overflow-x: clip; }
 .flip-word.is-leaving { animation: word-leave 280ms ease-out both; }
 .flip-word.is-entering > span {
   animation: letter-enter 460ms cubic-bezier(.22,1,.36,1) both;
-  animation-delay: calc(var(--letter-index) * 28ms);
+  animation-delay: calc(180ms + var(--letter-index) * 28ms);
 }
 @keyframes word-leave {
-  to { opacity: 0; transform: translateY(-.09em); filter: blur(6px); }
+  to { opacity: 0; transform: translateX(-.025em) rotateX(-20deg); filter: blur(6px); }
 }
 @keyframes letter-enter {
-  from { opacity: 0; transform: translateY(.1em); filter: blur(4px); }
-  to { opacity: 1; transform: translateY(0); filter: blur(0); }
+  from { opacity: 0; transform: translateX(.035em) rotateX(35deg); filter: blur(4px); }
+  to { opacity: 1; transform: translateX(0) rotateX(0); filter: blur(0); }
 }
 /* The hero is a display treatment. All typography below it uses the original rules. */
 body .hero h1.hero-title {
+  animation: none !important;
+  opacity: 1 !important;
   font-weight: 600;
   letter-spacing: -.015em;
   text-transform: none;
@@ -45,13 +47,21 @@ body .hero-content {
   max-width: none !important;
   min-width: 0;
   padding-inline: 5%;
+  padding-top: clamp(2rem, 4vh, 3rem);
+  align-self: start;
+  transform: none !important;
 }
 body .hero-title .hero-line { justify-content: flex-start; }
 body .hero-title .typing-slot { width: 100% !important; min-width: 0; }
 body .hero-title .hero-line,
 body #typingText.flip-slot { height: .96em !important; line-height: .96 !important; }
-body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
+body .hero-title .hero-line + .hero-line { margin-top: -.035em !important; }
+body .hero-title .hero-line:last-child { transition: margin-top 160ms ease; }
+body .hero[data-descender="false"] .hero-title .hero-line:last-child { margin-top: -.235em !important; }
 .hero p.hero-subtitle {
+  animation: none !important;
+  opacity: 1 !important;
+  transform: none !important;
   --hero-subtitle-x: 0% !important;
   font-size: clamp(1.28rem, calc(.36rem + 4.3vw), 2.75rem) !important;
   line-height: 1.16 !important;
@@ -60,14 +70,10 @@ body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
   width: min(100%, 46ch) !important;
   text-align: left;
 }
-/* Fixed grid cells: an image leaves its cell before another cell reveals. */
+/* Images are placed on a column/row grid, outside the blue word rectangle. */
 .hero-work-grid {
   position: absolute;
-  inset: calc(var(--nav-h) + 2rem) 5% 3rem;
-  display: grid;
-  grid-template-columns: repeat(12, minmax(0, 1fr));
-  grid-template-rows: repeat(6, minmax(0, 1fr));
-  gap: clamp(12px, 1.2vw, 24px);
+  inset: calc(var(--nav-h) + 1.5rem) 5% 2rem;
   z-index: 0;
   pointer-events: none;
 }
@@ -75,25 +81,27 @@ body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
   content: '';
   position: absolute;
   inset: 0;
-  background: linear-gradient(90deg, #111 0%, rgba(17,17,17,.78) 40%, transparent 78%);
+  background: linear-gradient(90deg, rgba(17,17,17,.65), rgba(17,17,17,.12) 70%);
 }
 .hero-grid-module {
+  position: absolute;
+  left: var(--image-x, 66%);
+  top: var(--image-y, 0px);
+  width: var(--image-w, 30%);
+  height: var(--image-h, auto);
+  aspect-ratio: 16 / 10;
   margin: 0;
   overflow: hidden;
-  align-self: start;
-  aspect-ratio: 16 / 10;
   opacity: 0;
   clip-path: inset(0 100% 0 0);
-  transition: opacity 180ms ease, clip-path 280ms cubic-bezier(.22,1,.36,1);
+  transition: opacity 180ms ease, clip-path 360ms cubic-bezier(.22,1,.36,1);
 }
-.hero-grid-module.is-active { opacity: .78; clip-path: inset(0); }
+.hero-grid-module.is-active {
+  opacity: .92;
+  clip-path: inset(0);
+  transition-delay: var(--image-delay, 0ms);
+}
 .hero-grid-module img { display: block; width: 100%; height: 100%; object-fit: cover; }
-.hero-grid-module:nth-child(1) { grid-column: 9 / span 4; grid-row: 1 / span 2; }
-.hero-grid-module:nth-child(2) { grid-column: 9 / span 4; grid-row: 5 / span 2; }
-.hero-grid-module:nth-child(3) { grid-column: 8 / span 4; grid-row: 3 / span 2; }
-.hero-grid-module:nth-child(4) { grid-column: 7 / span 3; grid-row: 1 / span 2; }
-.hero-grid-module:nth-child(5) { grid-column: 10 / span 3; grid-row: 4 / span 2; }
-.hero-grid-module:nth-child(6) { grid-column: 7 / span 4; grid-row: 5 / span 2; }
 @media (min-width: 1024px) {
   .hero h1.hero-title {
     font-size: clamp(7.75rem, min(14.5vw, 21vh), 14rem) !important;
@@ -114,21 +122,11 @@ body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
     white-space: normal !important;
     text-wrap: wrap !important;
   }
-  .hero-work-grid {
-    inset: calc(var(--nav-h) + 1.5rem) 6% 2.2rem;
-    grid-template-columns: repeat(6, minmax(0, 1fr));
-    grid-template-rows: repeat(8, minmax(0, 1fr));
-    gap: 12px;
-  }
+  body .hero-content { padding-top: clamp(6rem, 14vh, 9rem); }
+  .hero-work-grid { inset: calc(var(--nav-h) + 1.5rem) 6% 2rem; }
   .hero-work-grid::after {
-    background: linear-gradient(180deg, transparent 0%, rgba(17,17,17,.5) 30%, rgba(17,17,17,.45) 72%, transparent 100%);
+    background: linear-gradient(90deg, rgba(17,17,17,.35), rgba(17,17,17,.08));
   }
-  .hero-grid-module:nth-child(1) { grid-column: 4 / span 3; grid-row: 1 / span 2; }
-  .hero-grid-module:nth-child(2) { grid-column: 1 / span 4; grid-row: 7 / span 2; }
-  .hero-grid-module:nth-child(3) { grid-column: 3 / span 4; grid-row: 6 / span 2; }
-  .hero-grid-module:nth-child(4) { grid-column: 1 / span 3; grid-row: 2 / span 2; }
-  .hero-grid-module:nth-child(5) { grid-column: 4 / span 3; grid-row: 3 / span 2; }
-  .hero-grid-module:nth-child(6) { grid-column: 1 / span 3; grid-row: 6 / span 2; }
 }
 @media (max-width: 420px) {
   .hero h1.hero-title { font-size: clamp(3.65rem, 18vw, 6.95rem) !important; }
@@ -137,5 +135,5 @@ body .hero-title .hero-line + .hero-line { margin-top: -.01em !important; }
 @media (prefers-reduced-motion: reduce) {
   .flip-word, .flip-word > span { animation: none !important; transform: none !important; filter: none !important; opacity: 1 !important; }
   .flip-word.is-leaving { opacity: 0 !important; }
-  .hero-grid-module { transition: none; }
+  .hero-grid-module, body .hero-title .hero-line:last-child { transition: none; }
 }
