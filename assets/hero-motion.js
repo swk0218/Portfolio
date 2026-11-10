@@ -9,21 +9,21 @@
   // Coordinates are [column, row, columns, rows]; word length never moves them.
   const desktopFrames = [
     [[9, 0, 3, 7], [9, 7, 3, 3]],
-    [[8, 0, 4, 3], [10, 3, 2, 3], [9, 6, 3, 4]],
+    [[8, 0, 4, 3], [9, 3, 3, 7]],
     [[9, 3, 3, 7], [8, 0, 4, 3]],
-    [[8, 0, 4, 3], [10, 3, 2, 6]],
-    [[9, 0, 3, 6], [9, 6, 3, 3]],
-    [[8, 9, 4, 2], [9, 0, 3, 7]]
+    [[8, 0, 4, 3], [9, 3, 3, 7]],
+    [[9, 0, 3, 6], [10, 6, 2, 5]],
+    [[9, 1, 3, 6], [9, 7, 3, 3]]
   ];
-  // On compact screens, keep imagery on both sides of the typography block.
-  // The lower band's origin is snapped to the same row pitch as the upper band.
+  // Compact layouts live entirely within the dedicated image row of a 100svh hero.
+  // [column, row, columns, rows] on a shared 6-by-8 grid.
   const compactFrames = [
-    [['lower', 0, 0, 4, 6], ['upper', 3, 0, 3, 3]],
-    [['upper', 0, 0, 4, 3], ['lower', 0, 0, 3, 4], ['lower', 3, 2, 3, 4]],
-    [['lower', 2, 0, 4, 6], ['upper', 0, 0, 3, 3]],
-    [['upper', 2, 0, 4, 3], ['lower', 0, 0, 4, 6]],
-    [['lower', 0, 0, 4, 6], ['upper', 2, 0, 4, 3], ['lower', 4, 2, 2, 3]],
-    [['lower', 0, 0, 6, 4], ['upper', 3, 0, 3, 3]]
+    [[0, 0, 3, 8], [3, 2, 3, 6]],
+    [[0, 0, 3, 5], [3, 0, 3, 8]],
+    [[0, 0, 4, 8], [4, 3, 2, 3]],
+    [[0, 0, 3, 5], [3, 0, 3, 8]],
+    [[0, 0, 3, 8], [3, 0, 3, 8]],
+    [[0, 0, 4, 8], [4, 1, 2, 6]]
   ];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const modules = [...grid.querySelectorAll('.hero-grid-module')];
@@ -34,35 +34,29 @@
   function arrange(scene, entranceDelay = 0) {
     const bounds = grid.getBoundingClientRect();
     const heroBounds = hero.getBoundingClientRect();
-    const firstLine = hero.querySelector('.hero-line').getBoundingClientRect();
     const line = slot.closest('.hero-line').getBoundingClientRect();
     const subtitle = hero.querySelector('.hero-subtitle').getBoundingClientRect();
     const compact = matchMedia('(max-width: 1099px)').matches;
     const gap = compact ? 12 : 18;
     const columns = compact ? 6 : 12;
     const columnPitch = (bounds.width + gap) / columns;
-    const rowPitch = compact
-      ? Math.max(28, (firstLine.top - bounds.top) / 3)
+    const imageSpace = compact ? hero.querySelector('.hero-image-space').getBoundingClientRect() : null;
+    const rowPitch = compact ? (imageSpace.height + gap) / 8
       : Math.max(36, (line.top - bounds.top - gap) / 3);
-    const lowerRow = Math.ceil((subtitle.bottom - bounds.top + 28) / rowPitch);
-    const frames = compact ? compactFrames : desktopFrames.map((frames, i) =>
-      i === 5 && matchMedia('(max-width: 1279px)').matches
-        ? [[9, 9, 3, 2], frames[1]] : frames);
-    const rectangles = frames.map(items => items.map(frame => {
-      if (compact) {
-        const [band, col, row, cols, rows] = frame;
-        return {x: col * columnPitch, y: ((band === 'lower' ? lowerRow : 0) + row) * rowPitch,
-          w: cols * columnPitch - gap, h: rows * rowPitch - gap};
-      }
-      const [col, row, cols, rows] = frame;
-      return {x: col * columnPitch, y: row * rowPitch,
-        w: cols * columnPitch - gap, h: rows * rowPitch - gap};
-    }));
-    // Reserve the complete sequence, so changing scene never changes hero height.
-    const lastImage = Math.max(...rectangles.flat().map(rect => rect.y + rect.h));
-    const requiredHeight = Math.max(subtitle.bottom - heroBounds.top + 48,
-      bounds.top - heroBounds.top + lastImage + 36);
-    hero.style.setProperty('--hero-layout-min-height', `${Math.ceil(requiredHeight)}px`);
+    const offsetY = compact ? imageSpace.top - bounds.top : 0;
+    const frames = compact ? compactFrames : desktopFrames;
+    const rectangles = frames.map(items => items.map(([col, row, cols, rows]) => ({
+      x: col * columnPitch, y: offsetY + row * rowPitch,
+      w: cols * columnPitch - gap, h: Math.max(1, rows * rowPitch - gap)
+    })));
+    if (compact) {
+      hero.style.removeProperty('--hero-layout-min-height');
+    } else {
+      const lastImage = Math.max(...rectangles.flat().map(rect => rect.y + rect.h));
+      const requiredHeight = Math.max(subtitle.bottom - heroBounds.top + 48,
+        bounds.top - heroBounds.top + lastImage + 36);
+      hero.style.setProperty('--hero-layout-min-height', `${Math.ceil(requiredHeight)}px`);
+    }
     const active = modules.filter(module => Number(module.dataset.scene) === scene);
     active.forEach((module, order) => {
       const rect = rectangles[scene][order];
