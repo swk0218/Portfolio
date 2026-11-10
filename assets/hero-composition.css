@@ -163,3 +163,11 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !impor
   .hero-grid-module { transition: none; }
   .hero-grid-module img { transition: none; filter: none; }
 }
+
+/* Keep image bands clear of compact-screen typography. */
+@media (max-width: 1099px) {
+  body .hero-content { padding-top: clamp(8rem, 20vw, 11rem); }
+}
+.hero-grid-module[data-crop="ballie"] img { object-position: 43% 20%; }
+.hero-grid-module[data-crop="astronaut"] img { object-position: 61% center; }
+.hero-grid-module[data-crop="material"] img { object-position: 63% center; }

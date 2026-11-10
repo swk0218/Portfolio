@@ -1,21 +1,30 @@
-/* Two fixed grid compositions alternate between two and three images. */
+/* Six composed scenes; all images share stable column and row tracks. */
 (() => {
   const hero = document.querySelector('.hero');
   const slot = document.getElementById('typingText');
   const grid = document.querySelector('.hero-work-grid');
   if (!hero || !slot || !grid) return;
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
-  const sceneSlots = [['A', 'B'], ['C', 'D', 'E'], ['A', 'B'], ['C', 'D', 'E'], ['A', 'B'], ['C', 'D', 'E']];
-  // [zone, column, row, column span, row span]. Shared slots never follow word width.
-  const desktopCells = {
-    A: ['upper', 8, 0, 4, 4], B: ['middle', 10, 0, 2, 2],
-    C: ['lower', 8, 0, 4, 4], D: ['upper', 5, 0, 3, 3], E: ['middle', 10, 2, 2, 2]
-  };
-  const tabletCells = {...desktopCells, B: ['upper', 6, 0, 2, 2]};
-  const mobileCells = {
-    A: ['upper', 2, 0, 4, 4], B: ['upper', 0, 0, 2, 2],
-    C: ['lower', 0, 0, 4, 4], D: ['lower', 4, 0, 2, 2], E: ['lower', 4, 2, 2, 2]
-  };
+  // Each scene has its own composition on one shared 12-column grid.
+  // Coordinates are [column, row, columns, rows]; word length never moves them.
+  const desktopFrames = [
+    [[9, 0, 3, 7], [9, 7, 3, 3]],
+    [[8, 0, 4, 3], [10, 3, 2, 3], [9, 6, 3, 4]],
+    [[9, 3, 3, 7], [8, 0, 4, 3]],
+    [[8, 0, 4, 3], [10, 3, 2, 6]],
+    [[9, 0, 3, 6], [9, 6, 3, 3]],
+    [[8, 9, 4, 2], [9, 0, 3, 7]]
+  ];
+  // On compact screens, keep imagery on both sides of the typography block.
+  // The lower band's origin is snapped to the same row pitch as the upper band.
+  const compactFrames = [
+    [['lower', 0, 0, 4, 6], ['upper', 3, 0, 3, 3]],
+    [['upper', 0, 0, 4, 3], ['lower', 0, 0, 3, 4], ['lower', 3, 2, 3, 4]],
+    [['lower', 2, 0, 4, 6], ['upper', 0, 0, 3, 3]],
+    [['upper', 2, 0, 4, 3], ['lower', 0, 0, 4, 6]],
+    [['lower', 0, 0, 4, 6], ['upper', 2, 0, 4, 3], ['lower', 4, 2, 2, 3]],
+    [['lower', 0, 0, 6, 4], ['upper', 3, 0, 3, 3]]
+  ];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const modules = [...grid.querySelectorAll('.hero-grid-module')];
   let index = 0;
@@ -24,38 +33,50 @@
 
   function arrange(scene, entranceDelay = 0) {
     const bounds = grid.getBoundingClientRect();
+    const heroBounds = hero.getBoundingClientRect();
+    const firstLine = hero.querySelector('.hero-line').getBoundingClientRect();
     const line = slot.closest('.hero-line').getBoundingClientRect();
-    const title = hero.querySelector('.hero-title').getBoundingClientRect();
     const subtitle = hero.querySelector('.hero-subtitle').getBoundingClientRect();
-    const mobile = matchMedia('(max-width: 768px)').matches;
-    const gap = mobile ? 12 : 18;
-    const columnPitch = (bounds.width + gap) / (mobile ? 6 : 12);
-    const bandHeight = Math.max(72, line.top - bounds.top - gap - 8);
-    const rowPitch = (bandHeight + gap) / 4;
-    const origins = {
-      upper: 0,
-      middle: line.top - bounds.top,
-      lower: (matchMedia('(max-width: 1023px)').matches ? subtitle.bottom : title.bottom) - bounds.top + gap + 8
-    };
-    const requiredHeight = bounds.top - hero.getBoundingClientRect().top + origins.lower + bandHeight + 32;
+    const compact = matchMedia('(max-width: 1099px)').matches;
+    const gap = compact ? 12 : 18;
+    const columns = compact ? 6 : 12;
+    const columnPitch = (bounds.width + gap) / columns;
+    const rowPitch = compact
+      ? Math.max(28, (firstLine.top - bounds.top) / 3)
+      : Math.max(36, (line.top - bounds.top - gap) / 3);
+    const lowerRow = Math.ceil((subtitle.bottom - bounds.top + 28) / rowPitch);
+    const frames = compact ? compactFrames : desktopFrames.map((frames, i) =>
+      i === 5 && matchMedia('(max-width: 1279px)').matches
+        ? [[9, 9, 3, 2], frames[1]] : frames);
+    const rectangles = frames.map(items => items.map(frame => {
+      if (compact) {
+        const [band, col, row, cols, rows] = frame;
+        return {x: col * columnPitch, y: ((band === 'lower' ? lowerRow : 0) + row) * rowPitch,
+          w: cols * columnPitch - gap, h: rows * rowPitch - gap};
+      }
+      const [col, row, cols, rows] = frame;
+      return {x: col * columnPitch, y: row * rowPitch,
+        w: cols * columnPitch - gap, h: rows * rowPitch - gap};
+    }));
+    // Reserve the complete sequence, so changing scene never changes hero height.
+    const lastImage = Math.max(...rectangles.flat().map(rect => rect.y + rect.h));
+    const requiredHeight = Math.max(subtitle.bottom - heroBounds.top + 48,
+      bounds.top - heroBounds.top + lastImage + 36);
     hero.style.setProperty('--hero-layout-min-height', `${Math.ceil(requiredHeight)}px`);
-    const cells = mobile ? mobileCells : matchMedia('(max-width: 1023px)').matches ? tabletCells : desktopCells;
     const active = modules.filter(module => Number(module.dataset.scene) === scene);
     active.forEach((module, order) => {
-      module.classList.remove('is-active');
-      const name = sceneSlots[scene][order];
-      if (!name) return;
-      const [zone, col, row, cols, rows] = cells[name];
-      module.style.setProperty('--image-x', `${col * columnPitch}px`);
-      module.style.setProperty('--image-y', `${origins[zone] + row * rowPitch}px`);
-      module.style.setProperty('--image-w', `${cols * columnPitch - gap}px`);
-      module.style.setProperty('--image-h', `${rows * rowPitch - gap}px`);
+      const rect = rectangles[scene][order];
+      if (!rect) return;
+      module.style.setProperty('--image-x', `${rect.x}px`);
+      module.style.setProperty('--image-y', `${rect.y}px`);
+      module.style.setProperty('--image-w', `${rect.w}px`);
+      module.style.setProperty('--image-h', `${rect.h}px`);
       module.style.setProperty('--image-delay', preference.matches ? '0ms' : `${entranceDelay + order * 90}ms`);
-      module.dataset.gridSlot = name;
+      module.dataset.gridSlot = `${scene}-${order}`;
       module.classList.add('is-active');
     });
     hero.dataset.keyword = words[scene];
-    hero.dataset.imageCount = String(Math.min(active.length, sceneSlots[scene].length));
+    hero.dataset.imageCount = String(active.length);
   }
 
   function flip() {
