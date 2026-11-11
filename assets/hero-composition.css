@@ -190,7 +190,6 @@ body .hero-content {
   inset: 0;
   z-index: 0;
   pointer-events: none;
-  transform-origin: var(--hero-orb-x, 56%) var(--hero-orb-y, 82%);
 }
 body .hero .hero-shader-gradient {
   left: var(--hero-orb-x, 56%) !important;
@@ -199,50 +198,32 @@ body .hero .hero-shader-gradient {
   height: var(--hero-orb-size, min(140vw, 70svh)) !important;
 }
 
-/* Optional full-name study: one unbroken line at every viewport width. */
-body .hero--name h1.hero-title {
-  font-size: clamp(6.5rem, min(11.5vw, 16svh), 12rem) !important;
-  margin-bottom: clamp(.8rem, 1.6svh, 1.3rem) !important;
-  letter-spacing: -.025em;
-  white-space: nowrap;
-}
-.hero-name-descriptor {
-  margin: 0 0 clamp(1.1rem, 2.3svh, 1.8rem);
-  font-family: "Funnel Display", Manrope, sans-serif !important;
-  font-size: clamp(1.3rem, 2.5vw, 2.6rem);
-  font-weight: 500;
-  color: var(--white) !important;
-  letter-spacing: -.015em;
-  line-height: 1.3;
-  white-space: nowrap;
-  animation: hero-copy-in 800ms cubic-bezier(.25,.75,.25,1) 400ms backwards;
-}
-.hero-name-descriptor #typingText.flip-slot {
-  width: 9ch;
-  height: 1.18em !important;
-  line-height: 1.18 !important;
-  vertical-align: -.08em;
-}
-@media (max-width: 1199px) {
-  body .hero--name .hero-content { grid-template-rows: max-content max-content max-content; }
-  body .hero--name h1.hero-title {
-    font-size: clamp(2rem, min(10.2vw, 10.8svh), 7rem) !important;
-    margin: 0 !important;
-  }
-  .hero-name-descriptor { grid-row: 2; margin: 0; font-size: clamp(1.08rem, 4.4vw, 2rem); }
-  body .hero--name p.hero-subtitle { grid-row: 3; }
-}
 @media (min-width: 1200px) and (max-height: 760px) {
   body .hero h1.hero-title { font-size: clamp(5rem, min(12.5vw, 18.5svh), 10rem) !important; }
-  body .hero--name h1.hero-title { font-size: clamp(5rem, min(11.5vw, 14svh), 10rem) !important; }
 }
 @media (max-width: 1199px) and (max-height: 480px) {
   :root { --nav-haze-depth: 1.4rem; }
   body .hero-content { padding-top: calc(var(--nav-h) + var(--nav-haze-depth) + 8px) !important; }
-  body .hero--name h1.hero-title { font-size: clamp(1.8rem, min(8vw, 10svh), 3rem) !important; }
-  .hero-name-descriptor { font-size: .95rem; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-atmosphere { transform: none !important; filter: none !important; opacity: 1 !important; }
-  .hero-name-descriptor { animation: none; }
+}
+
+
+/* A fixed, faint light accent; the organic field never scales or dims. */
+.hero-light-accent {
+  position: absolute;
+  left: var(--hero-orb-x, 56%);
+  top: var(--hero-orb-y, 82%);
+  width: var(--hero-orb-size, min(140vw, 70svh));
+  height: var(--hero-orb-size, min(140vw, 70svh));
+  transform: translate(-50%, -50%);
+  pointer-events: none;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at 50% 45%, rgba(25, 50, 255, .8), rgba(15, 27, 255, .2) 45%, transparent 70%);
+  mix-blend-mode: screen;
+  opacity: 0;
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-light-accent { display: none; }
 }

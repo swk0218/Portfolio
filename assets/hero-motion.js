@@ -1,29 +1,15 @@
-/* Keyword changes gently gather and release the existing organic background. */
+/* Original organic motion stays continuous; word entries add a faint light. */
 (() => {
   const hero = document.querySelector('.hero');
   const slot = document.getElementById('typingText');
   if (!hero || !slot) return;
-  const atmosphere = hero.querySelector('.hero-atmosphere');
+  const light = hero.querySelector('.hero-light-accent');
   const subtitle = hero.querySelector('.hero-subtitle');
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0;
   let current = slot.querySelector('.flip-word');
-  let cleanup, pulse, layoutFrame;
-
-  if (new URLSearchParams(location.search).get('hero') === 'name') {
-    hero.classList.add('hero--name');
-    const title = hero.querySelector('h1');
-    const name = document.createElement('span');
-    name.className = 'hero-line';
-    name.textContent = 'Wonkyoung Seo';
-    const descriptor = document.createElement('p');
-    descriptor.className = 'hero-name-descriptor';
-    descriptor.append('Crafting ', slot, ' identities.');
-    title.replaceChildren(name);
-    title.setAttribute('aria-label', 'Wonkyoung Seo');
-    title.after(descriptor);
-  }
+  let cleanup, lightAnimation, layoutFrame;
 
   function arrangeBackground() {
     const bounds = hero.getBoundingClientRect();
@@ -51,15 +37,14 @@
     layoutFrame = requestAnimationFrame(arrangeBackground);
   }
 
-  function breathe() {
-    if (!atmosphere || preference.matches) return;
-    if (pulse) pulse.cancel();
-    pulse = atmosphere.animate([
-      { transform: 'scale(1)', opacity: 1, filter: 'brightness(1)', offset: 0 },
-      { transform: 'scale(.945)', opacity: .72, filter: 'brightness(.94)', offset: .22 },
-      { transform: 'scale(1.035)', opacity: 1, filter: 'brightness(1.14)', offset: .60 },
-      { transform: 'scale(1)', opacity: 1, filter: 'brightness(1)', offset: 1 }
-    ], { duration: 1500, easing: 'cubic-bezier(.25,.65,.25,1)' });
+  function lightOnWordEntry() {
+    if (!light || preference.matches) return;
+    if (lightAnimation && lightAnimation.playState === 'running') return;
+    lightAnimation = light.animate([
+      { opacity: 0, easing: 'ease-in-out' },
+      { opacity: .075, easing: 'ease-in-out' },
+      { opacity: 0 }
+    ], { duration: 2200, delay: 250 });
   }
   function flip() {
     clearTimeout(cleanup);
@@ -82,7 +67,7 @@
       else cleanup = setTimeout(() => previous.remove(), 440);
     }
     hero.dataset.keyword = words[index];
-    breathe();
+    lightOnWordEntry();
   }
 
   let started = false;
@@ -91,6 +76,7 @@
     started = true;
     hero.dataset.keyword = words[index];
     arrangeBackground();
+    lightOnWordEntry();
     setInterval(flip, 2900);
   };
   const fontFallback = setTimeout(start, 1500);
@@ -101,5 +87,5 @@
     const observer = new ResizeObserver(queueLayout);
     [hero, subtitle, document.querySelector('nav')].filter(Boolean).forEach(node => observer.observe(node));
   }
-  preference.addEventListener('change', () => { if (pulse) pulse.cancel(); });
+  preference.addEventListener('change', () => { if (lightAnimation) lightAnimation.cancel(); });
 })();
