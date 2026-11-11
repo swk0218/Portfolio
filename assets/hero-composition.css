@@ -1,5 +1,7 @@
 /* Preserve the existing composition, palette and blue navigation haze. */
 html { overflow-x: clip; }
+:root { --hero-content-gutter: 5%; }
+@media (max-width: 720px) { :root { --hero-content-gutter: 6%; } }
 #typingText.flip-slot {
   display: inline-grid;
   place-items: center start;
@@ -59,7 +61,7 @@ body .hero-content {
   width: 100% !important;
   max-width: none !important;
   min-width: 0;
-  padding-inline: 5%;
+  padding-inline: max(var(--hero-content-gutter), calc((100% - var(--site-rail-max)) / 2));
   padding-top: clamp(2rem, 4vh, 3rem);
   align-self: start;
   transform: none !important;
@@ -101,7 +103,6 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !impor
   .hero p.hero-subtitle { font-size: clamp(1.28rem, 3.8vh, 2rem) !important; }
 }
 @media (max-width: 768px) {
-  body .hero-content { padding-inline: 6% !important; }
   .hero h1.hero-title { font-size: clamp(3.65rem, 18vw, 7.8rem) !important; }
   .hero p.hero-subtitle {
     font-size: clamp(1.1rem, 4.4vw, 1.75rem) !important;
@@ -145,7 +146,7 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !impor
     row-gap: clamp(12px, 1.8svh, 20px);
     height: 100%;
     min-height: 0;
-    padding: calc(var(--nav-h) + clamp(8px, 1.8svh, 20px)) 6% max(16px, env(safe-area-inset-bottom)) !important;
+    padding: calc(var(--nav-h) + clamp(8px, 1.8svh, 20px)) var(--hero-content-gutter) max(16px, env(safe-area-inset-bottom)) !important;
   }
   body .hero h1.hero-title {
     grid-row: 1;
@@ -227,3 +228,13 @@ body .hero .hero-shader-gradient {
 @media (prefers-reduced-motion: reduce) {
   .hero-light-accent { display: none; }
 }
+
+/* Funnel Display 600: retain native GPOS (including ra at -20/1200 em).
+   Optical starts use measured outline sidebearings, independent of layout rails.
+   Optical f/t allowance: +8/1000 em above -15/1000 em display tracking. */
+body .hero h1.hero-title { font-kerning: normal; font-variant-ligatures: common-ligatures; }
+.hero-word { display: inline-block; }
+.hero-word--crafting { margin-inline-start: -.039908em; }
+.hero-word--identities { margin-inline-start: -.078473em; }
+.hero-kern-ft { letter-spacing: -.007em; }
+.flip-word { margin-inline-start: var(--word-optical-start, -.033287em); }

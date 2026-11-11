@@ -6,6 +6,8 @@
   const light = hero.querySelector('.hero-light-accent');
   const subtitle = hero.querySelector('.hero-subtitle');
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
+  // Outline left bearings at Funnel Display 600; optical alignment only.
+  const opticalStarts = ['-.033287em', '-.074445em', '-.078473em', '-.074445em', '-.074445em', '-.018704em'];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0;
   let current = slot.querySelector('.flip-word');
@@ -53,6 +55,7 @@
     index = (index + 1) % words.length;
     current = document.createElement('span');
     current.className = 'flip-word';
+    current.style.setProperty('--word-optical-start', opticalStarts[index]);
     if (!preference.matches) current.classList.add('is-entering');
     for (const [order, char] of [...words[index]].entries()) {
       const letter = document.createElement('span');

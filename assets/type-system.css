@@ -31,6 +31,7 @@ body #about h2 {
 
 /* Full-name site identity, shared by home and project pages. */
 body nav .logo {
+  font-family: "Funnel Display", Manrope, sans-serif !important;
   font-size: clamp(.96rem, 1.3vw, 1.22rem) !important;
   letter-spacing: -.015em !important;
   text-transform: none;
@@ -40,10 +41,10 @@ body nav .logo {
 @media (max-width: 600px) {
   body nav .logo { font-size: clamp(.86rem, 3.4vw, 1rem) !important; }
   body nav .nav-inner { gap: .65rem; }
-  body nav .nav-links { gap: .65rem !important; }
+  body nav .nav-links { gap: .85rem !important; }
 }
 @media (max-width: 380px) {
   body nav .nav-inner { gap: .5rem; }
-  body nav .nav-links { gap: .55rem !important; }
+  body nav .nav-links { gap: .7rem !important; }
   body nav .nav-links a { font-size: .68rem !important; letter-spacing: 0 !important; }
 }
