@@ -238,3 +238,47 @@ body .hero h1.hero-title { font-kerning: normal; font-variant-ligatures: common-
 .hero-word--identities { margin-inline-start: -.078473em; }
 .hero-kern-ft { letter-spacing: -.007em; }
 .flip-word { margin-inline-start: var(--word-optical-start, -.033287em); }
+
+/* Project detail glimpses sit on a fixed 3 × 4 grid above the organic field. */
+.hero-modules {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  --module-gap: clamp(7px, .9vw, 14px);
+}
+.hero-modules[hidden] { display: none; }
+.hero[data-module-layout="side"] p.hero-subtitle { max-width: var(--hero-copy-max) !important; }
+.hero-module-set {
+  position: absolute; inset: 0;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(4, minmax(0, 1fr));
+  gap: var(--module-gap);
+  pointer-events: none;
+}
+.hero-module {
+  position: relative; display: block; min-width: 0; min-height: 0;
+  pointer-events: auto;
+  animation: module-enter 900ms cubic-bezier(.25,.75,.25,1) both;
+  animation-delay: calc(300ms + var(--module-order) * 70ms);
+}
+.hero-module img {
+  display: block; width: 100%; height: 100%;
+  object-fit: contain; object-position: left top;
+  border-radius: 0; opacity: 1;
+}
+.hero-module:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
+.hero-module-set.is-leaving .hero-module { animation: module-leave 420ms ease-out both; pointer-events: none; }
+@keyframes module-enter {
+  from { opacity: 0; filter: blur(12px); transform: translateY(10px); }
+  to { opacity: 1; filter: blur(0); transform: translateY(0); }
+}
+@keyframes module-leave {
+  to { opacity: 0; filter: blur(10px); transform: translateY(-6px); }
+}
+/* On very short phones, give the type poster two cells rather than a tiny third crop. */
+.hero-modules.is-short [data-scene="Distinct"] .hero-module:nth-child(2) { grid-row: 2 / span 2 !important; }
+.hero-modules.is-short [data-scene="Distinct"] .hero-module:nth-child(3) { display: none; }
+@media (prefers-reduced-motion: reduce) {
+  .hero-module, .hero-module-set.is-leaving .hero-module { animation: none; transform: none; filter: none; opacity: 1; }
+}
