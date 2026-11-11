@@ -9,20 +9,20 @@
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
   // Outline left bearings at Funnel Display 600; optical alignment only.
   const opticalStarts = ['-.033287em', '-.074445em', '-.078473em', '-.074445em', '-.074445em', '-.018704em'];
-  // 3 columns × 4 rows, numbered row-first. Adjacent scenes use disjoint cells,
+  // 3 columns × 5 rows, numbered row-first. Adjacent scenes use disjoint cells,
   // including the last-to-first transition. The grid itself never moves on a flip.
   const scenes = [
-    { project: 'mrgb', name: 'Micro RGB', slots: [[0,1,3,4], [5]],
+    { project: 'mrgb', name: 'Micro RGB', slots: [0, 11],
       images: [['strategic-exhibit'], ['strategic-poster', 'strategic-colorbox']] },
-    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [[6,7,9,10], [8]],
+    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 12],
       images: [['refined-product'], ['refined-material']] },
-    { project: 'ballie', name: 'Ballie', slots: [[1,2,4,5], [0]],
-      images: [['iconic-stack'], ['iconic-booklet', 'iconic-box']] },
-    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [[9,10], [3], [6]],
+    { project: 'ballie', name: 'Ballie', slots: [2, 3, 10],
+      images: [['iconic-stack'], ['iconic-booklet'], ['iconic-box']] },
+    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [1, 6, 14],
       images: [['distinct-portal'], ['distinct-type'], ['distinct-portrait']] },
-    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [[4,5,7,8], [0]],
+    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 10],
       images: [['bold-yellow', 'bold-poster'], ['bold-orange']] },
-    { name: 'Just Cool', slots: [[10,11], [2], [6,9]],
+    { name: 'Just Cool', slots: [1, 8, 12],
       images: [['cool-cave'], ['cool-viewfinity'], ['cool-ark']],
       projects: ['monitor-os', 'viewfinity', 'ark'],
       names: ['The Odyssey Continues', 'ViewFinity', 'Ark'] }
@@ -111,7 +111,6 @@
     modules.style.height = `${height}px`;
     hero.dataset.moduleLayout = portrait ? 'below' : 'side';
     hero.style.setProperty('--hero-copy-max', `${Math.max(0, left - railLeft - 24)}px`);
-    modules.classList.toggle('is-short', portrait && height < 210);
     modules.hidden = width < 90 || height < 70;
   }
   function showImages(sceneIndex) {
@@ -129,11 +128,10 @@
     activeSet = document.createElement('div');
     activeSet.className = 'hero-module-set';
     activeSet.dataset.scene = words[sceneIndex];
-    scene.slots.forEach((cells, order) => {
-      const first = Math.min(...cells), last = Math.max(...cells);
-      const row = Math.floor(first / 3) + 1, column = first % 3 + 1;
-      const rowSpan = Math.floor(last / 3) - row + 2;
-      const columnSpan = last % 3 - column + 2;
+    const incoming = activeSet;
+    const decoding = [];
+    scene.slots.forEach((cell, order) => {
+      const row = Math.floor(cell / 3) + 1, column = cell % 3 + 1;
       const project = scene.projects ? scene.projects[order] : scene.project;
       const name = scene.names ? scene.names[order] : scene.name;
       const file = scene.images[order][entry % scene.images[order].length];
@@ -141,18 +139,23 @@
       card.className = 'hero-module';
       card.href = `projects/${project}.html`;
       card.setAttribute('aria-label', `Explore ${name}`);
-      card.dataset.cells = cells.join(',');
-      card.style.gridArea = `${row} / ${column} / span ${rowSpan} / span ${columnSpan}`;
+      card.dataset.cell = cell;
+      card.style.gridArea = `${row} / ${column} / ${row + 1} / ${column + 1}`;
       card.style.setProperty('--module-order', order);
       const image = document.createElement('img');
       image.src = `assets/hero/glimpses/${file}.webp`;
       image.alt = imageDescriptions[file];
       image.decoding = 'async';
       image.draggable = false;
+      // Start the reveal after decoding, so slow images never appear already settled.
+      decoding.push(image.decode().catch(() => {}));
       card.append(image);
       activeSet.append(card);
     });
-    modules.append(activeSet);
+    modules.append(incoming);
+    Promise.all(decoding).then(() => {
+      if (activeSet === incoming && incoming.isConnected) incoming.classList.add('is-ready');
+    });
     // Next scene loads in advance; no network wait interrupts the shared rhythm.
     scenes[(sceneIndex + 1) % scenes.length].images.flat().forEach(file => {
       const image = new Image();
