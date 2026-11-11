@@ -8,22 +8,22 @@
   // Each scene has its own composition on one shared 12-column grid.
   // Coordinates are [column, row, columns, rows]; word length never moves them.
   const desktopFrames = [
-    [[9, 0, 3, 7], [9, 7, 3, 3]],
-    [[8, 0, 4, 3], [9, 3, 3, 7]],
-    [[9, 3, 3, 7], [8, 0, 4, 3]],
-    [[8, 0, 4, 3], [9, 3, 3, 7]],
-    [[9, 0, 3, 6], [10, 6, 2, 5]],
-    [[9, 1, 3, 6], [9, 7, 3, 3]]
+    [[8, 0, 4, 3], [10, 3, 2, 5]],
+    [[9, 0, 3, 3], [9, 4, 3, 6]],
+    [[9, 0, 3, 5], [10, 5, 2, 6]],
+    [[9, 0, 3, 4], [10, 4, 2, 3], [9, 7, 3, 3]],
+    [[9, 0, 3, 7], [10, 7, 2, 5]],
+    [[9, 4, 3, 5], [8, 0, 4, 3]]
   ];
-  // Compact layouts live entirely within the dedicated image row of a 100svh hero.
-  // [column, row, columns, rows] on a shared 6-by-8 grid.
+  // Every scene uses the same 12-column / 12-row canvas. Large and small
+  // modules trade places without shifting title, copy or gallery bounds.
   const compactFrames = [
-    [[0, 0, 3, 8], [3, 2, 3, 6]],
-    [[0, 0, 3, 5], [3, 0, 3, 8]],
-    [[0, 0, 4, 8], [4, 3, 2, 3]],
-    [[0, 0, 3, 5], [3, 0, 3, 8]],
-    [[0, 0, 3, 8], [3, 0, 3, 8]],
-    [[0, 0, 4, 8], [4, 1, 2, 6]]
+    [[0, 0, 12, 6], [8, 6, 4, 6]],
+    [[5, 0, 7, 6], [0, 0, 5, 12]],
+    [[0, 2, 7, 10], [7, 0, 5, 7]],
+    [[0, 0, 8, 7], [8, 0, 4, 4], [5, 8, 7, 4]],
+    [[0, 0, 7, 12], [8, 4, 4, 8]],
+    [[0, 5, 12, 7], [5, 0, 7, 4]]
   ];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   const modules = [...grid.querySelectorAll('.hero-grid-module')];
@@ -38,10 +38,10 @@
     const subtitle = hero.querySelector('.hero-subtitle').getBoundingClientRect();
     const compact = matchMedia('(max-width: 1099px)').matches;
     const gap = compact ? 12 : 18;
-    const columns = compact ? 6 : 12;
+    const columns = 12;
     const columnPitch = (bounds.width + gap) / columns;
     const imageSpace = compact ? hero.querySelector('.hero-image-space').getBoundingClientRect() : null;
-    const rowPitch = compact ? (imageSpace.height + gap) / 8
+    const rowPitch = compact ? (imageSpace.height + gap) / 12
       : Math.max(36, (line.top - bounds.top - gap) / 3);
     const offsetY = compact ? imageSpace.top - bounds.top : 0;
     const frames = compact ? compactFrames : desktopFrames;
