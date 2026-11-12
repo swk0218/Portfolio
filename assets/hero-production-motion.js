@@ -1,4 +1,4 @@
-/* Keep the production composition and continuous background untouched. */
+/* Retain the composition while bringing the organic field forward on scroll. */
 (() => {
   const hero = document.querySelector('.hero');
   const slot = document.getElementById('typingText');
@@ -24,9 +24,13 @@
       return;
     }
     const bounds = hero.getBoundingClientRect();
-    const progress = Math.max(0, Math.min(1, -bounds.top / Math.max(1, bounds.height)));
-    const eased = progress * progress * (3 - 2 * progress);
-    background.style.transform = `translate3d(0, ${(bounds.height * .07 * eased).toFixed(2)}px, 0) scale(${(1 + .18 * eased).toFixed(4)})`;
+    const distance = Math.max(0, Math.min(bounds.height, -bounds.top));
+    // Reach the full zoom while the field is still visible, with a strong early response.
+    const progress = Math.min(1, distance / Math.max(1, bounds.height * .75));
+    const eased = 1 - (1 - progress) ** 2;
+    const scale = 1 + 2.2 * eased;
+    // Counter part of the page travel so the enlarging forms linger behind the copy.
+    background.style.transform = `translate3d(0, ${(distance * .55).toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
     hero.toggleAttribute('data-parallax-active', bounds.bottom > 0 && bounds.top <= 0);
   }
   function queueBackground() {
