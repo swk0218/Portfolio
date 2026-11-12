@@ -13,30 +13,34 @@
   // companions occupy one cell. Adjacent scenes share no occupied cells,
   // including the last-to-first transition. The grid stays fixed on a flip.
   const scenes = [
-    { project: 'mrgb', name: 'Micro RGB', slots: [0, 8], rowSpans: [2, 1],
-      images: [['strategic-poster'], ['strategic-exhibit']] },
-    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 9], rowSpans: [2, 1],
-      images: [['refined-detail-portrait'], ['refined-product']] },
+    { project: 'mrgb', name: 'Micro RGB', slots: [0, 8, 1], rowSpans: [2, 1, 1],
+      images: [['strategic-poster'], ['strategic-exhibit'], ['strategic-colorbox']] },
+    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 9, 2], rowSpans: [2, 1, 1],
+      images: [['refined-detail-portrait'], ['refined-product'], ['refined-material']] },
     { project: 'ballie', name: 'Ballie', slots: [8, 1, 3], rowSpans: [2, 1, 1],
       images: [['iconic-stack-portrait'], ['iconic-booklet'], ['iconic-box']] },
-    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [2, 10], rowSpans: [2, 1],
-      images: [['distinct-portrait'], ['distinct-portal']] },
-    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 1], rowSpans: [2, 1],
-      images: [['bold-yellow', 'bold-poster'], ['bold-orange']] },
-    { name: 'Just Cool', slots: [4, 2, 9], rowSpans: [2, 1, 1],
-      images: [['cool-ark'], ['cool-cave'], ['cool-viewfinity']],
-      projects: ['ark', 'monitor-os', 'viewfinity'],
-      names: ['Ark', 'The Odyssey Continues', 'ViewFinity'] }
+    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [2, 10, 0], rowSpans: [2, 1, 1],
+      images: [['distinct-portrait'], ['distinct-portal'], ['distinct-ready']] },
+    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 1, 11], rowSpans: [2, 1, 1],
+      images: [['bold-yellow', 'bold-poster'], ['bold-orange'], ['bold-wide']] },
+    { name: 'Just Cool', slots: [4, 2, 9, 5, 10], rowSpans: [2, 1, 1, 1, 1],
+      images: [['cool-ark'], ['cool-cave'], ['cool-viewfinity'], ['cool-viewfinity-cyan'], ['cool-ark-control']],
+      projects: ['ark', 'monitor-os', 'viewfinity', 'viewfinity', 'ark'],
+      names: ['Ark', 'The Odyssey Continues', 'ViewFinity', 'ViewFinity', 'Ark'] }
   ];
   // Preserve complete poster compositions; photographs keep their chosen focal point.
   const imageFraming = {
     'strategic-poster': { fit: 'contain', background: '#050505' },
     'strategic-exhibit': { fit: 'contain', background: '#050505' },
+    'strategic-colorbox': { fit: 'contain', background: '#050505' },
     'bold-yellow': { fit: 'contain', background: '#050505' },
     'bold-poster': { fit: 'contain', background: '#050505' },
+    'bold-wide': { fit: 'contain', background: '#050505' },
     'bold-orange': { position: '50% 68%' },
     'distinct-portrait': { position: '50% 48%' },
-    'cool-ark': { position: '55% 50%' }
+    'distinct-ready': { fit: 'contain', background: '#ededeb' },
+    'cool-ark': { position: '55% 50%' },
+    'cool-ark-control': { position: '50% 60%' }
   };
   const imageDescriptions = {
     'strategic-exhibit': 'Micro RGB campaign exhibition',
@@ -52,12 +56,16 @@
     'distinct-portal': 'Odyssey OLED portal artwork',
     'distinct-type': 'Odyssey OLED typographic poster',
     'distinct-portrait': 'Odyssey OLED campaign portrait',
+    'distinct-ready': 'Odyssey OLED GET READY graphic and display detail',
     'bold-yellow': 'Wireless Audio VL geometric poster',
     'bold-orange': 'Wireless Audio VL orange graphic',
     'bold-poster': 'Wireless Audio VL outdoor poster',
+    'bold-wide': 'Wireless Audio VL concentric graphic and speaker poster',
     'cool-cave': 'The Odyssey Continues floating artifact artwork',
     'cool-viewfinity': 'ViewFinity glass artwork',
-    'cool-ark': 'Ark lifestyle photography'
+    'cool-ark': 'Ark lifestyle photography',
+    'cool-viewfinity-cyan': 'ViewFinity cyan and yellow glass artwork',
+    'cool-ark-control': 'Ark circular controller and hand close-up'
   };
   const entries = words.map(() => 0);
   const title = hero.querySelector('.hero-title');
