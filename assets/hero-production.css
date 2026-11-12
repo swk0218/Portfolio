@@ -85,6 +85,9 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   opacity: 1;
 }
 .hero[data-parallax-active] .hero-shader-parallax { will-change: transform, opacity; }
+@media (max-width: 768px) {
+  .hero .hero-shader-gradient { top: calc(52% + 5svh) !important; }
+}
 .hero-award-stars svg {
   transform-box: fill-box;
   transform-origin: 50% 50%;
