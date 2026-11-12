@@ -1,4 +1,4 @@
-/* Retain the composition while bringing the organic field forward on scroll. */
+/* Let the organic field grow and dissolve with reversible scroll progress. */
 (() => {
   const hero = document.querySelector('.hero');
   const slot = document.getElementById('typingText');
@@ -20,17 +20,19 @@
     if (!background) return;
     if (preference.matches) {
       background.style.removeProperty('transform');
+      background.style.removeProperty('opacity');
       hero.removeAttribute('data-parallax-active');
       return;
     }
     const bounds = hero.getBoundingClientRect();
     const distance = Math.max(0, Math.min(bounds.height, -bounds.top));
-    // Reach the full zoom while the field is still visible, with a strong early response.
-    const progress = Math.min(1, distance / Math.max(1, bounds.height * .75));
+    // Complete the dissolve before the hero exits; both values reverse with the scroll.
+    const progress = Math.min(1, distance / Math.max(1, bounds.height * .8));
     const eased = 1 - (1 - progress) ** 2;
-    const scale = 1 + 2.2 * eased;
-    // Counter part of the page travel so the enlarging forms linger behind the copy.
-    background.style.transform = `translate3d(0, ${(distance * .55).toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+    const scale = 1 + .7 * eased;
+    const dissolve = progress * progress * (3 - 2 * progress);
+    background.style.transform = `translate3d(0, ${(distance * .25).toFixed(2)}px, 0) scale(${scale.toFixed(4)})`;
+    background.style.opacity = (1 - dissolve).toFixed(4);
     hero.toggleAttribute('data-parallax-active', bounds.bottom > 0 && bounds.top <= 0);
   }
   function queueBackground() {
@@ -128,7 +130,7 @@
   window.addEventListener('resize', queueLayout);
   window.addEventListener('load', queueLayout);
   if ('ResizeObserver' in window && navigation) new ResizeObserver(queueLayout).observe(navigation);
-  window.addEventListener('scroll', () => { if (backgroundVisible) queueBackground(); }, { passive: true });
+  window.addEventListener('scroll', () => { if (backgroundVisible) queueBackground(); }, { passive: true, capture: true });
   if (background && 'IntersectionObserver' in window) {
     new IntersectionObserver(entries => {
       backgroundVisible = entries[0].isIntersecting;

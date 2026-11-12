@@ -82,14 +82,15 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   z-index: 0;
   pointer-events: none;
   transform-origin: 50% 60%;
+  opacity: 1;
 }
-.hero[data-parallax-active] .hero-shader-parallax { will-change: transform; }
+.hero[data-parallax-active] .hero-shader-parallax { will-change: transform, opacity; }
 .hero-award-stars svg {
   transform-box: fill-box;
   transform-origin: 50% 50%;
 }
 @media (prefers-reduced-motion: reduce) {
-  .hero-shader-parallax { transform: none !important; }
+  .hero-shader-parallax { transform: none !important; opacity: 1 !important; }
   .flip-word, .flip-word > span {
     animation: none !important;
     transform: none !important;
@@ -100,7 +101,8 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
 }
 
 /* Retain the current non-hero link treatment and navigation haze. */
-html { overflow-x: clip; }
+/* Clip horizontal overflow without creating a second vertical scroll container. */
+html, body { overflow-x: clip; }
 .project-title-link { font-family: "Funnel Display", Manrope, sans-serif !important; color: inherit; text-decoration: none; }
 .project-title-link:hover { text-decoration: underline; text-decoration-thickness: .045em; text-underline-offset: .13em; }
 .project-title-link:focus-visible { outline: 2px solid var(--accent); outline-offset: 5px; }
