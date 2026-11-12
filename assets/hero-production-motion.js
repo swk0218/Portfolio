@@ -4,11 +4,34 @@
   const slot = document.getElementById('typingText');
   if (!hero || !slot) return;
   const heading = hero.querySelector('.hero-title');
+  const content = hero.querySelector('.hero-content');
+  const awards = hero.querySelector('.hero-award-stars');
+  const navigation = document.querySelector('nav');
   const stars = [...hero.querySelectorAll('.hero-award-stars svg')];
-  const words = ['STRATEGIC', 'REFINED', 'ICONIC', 'DISTINCT', 'BOLD', 'JUST COOL'];
+  const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0, current, cleanup, started = false;
   let starAnimations = [];
+  let layoutFrame;
+
+  function positionCopy() {
+    if (!content || !awards || !navigation) return;
+    if (!matchMedia('(max-width: 768px)').matches) {
+      content.style.removeProperty('--hero-copy-optical-offset');
+      return;
+    }
+    const haze = getComputedStyle(navigation, '::before');
+    const hazeBottom = (parseFloat(haze.top) || 0) + (parseFloat(haze.height) || navigation.offsetHeight);
+    // Layout offsets exclude both the entrance animation and our own optical lift.
+    const awardsTop = content.offsetTop + awards.offsetTop;
+    const desiredLift = Math.min(35.2, Math.max(19.2, hero.clientHeight * .035));
+    const lift = Math.max(0, Math.min(desiredLift, awardsTop - hazeBottom - 16));
+    content.style.setProperty('--hero-copy-optical-offset', `${-lift}px`);
+  }
+  function queueLayout() {
+    cancelAnimationFrame(layoutFrame);
+    layoutFrame = requestAnimationFrame(positionCopy);
+  }
 
   function makeWord(word, animate) {
     const node = document.createElement('span');
@@ -54,6 +77,7 @@
     }
     heading.setAttribute('aria-label', `Crafting ${words[index].toLowerCase()} identities`);
     hero.dataset.keyword = words[index];
+    queueLayout();
     awardWave();
   }
 
@@ -65,6 +89,7 @@
     slot.replaceChildren(current);
     heading.setAttribute('aria-label', 'Crafting strategic identities');
     hero.dataset.keyword = words[index];
+    queueLayout();
     // The original constellation entrance completes before the first shared pulse.
     setInterval(flip, 2900);
   }
@@ -75,4 +100,7 @@
     starAnimations.forEach(animation => animation.cancel());
     starAnimations = [];
   });
+  window.addEventListener('resize', queueLayout);
+  window.addEventListener('load', queueLayout);
+  if ('ResizeObserver' in window && navigation) new ResizeObserver(queueLayout).observe(navigation);
 })();
