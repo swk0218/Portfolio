@@ -17,7 +17,7 @@ body .hero-title .hero-line {
 body .hero-title .typing-slot { width: 100% !important; min-width: 0; }
 body .hero-title .hero-line,
 body #typingText.flip-slot { height: .96em !important; line-height: .96 !important; }
-body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !important; }
+body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !important; }
 .hero-word { display: inline-block; }
 /* Retain the developed f-to-t allowance and native kerning in each word. */
 .hero-kern-ft { letter-spacing: -.007em; }
@@ -72,15 +72,24 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + 1px) !impor
   from { opacity: 0; transform: translateX(.035em) rotateX(35deg); filter: blur(.1em); }
   to { opacity: 1; transform: translateX(0) rotateX(0); filter: blur(0); }
 }
-.hero-award-stars { margin-bottom: clamp(.8rem, 1.05vw, 1.15rem) !important; }
+.hero-award-stars { margin-bottom: clamp(.4rem, .55vw, .7rem) !important; }
 @media (max-width: 768px) {
-  .hero-award-stars { margin-bottom: .8rem !important; }
+  .hero-award-stars { margin-bottom: .4rem !important; }
 }
+.hero-shader-parallax {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+  transform-origin: 50% 60%;
+}
+.hero[data-parallax-active] .hero-shader-parallax { will-change: transform; }
 .hero-award-stars svg {
   transform-box: fill-box;
   transform-origin: 50% 50%;
 }
 @media (prefers-reduced-motion: reduce) {
+  .hero-shader-parallax { transform: none !important; }
   .flip-word, .flip-word > span {
     animation: none !important;
     transform: none !important;

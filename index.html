@@ -3,7 +3,7 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="portfolio-revision" content="20261112h"/>
+<meta name="portfolio-revision" content="20261112i"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
 <meta name="robots" content="noindex, nofollow, noarchive, nosnippet"/>
 <title>Wonkyoung Seo</title>
@@ -2757,7 +2757,9 @@ nav::before{
 
   </style>
 <link rel="stylesheet" href="assets/type-system.css?v=20261111e">
-<link rel="stylesheet" href="assets/hero-production.css?v=20261112h">
+<link rel="stylesheet" href="assets/hero-production.css?v=20261112i">
+<link rel="stylesheet" href="assets/interaction-system.css?v=20261112i">
+<link rel="stylesheet" href="assets/motion-system.css?v=20261112i">
 </head>
 <body class="motion-loco">
 <div id="top"></div>
@@ -2772,7 +2774,7 @@ nav::before{
 </div>
 </nav>
 <section class="hero">
-<div aria-hidden="true" class="hero-shader-gradient" id="heroShaderGradient"></div>
+<div class="hero-shader-parallax" aria-hidden="true"><div class="hero-shader-gradient" id="heroShaderGradient"></div></div>
 <div class="hero-content">
 <div class="hero-award-stars" role="img" aria-label="Six major design awards">
 <svg aria-hidden="true" focusable="false" viewBox="0 0 24 24"><path d="M12 0 13.84 7.57 20.49 3.51 16.43 10.16 24 12 16.43 13.84 20.49 20.49 13.84 16.43 12 24 10.16 16.43 3.51 20.49 7.57 13.84 0 12 7.57 10.16 3.51 3.51 10.16 7.57Z"/></svg>
@@ -3105,7 +3107,8 @@ nav::before{
     </div>
   </footer>
 <script src="assets/hero-shadergradient.js?v=20260915" defer></script>
-<script src="assets/hero-production-motion.js?v=20261112h" defer></script>
+<script src="assets/hero-production-motion.js?v=20261112i" defer></script>
+<script src="assets/project-motion.js?v=20261112i" defer></script>
 <script src="assets/thumbs/list/manifest.js"></script>
 <script>
         // Portfolio data
@@ -4014,137 +4017,9 @@ const projects = [
                     return;
                 }
                 e.preventDefault();
-                document.querySelector(href)?.scrollIntoView({behavior: 'smooth'});
+                document.querySelector(href)?.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
             });
         });
     </script>
-<script>
-        // Viewport rail/full-bleed sync (midcheck)
-        (function () {
-            const root = document.documentElement;
-            if (!root) return;
-
-            function syncFullBleed() {
-                const width = Math.max(root.clientWidth || 0, window.innerWidth || 0);
-                const safeWidth = root.clientWidth || width;
-                if (!safeWidth) return;
-                root.style.setProperty('--full-bleed-width', `${safeWidth}px`);
-                root.style.setProperty('--full-bleed-offset', `calc(50% - ${safeWidth / 2}px)`);
-            }
-
-            syncFullBleed();
-            window.addEventListener('resize', syncFullBleed, { passive: true });
-            window.addEventListener('orientationchange', syncFullBleed, { passive: true });
-        })();
-        // /Viewport rail/full-bleed sync (midcheck)
-
-        // Locopopo-inspired scroll reveal (midcheck)
-        (function () {
-            if (!document.body || !document.body.classList.contains('motion-loco')) return;
-
-            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const revealables = [];
-            const seen = new Set();
-
-            function add(el, type = 'text', delay = 0) {
-                if (!el || seen.has(el)) return;
-                seen.add(el);
-                el.setAttribute('data-reveal', type);
-                el.style.setProperty('--reveal-delay', `${Math.max(0, Math.round(delay))}ms`);
-                revealables.push(el);
-            }
-
-            document.querySelectorAll('.project-card').forEach((card, index) => {
-                const base = Math.min((index % 4) * 90, 270);
-                add(card.querySelector('.project-image'), 'media', base);
-                add(card.querySelector('.project-details'), 'text', base + 115);
-            });
-
-            document.querySelectorAll('.work-item').forEach((item, index) => {
-                const base = Math.min((index % 6) * 55, 275);
-                add(item.querySelector('.work-item-image'), 'media', base);
-                add(item.querySelector('.work-item-category'), 'text', base + 82);
-                add(item.querySelector('.work-item-title'), 'text', base + 104);
-                add(item.querySelector('.work-item-tagline'), 'text', base + 126);
-                add(item.querySelector('.work-item-awards'), 'text', base + 142);
-            });
-
-            [
-                '.selected-works-title',
-                '.all-work .section-title',
-                '.work-tabs',
-                '.about-grid > div',
-                '.skill-item',
-                '.awards-section .about-contact-label',
-                '.awards-section .feature-item',
-                '.featured-in .about-contact-label',
-                '.featured-in .feature-item',
-                '.about-contact-item',
-                '.site-footer',
-                '.project-header',
-                '.hero-media',
-                '.overview-section',
-                '.shot-block',
-                '.next'
-            ].forEach((selector) => {
-                document.querySelectorAll(selector).forEach((el, index) => {
-                    const media = el.matches('.hero-media, .shot-block');
-                    const delay = media ? Math.min((index % 6) * 62, 310) : Math.min((index % 8) * 54, 270);
-                    add(el, media ? 'media' : 'text', delay);
-                });
-            });
-
-            if (!revealables.length) return;
-
-            let observer = null;
-
-            function reveal(el) {
-                el.setAttribute('data-reveal-state', 'in');
-                if (observer) observer.unobserve(el);
-
-                let settled = false;
-                const settle = () => {
-                    if (settled) return;
-                    settled = true;
-                    el.setAttribute('data-reveal-settled', '');
-                    el.removeEventListener('transitionend', onTransitionEnd);
-                };
-                const onTransitionEnd = (event) => {
-                    if (event.target === el) settle();
-                };
-
-                el.addEventListener('transitionend', onTransitionEnd);
-                window.setTimeout(settle, 1750);
-            }
-
-            if (reduce) {
-                revealables.forEach((el) => reveal(el));
-                return;
-            }
-
-            function revealVisible() {
-                const vh = window.innerHeight || document.documentElement.clientHeight;
-                revealables.forEach((el) => {
-                    if (el.getAttribute('data-reveal-state') === 'in') return;
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < vh * 0.92 && rect.bottom > 0) reveal(el);
-                });
-            }
-
-            if ('IntersectionObserver' in window) {
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) reveal(entry.target);
-                    });
-                }, { threshold: 0.13, rootMargin: '0px 0px -7% 0px' });
-                revealables.forEach((el) => observer.observe(el));
-            }
-
-            requestAnimationFrame(revealVisible);
-            window.addEventListener('load', revealVisible, { once: true });
-            window.addEventListener('hashchange', () => requestAnimationFrame(revealVisible));
-        })();
-        // /Locopopo-inspired scroll reveal (midcheck)
-  </script>
 </body>
 </html>

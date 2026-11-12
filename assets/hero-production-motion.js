@@ -7,12 +7,32 @@
   const content = hero.querySelector('.hero-content');
   const awards = hero.querySelector('.hero-award-stars');
   const navigation = document.querySelector('nav');
+  const background = hero.querySelector('.hero-shader-parallax');
   const stars = [...hero.querySelectorAll('.hero-award-stars svg')];
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
   const preference = matchMedia('(prefers-reduced-motion: reduce)');
   let index = 0, current, cleanup, started = false;
   let starAnimations = [];
   let layoutFrame;
+  let scrollFrame, backgroundVisible = true;
+
+  function backgroundScroll() {
+    if (!background) return;
+    if (preference.matches) {
+      background.style.removeProperty('transform');
+      hero.removeAttribute('data-parallax-active');
+      return;
+    }
+    const bounds = hero.getBoundingClientRect();
+    const progress = Math.max(0, Math.min(1, -bounds.top / Math.max(1, bounds.height)));
+    const eased = progress * progress * (3 - 2 * progress);
+    background.style.transform = `translate3d(0, ${(bounds.height * .07 * eased).toFixed(2)}px, 0) scale(${(1 + .18 * eased).toFixed(4)})`;
+    hero.toggleAttribute('data-parallax-active', bounds.bottom > 0 && bounds.top <= 0);
+  }
+  function queueBackground() {
+    if (scrollFrame) return;
+    scrollFrame = requestAnimationFrame(() => { scrollFrame = null; backgroundScroll(); });
+  }
 
   function positionCopy() {
     if (!content || !awards || !navigation) return;
@@ -30,7 +50,7 @@
   }
   function queueLayout() {
     cancelAnimationFrame(layoutFrame);
-    layoutFrame = requestAnimationFrame(positionCopy);
+    layoutFrame = requestAnimationFrame(() => { positionCopy(); queueBackground(); });
   }
 
   function makeWord(word, animate) {
@@ -99,8 +119,16 @@
   preference.addEventListener('change', () => {
     starAnimations.forEach(animation => animation.cancel());
     starAnimations = [];
+    queueBackground();
   });
   window.addEventListener('resize', queueLayout);
   window.addEventListener('load', queueLayout);
   if ('ResizeObserver' in window && navigation) new ResizeObserver(queueLayout).observe(navigation);
+  window.addEventListener('scroll', () => { if (backgroundVisible) queueBackground(); }, { passive: true });
+  if (background && 'IntersectionObserver' in window) {
+    new IntersectionObserver(entries => {
+      backgroundVisible = entries[0].isIntersecting;
+      queueBackground();
+    }, { threshold: 0 }).observe(hero);
+  }
 })();
