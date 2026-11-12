@@ -14,58 +14,42 @@
   // including the last-to-first transition. The grid stays fixed on a flip.
   const scenes = [
     { project: 'mrgb', name: 'Micro RGB', slots: [0, 8, 1], rowSpans: [2, 1, 1],
-      images: [['strategic-poster'], ['strategic-exhibit'], ['strategic-colorbox']] },
+      images: [['strategic-display-portrait'], ['strategic-particle-field'], ['strategic-campaign-copy']] },
     { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 9, 2], rowSpans: [2, 1, 1],
-      images: [['refined-detail-portrait'], ['refined-product'], ['refined-material']] },
+      images: [['refined-detail-portrait'], ['refined-topview'], ['refined-material-corner']] },
     { project: 'ballie', name: 'Ballie', slots: [8, 1, 3], rowSpans: [2, 1, 1],
-      images: [['iconic-stack-portrait'], ['iconic-booklet'], ['iconic-box']] },
+      images: [['iconic-unbox-tall'], ['iconic-booklet-clear'], ['iconic-box-clear']] },
     { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [2, 10, 0], rowSpans: [2, 1, 1],
-      images: [['distinct-portrait'], ['distinct-portal'], ['distinct-ready']] },
+      images: [['distinct-manifest-tall'], ['distinct-portal-clear'], ['distinct-gold-world']] },
     { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 1, 11], rowSpans: [2, 1, 1],
-      images: [['bold-yellow', 'bold-poster'], ['bold-orange'], ['bold-wide']] },
+      images: [['bold-orange-eight'], ['bold-yellow-rect'], ['bold-gold-diamond']] },
     { name: 'Just Cool', slots: [4, 2, 9, 5, 10], rowSpans: [2, 1, 1, 1, 1],
-      images: [['cool-ark'], ['cool-cave'], ['cool-viewfinity'], ['cool-viewfinity-cyan'], ['cool-ark-control']],
-      projects: ['ark', 'monitor-os', 'viewfinity', 'viewfinity', 'ark'],
-      names: ['Ark', 'The Odyssey Continues', 'ViewFinity', 'ViewFinity', 'Ark'] }
+      images: [['cool-ark-frontal'], ['cool-cave-wide'], ['cool-viewfinity-pink'], ['cool-starship'], ['cool-viewfinity-signal']],
+      projects: ['ark', 'monitor-os', 'viewfinity', 'monitor-os', 'viewfinity'],
+      names: ['Ark', 'The Odyssey Continues', 'ViewFinity', 'The Odyssey Continues', 'ViewFinity'] }
   ];
-  // Preserve complete poster compositions; photographs keep their chosen focal point.
-  const imageFraming = {
-    'strategic-poster': { fit: 'contain', background: '#050505' },
-    'strategic-exhibit': { fit: 'contain', background: '#050505' },
-    'strategic-colorbox': { fit: 'contain', background: '#050505' },
-    'bold-yellow': { fit: 'contain', background: '#050505' },
-    'bold-poster': { fit: 'contain', background: '#050505' },
-    'bold-wide': { fit: 'contain', background: '#050505' },
-    'bold-orange': { position: '50% 68%' },
-    'distinct-portrait': { position: '50% 48%' },
-    'distinct-ready': { fit: 'contain', background: '#ededeb' },
-    'cool-ark': { position: '55% 50%' },
-    'cool-ark-control': { position: '50% 60%' }
-  };
+  // Prepared crops fill each frame; no automatic focal shift or letterboxing.
   const imageDescriptions = {
-    'strategic-exhibit': 'Micro RGB campaign exhibition',
-    'strategic-poster': 'Micro RGB color campaign poster',
-    'strategic-colorbox': 'Micro RGB color and material cube',
-    'refined-product': 'The Premiere 8K product photography',
-    'refined-material': 'The Premiere 8K metal and grille detail',
+    'strategic-display-portrait': 'Micro RGB campaign display with the complete screen visible',
+    'strategic-particle-field': 'Micro RGB blue and magenta particle artwork',
+    'strategic-campaign-copy': 'Micro RGB Feel the power of color campaign graphic',
     'refined-detail-portrait': 'The Premiere 8K diagonal product and material study',
-    'iconic-stack': 'Ballie and its packaging',
-    'iconic-stack-portrait': 'Ballie above its stacked packaging, with the full product visible',
-    'iconic-booklet': 'Ballie illustrated booklet',
-    'iconic-box': 'Ballie packaging detail',
-    'distinct-portal': 'Odyssey OLED portal artwork',
-    'distinct-type': 'Odyssey OLED typographic poster',
-    'distinct-portrait': 'Odyssey OLED campaign portrait',
-    'distinct-ready': 'Odyssey OLED GET READY graphic and display detail',
-    'bold-yellow': 'Wireless Audio VL geometric poster',
-    'bold-orange': 'Wireless Audio VL orange graphic',
-    'bold-poster': 'Wireless Audio VL outdoor poster',
-    'bold-wide': 'Wireless Audio VL concentric graphic and speaker poster',
-    'cool-cave': 'The Odyssey Continues floating artifact artwork',
-    'cool-viewfinity': 'ViewFinity glass artwork',
-    'cool-ark': 'Ark lifestyle photography',
-    'cool-viewfinity-cyan': 'ViewFinity cyan and yellow glass artwork',
-    'cool-ark-control': 'Ark circular controller and hand close-up'
+    'refined-topview': 'The Premiere 8K complete top-view silhouette',
+    'refined-material-corner': 'The Premiere 8K chrome edge and grille detail',
+    'iconic-unbox-tall': 'Ballie in its open packaging with the lid and tray visible',
+    'iconic-booklet-clear': 'Ballie illustrated booklet held in two hands',
+    'iconic-box-clear': 'Ballie closed packaging with its complete silhouette',
+    'distinct-manifest-tall': 'Odyssey OLED BE THE WINNER OF ALL WORLDS poster',
+    'distinct-portal-clear': 'Odyssey OLED circular portal and character artwork',
+    'distinct-gold-world': 'Odyssey OLED gold doorway artwork',
+    'bold-orange-eight': 'Wireless Audio VL orange concentric figure-eight graphic',
+    'bold-yellow-rect': 'Wireless Audio VL yellow concentric rectangular graphic',
+    'bold-gold-diamond': 'Wireless Audio VL interwoven gold diamond graphic',
+    'cool-ark-frontal': 'Ark gaming lifestyle with the complete vertical monitor visible',
+    'cool-cave-wide': 'The Odyssey Continues floating artifact in a blue cave',
+    'cool-viewfinity-pink': 'ViewFinity pink refractive glass artwork',
+    'cool-starship': 'The Odyssey Continues starship and nebula artwork',
+    'cool-viewfinity-signal': 'ViewFinity yellow graphic field with black alignment marks'
   };
   const entries = words.map(() => 0);
   const title = hero.querySelector('.hero-title');
@@ -169,10 +153,6 @@
       card.dataset.rowSpan = rowSpan;
       card.style.gridArea = `${row} / ${column} / ${row + rowSpan} / ${column + 1}`;
       card.style.setProperty('--module-order', order);
-      const framing = imageFraming[file] || {};
-      if (framing.fit) card.style.setProperty('--module-fit', framing.fit);
-      if (framing.position) card.style.setProperty('--module-position', framing.position);
-      if (framing.background) card.style.setProperty('--module-background', framing.background);
       const image = document.createElement('img');
       image.src = `assets/hero/glimpses/${file}.webp`;
       image.alt = imageDescriptions[file];
