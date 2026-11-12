@@ -9,31 +9,44 @@
   const words = ['Strategic', 'Refined', 'Iconic', 'Distinct', 'Bold', 'Just Cool'];
   // Outline left bearings at Funnel Display 600; optical alignment only.
   const opticalStarts = ['-.033287em', '-.074445em', '-.078473em', '-.074445em', '-.074445em', '-.018704em'];
-  // 3 columns × 5 rows, numbered row-first. Adjacent scenes use disjoint cells,
-  // including the last-to-first transition. The grid itself never moves on a flip.
+  // 3 columns × 4 rows, numbered row-first. One portrait spans two rows;
+  // companions occupy one cell. Adjacent scenes share no occupied cells,
+  // including the last-to-first transition. The grid stays fixed on a flip.
   const scenes = [
-    { project: 'mrgb', name: 'Micro RGB', slots: [0, 11],
-      images: [['strategic-exhibit'], ['strategic-poster', 'strategic-colorbox']] },
-    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 12],
-      images: [['refined-product'], ['refined-material']] },
-    { project: 'ballie', name: 'Ballie', slots: [2, 3, 10],
-      images: [['iconic-stack'], ['iconic-booklet'], ['iconic-box']] },
-    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [1, 6, 14],
-      images: [['distinct-portal'], ['distinct-type'], ['distinct-portrait']] },
-    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 10],
+    { project: 'mrgb', name: 'Micro RGB', slots: [0, 8], rowSpans: [2, 1],
+      images: [['strategic-poster'], ['strategic-exhibit']] },
+    { project: 'thepremiere-8k', name: 'The Premiere 8K', slots: [4, 9], rowSpans: [2, 1],
+      images: [['refined-detail-portrait'], ['refined-product']] },
+    { project: 'ballie', name: 'Ballie', slots: [8, 1, 3], rowSpans: [2, 1, 1],
+      images: [['iconic-stack-portrait'], ['iconic-booklet'], ['iconic-box']] },
+    { project: 'odyssey-oled', name: 'Odyssey OLED', slots: [2, 10], rowSpans: [2, 1],
+      images: [['distinct-portrait'], ['distinct-portal']] },
+    { project: 'wirelessaudio-vl', name: 'Wireless Audio VL', slots: [3, 1], rowSpans: [2, 1],
       images: [['bold-yellow', 'bold-poster'], ['bold-orange']] },
-    { name: 'Just Cool', slots: [1, 8, 12],
-      images: [['cool-cave'], ['cool-viewfinity'], ['cool-ark']],
-      projects: ['monitor-os', 'viewfinity', 'ark'],
-      names: ['The Odyssey Continues', 'ViewFinity', 'Ark'] }
+    { name: 'Just Cool', slots: [4, 2, 9], rowSpans: [2, 1, 1],
+      images: [['cool-ark'], ['cool-cave'], ['cool-viewfinity']],
+      projects: ['ark', 'monitor-os', 'viewfinity'],
+      names: ['Ark', 'The Odyssey Continues', 'ViewFinity'] }
   ];
+  // Preserve complete poster compositions; photographs keep their chosen focal point.
+  const imageFraming = {
+    'strategic-poster': { fit: 'contain', background: '#050505' },
+    'strategic-exhibit': { fit: 'contain', background: '#050505' },
+    'bold-yellow': { fit: 'contain', background: '#050505' },
+    'bold-poster': { fit: 'contain', background: '#050505' },
+    'bold-orange': { position: '50% 68%' },
+    'distinct-portrait': { position: '50% 48%' },
+    'cool-ark': { position: '55% 50%' }
+  };
   const imageDescriptions = {
     'strategic-exhibit': 'Micro RGB campaign exhibition',
     'strategic-poster': 'Micro RGB color campaign poster',
     'strategic-colorbox': 'Micro RGB color and material cube',
     'refined-product': 'The Premiere 8K product photography',
     'refined-material': 'The Premiere 8K metal and grille detail',
+    'refined-detail-portrait': 'The Premiere 8K diagonal product and material study',
     'iconic-stack': 'Ballie and its packaging',
+    'iconic-stack-portrait': 'Ballie above its stacked packaging, with the full product visible',
     'iconic-booklet': 'Ballie illustrated booklet',
     'iconic-box': 'Ballie packaging detail',
     'distinct-portal': 'Odyssey OLED portal artwork',
@@ -103,7 +116,11 @@
       top = Math.max(parseFloat(contentStyle.paddingTop), bounds.height * .20);
       available = bounds.height - 28 - top;
     }
-    const height = Math.max(0, Math.min(available, width * 1.25));
+    // A square grid field keeps one-cell frames near 1.4:1 and tall frames near 2:3.
+    // Shrink the whole fixed grid on short screens instead of cropping portraits harder.
+    width = Math.max(0, Math.min(width, available));
+    left = railRight - width;
+    const height = width;
     top += Math.max(0, (available - height) * .5);
     modules.style.left = `${left}px`;
     modules.style.top = `${top}px`;
@@ -132,6 +149,7 @@
     const decoding = [];
     scene.slots.forEach((cell, order) => {
       const row = Math.floor(cell / 3) + 1, column = cell % 3 + 1;
+      const rowSpan = scene.rowSpans[order];
       const project = scene.projects ? scene.projects[order] : scene.project;
       const name = scene.names ? scene.names[order] : scene.name;
       const file = scene.images[order][entry % scene.images[order].length];
@@ -140,8 +158,13 @@
       card.href = `projects/${project}.html`;
       card.setAttribute('aria-label', `Explore ${name}`);
       card.dataset.cell = cell;
-      card.style.gridArea = `${row} / ${column} / ${row + 1} / ${column + 1}`;
+      card.dataset.rowSpan = rowSpan;
+      card.style.gridArea = `${row} / ${column} / ${row + rowSpan} / ${column + 1}`;
       card.style.setProperty('--module-order', order);
+      const framing = imageFraming[file] || {};
+      if (framing.fit) card.style.setProperty('--module-fit', framing.fit);
+      if (framing.position) card.style.setProperty('--module-position', framing.position);
+      if (framing.background) card.style.setProperty('--module-background', framing.background);
       const image = document.createElement('img');
       image.src = `assets/hero/glimpses/${file}.webp`;
       image.alt = imageDescriptions[file];
