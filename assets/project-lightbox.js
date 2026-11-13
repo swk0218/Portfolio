@@ -100,8 +100,10 @@
           }
         }
         if (event.key === 'Escape') close();
-        if (event.key === 'ArrowLeft') move(-1);
-        if (event.key === 'ArrowRight') move(1);
+        const usesArrowKeys = event.target?.isContentEditable ||
+          event.target?.closest?.('input, textarea, select, video[controls]');
+        if (event.key === 'ArrowLeft' && !usesArrowKeys) move(-1);
+        if (event.key === 'ArrowRight' && !usesArrowKeys) move(1);
       });
       stage.addEventListener('touchstart', (event) => {
         touchStartX = event.changedTouches[0].clientX;

@@ -44,16 +44,16 @@ body .project-title-link:focus-visible {
 body .project-card:is(:hover, :focus-within) .project-image::before {
   opacity: .38 !important;
 }
-body .project-card:is(:hover, :focus-within) .project-image :is(img, .project-placeholder) {
-  transform: translateY(var(--parallax, 0px)) scale(1.08);
-  filter: blur(.4px);
+body .project-card:is(:hover, :focus-within) .project-image :is(img, video, .project-placeholder) {
+  transform: translateY(var(--parallax, 0px)) scale(1.045) !important;
+  filter: none !important;
 }
 body .work-item:is(:hover, :focus-within) .work-item-image::before {
   opacity: .62 !important;
 }
-body .work-item:is(:hover, :focus-within) .work-item-image :is(img, svg) {
-  transform: scale(1.10);
-  filter: blur(.4px);
+body .work-item:is(:hover, :focus-within) .work-item-image :is(img, video, svg) {
+  transform: scale(1.03) !important;
+  filter: none !important;
 }
 
 body .next-link,
