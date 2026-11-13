@@ -1,113 +1,167 @@
+/* Shared viewport and one-shot entrance motion for home and project pages. */
+(() => {
+  const root = document.documentElement;
+  if (!root) return;
+  function syncFullBleed() {
+    const width = root.clientWidth || window.innerWidth;
+    if (!width) return;
+    root.style.setProperty('--full-bleed-width', `${width}px`);
+    root.style.setProperty('--full-bleed-offset', `calc(50% - ${width / 2}px)`);
+  }
+  syncFullBleed();
+  window.addEventListener('resize', syncFullBleed, { passive: true });
+  window.addEventListener('orientationchange', syncFullBleed, { passive: true });
 
-        // Viewport rail/full-bleed sync (midcheck)
-        (function () {
-            const root = document.documentElement;
-            if (!root) return;
+  if (!document.body?.classList.contains('motion-loco') || root.hasAttribute('data-motion-system')) return;
+  root.setAttribute('data-motion-system', 'ready');
+  const preference = window.matchMedia?.('(prefers-reduced-motion: reduce)');
+  const records = [];
+  const seen = new Set();
+  const grids = new Set();
+  let observer = null;
+  let layoutFrame = 0;
 
-            function syncFullBleed() {
-                const width = Math.max(root.clientWidth || 0, window.innerWidth || 0);
-                const safeWidth = root.clientWidth || width;
-                if (!safeWidth) return;
-                root.style.setProperty('--full-bleed-width', `${safeWidth}px`);
-                root.style.setProperty('--full-bleed-offset', `calc(50% - ${safeWidth / 2}px)`);
-            }
+  function add(el, type = 'text', offset = 0, gridItem = el) {
+    if (!el || seen.has(el)) return;
+    seen.add(el);
+    el.setAttribute('data-reveal', type);
+    el.style.setProperty('--reveal-delay', `${offset}ms`);
+    const parent = gridItem?.parentElement;
+    const grid = parent && getComputedStyle(parent).display.includes('grid') ? parent : null;
+    if (grid) grids.add(grid);
+    records.push({ el, offset, grid, gridItem, settle: null });
+  }
 
-            syncFullBleed();
-            window.addEventListener('resize', syncFullBleed, { passive: true });
-            window.addEventListener('orientationchange', syncFullBleed, { passive: true });
-        })();
-        // /Viewport rail/full-bleed sync (midcheck)
+  document.querySelectorAll('.project-card').forEach(card => {
+    add(card.querySelector('.project-image'), 'media', 0, card);
+    add(card.querySelector('.project-details'), 'text', 100, card);
+  });
+  document.querySelectorAll('.work-item').forEach(item => {
+    add(item.querySelector('.work-item-image'), 'media', 0, item);
+    add(item.querySelector('.work-item-category'), 'text', 70, item);
+    add(item.querySelector('.work-item-title'), 'text', 90, item);
+    add(item.querySelector('.work-item-tagline'), 'text', 110, item);
+    add(item.querySelector('.work-item-awards'), 'text', 130, item);
+  });
+  [
+    '.selected-works-title', '.all-work .section-title', '.work-tabs',
+    '.about-grid > div', '.skill-item',
+    '.awards-section .about-contact-label', '.awards-section .feature-item',
+    '.featured-in .about-contact-label', '.featured-in .feature-item',
+    '.about-contact-item', '.site-footer', '.project-header',
+    '.hero-media', '.overview-section', '.shot-block', '.next'
+  ].forEach(selector => {
+    document.querySelectorAll(selector).forEach(el => {
+      add(el, el.matches('.hero-media, .shot-block') ? 'media' : 'text');
+    });
+  });
 
-        // Locopopo-inspired scroll reveal (midcheck)
-        (function () {
-            if (!document.body || !document.body.classList.contains('motion-loco')) return;
+  // A selected parent is the atomic reveal group; its children do not rise twice.
+  const revealables = records.filter(record => {
+    if (!record.el.parentElement?.closest('[data-reveal]')) return true;
+    record.el.removeAttribute('data-reveal');
+    record.el.removeAttribute('data-reveal-state');
+    record.el.removeAttribute('data-reveal-settled');
+    record.el.style.removeProperty('--reveal-delay');
+    return false;
+  });
+  if (!revealables.length) return;
 
-            const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-            const revealables = [];
-            const seen = new Set();
+  function refreshDelays() {
+    layoutFrame = 0;
+    const gridColumns = new Map();
+    grids.forEach(grid => {
+      const visible = [...grid.children].filter(item => item.getClientRects().length);
+      const columns = [...new Set(visible.map(item => Math.round(item.offsetLeft)))].sort((a, b) => a - b);
+      gridColumns.set(grid, { visible: new Set(visible), columns });
+    });
+    revealables.forEach(({ el, offset, grid, gridItem }) => {
+      if (el.getAttribute('data-reveal-state') === 'in') return;
+      const group = gridColumns.get(grid);
+      const column = group?.visible.has(gridItem)
+        ? Math.max(0, group.columns.indexOf(Math.round(gridItem.offsetLeft))) : 0;
+      el.style.setProperty('--reveal-delay', `${offset + column * 70}ms`);
+    });
+  }
+  function queueLayout() {
+    if (!layoutFrame) layoutFrame = requestAnimationFrame(() => {
+      refreshDelays();
+      if (observer) observeRemaining();
+    });
+  }
+  refreshDelays();
+  window.addEventListener('resize', queueLayout, { passive: true });
+  window.addEventListener('orientationchange', queueLayout, { passive: true });
+  // Filtering changes the visible columns without re-running a completed entrance.
+  if ('MutationObserver' in window) {
+    const mutations = new MutationObserver(queueLayout);
+    grids.forEach(grid => mutations.observe(grid, { attributes: true, attributeFilter: ['class'], childList: true, subtree: true }));
+  }
 
-            function add(el, type = 'text', delay = 0) {
-                if (!el || seen.has(el)) return;
-                seen.add(el);
-                el.setAttribute('data-reveal', type);
-                el.style.setProperty('--reveal-delay', `${Math.max(0, Math.round(delay))}ms`);
-                revealables.push(el);
-            }
+  function reveal(record) {
+    const { el } = record;
+    if (el.getAttribute('data-reveal-state') === 'in') return;
+    el.setAttribute('data-reveal-state', 'in');
+    observer?.unobserve(el);
+    let timer;
+    const settle = () => {
+      if (!record.settle) return;
+      record.settle = null;
+      clearTimeout(timer);
+      el.removeEventListener('transitionend', onEnd);
+      el.setAttribute('data-reveal-settled', '');
+    };
+    const onEnd = event => {
+      if (event.target === el && (event.propertyName === 'opacity' || event.propertyName === 'transform')) settle();
+    };
+    record.settle = settle;
+    el.addEventListener('transitionend', onEnd);
+    const style = getComputedStyle(el);
+    const duration = parseFloat(style.getPropertyValue('--loco-duration')) || 900;
+    const delay = parseFloat(style.getPropertyValue('--reveal-delay')) || 0;
+    timer = setTimeout(settle, duration + delay + 150);
+  }
+  function revealAll() {
+    observer?.disconnect();
+    revealables.forEach(record => {
+      record.el.setAttribute('data-reveal-state', 'in');
+      if (record.settle) record.settle();
+      else record.el.setAttribute('data-reveal-settled', '');
+    });
+  }
+  const motionChange = () => { if (preference?.matches) revealAll(); };
+  if (preference?.addEventListener) preference.addEventListener('change', motionChange);
+  else preference?.addListener?.(motionChange);
 
-            document.querySelectorAll('.project-card').forEach((card, index) => {
-                const base = Math.min((index % 4) * 90, 270);
-                add(card.querySelector('.project-image'), 'media', base);
-                add(card.querySelector('.project-details'), 'text', base + 115);
-            });
+  // Older browsers and reduced-motion visitors always receive visible content.
+  if (preference?.matches || !('IntersectionObserver' in window)) {
+    revealAll();
+    return;
+  }
+  const byElement = new Map(revealables.map(record => [record.el, record]));
+  function observeRemaining() {
+    observer?.disconnect();
+    if (preference?.matches) return;
+    const inset = Math.round((window.innerHeight || root.clientHeight) * .08);
+    observer = new IntersectionObserver(entries => {
+      entries.forEach(entry => { if (entry.isIntersecting) reveal(byElement.get(entry.target)); });
+    }, { threshold: 0, rootMargin: `0px 0px -${inset}px 0px` });
+    revealables.forEach(({ el }) => {
+      if (el.getAttribute('data-reveal-state') !== 'in') observer.observe(el);
+    });
+  }
+  observeRemaining();
 
-            document.querySelectorAll('.work-item').forEach((item, index) => {
-                const base = Math.min((index % 6) * 55, 275);
-                add(item.querySelector('.work-item-image'), 'media', base);
-                add(item.querySelector('.work-item-category'), 'text', base + 82);
-                add(item.querySelector('.work-item-title'), 'text', base + 104);
-                add(item.querySelector('.work-item-tagline'), 'text', base + 126);
-                add(item.querySelector('.work-item-awards'), 'text', base + 142);
-            });
-
-            [
-                '.selected-works-title',
-                '.all-work .section-title',
-                '.work-tabs',
-                '.about-grid > div',
-                '.skill-item',
-                '.awards-section .about-contact-label',
-                '.awards-section .feature-item',
-                '.featured-in .about-contact-label',
-                '.featured-in .feature-item',
-                '.about-contact-item',
-                '.site-footer',
-                '.project-header',
-                '.hero-media',
-                '.overview-section',
-                '.shot-block',
-                '.next'
-            ].forEach((selector) => {
-                document.querySelectorAll(selector).forEach((el, index) => {
-                    const media = el.matches('.hero-media, .shot-block');
-                    const delay = media ? Math.min((index % 6) * 62, 310) : Math.min((index % 8) * 54, 270);
-                    add(el, media ? 'media' : 'text', delay);
-                });
-            });
-
-            if (!revealables.length) return;
-
-            let observer = null;
-
-            function reveal(el) {
-                el.setAttribute('data-reveal-state', 'in');
-                if (observer) observer.unobserve(el);
-            }
-
-            if (reduce) {
-                revealables.forEach((el) => reveal(el));
-                return;
-            }
-
-            function revealVisible() {
-                const vh = window.innerHeight || document.documentElement.clientHeight;
-                revealables.forEach((el) => {
-                    if (el.getAttribute('data-reveal-state') === 'in') return;
-                    const rect = el.getBoundingClientRect();
-                    if (rect.top < vh * 0.92 && rect.bottom > 0) reveal(el);
-                });
-            }
-
-            if ('IntersectionObserver' in window) {
-                observer = new IntersectionObserver((entries) => {
-                    entries.forEach((entry) => {
-                        if (entry.isIntersecting) reveal(entry.target);
-                    });
-                }, { threshold: 0.13, rootMargin: '0px 0px -7% 0px' });
-                revealables.forEach((el) => observer.observe(el));
-            }
-
-            requestAnimationFrame(revealVisible);
-            window.addEventListener('load', revealVisible, { once: true });
-            window.addEventListener('hashchange', () => requestAnimationFrame(revealVisible));
-        })();
-        // /Locopopo-inspired scroll reveal (midcheck)
+  function revealVisible() {
+    const height = window.innerHeight || root.clientHeight;
+    refreshDelays();
+    revealables.forEach(record => {
+      if (record.el.getAttribute('data-reveal-state') === 'in') return;
+      const rect = record.el.getBoundingClientRect();
+      if (rect.top < height * .92 && rect.bottom > 0) reveal(record);
+    });
+  }
+  requestAnimationFrame(revealVisible);
+  window.addEventListener('load', revealVisible, { once: true });
+  window.addEventListener('hashchange', () => requestAnimationFrame(revealVisible));
+})();

@@ -1,0 +1,111 @@
+/* Shared interaction feedback for home and project pages. */
+body nav .nav-links a {
+  transition: color 220ms ease;
+}
+body nav .nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: auto;
+  bottom: 0;
+  width: 100%;
+  height: 1px;
+  background: currentColor;
+  opacity: .9;
+  transform: scaleX(0);
+  transform-origin: left center;
+  transition: transform 220ms ease;
+}
+body nav .nav-links a:is(:hover, :focus-visible, :active) {
+  color: var(--accent);
+}
+body nav .nav-links a:is(:hover, :focus-visible, :active)::after {
+  width: 100%;
+  transform: scaleX(1);
+}
+
+body .project-title-link {
+  font-family: "Funnel Display", Manrope, sans-serif !important;
+  color: inherit;
+  text-decoration: none;
+  transition: color 220ms ease;
+}
+body .project-card:is(:hover, :focus-within) .project-title-link,
+body .work-item:is(:hover, :focus-within) .project-title-link,
+body .project-title-link:is(:hover, :focus-visible, :active) {
+  color: var(--accent);
+  text-decoration: none;
+}
+body .project-title-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 5px;
+}
+/* The image and title share one card state, including keyboard focus. */
+body .project-card:is(:hover, :focus-within) .project-image::before {
+  opacity: .38 !important;
+}
+body .project-card:is(:hover, :focus-within) .project-image :is(img, video, .project-placeholder) {
+  transform: translateY(var(--parallax, 0px)) scale(1.045) !important;
+  filter: none !important;
+}
+body .work-item:is(:hover, :focus-within) .work-item-image::before {
+  opacity: .62 !important;
+}
+body .work-item:is(:hover, :focus-within) .work-item-image :is(img, video, svg) {
+  transform: scale(1.03) !important;
+  filter: none !important;
+}
+
+body .next-link,
+body .back-top {
+  transition: color 220ms ease;
+}
+body .lightbox-close,
+body .lightbox-nav,
+body .about-contact-value[href],
+body .about-contact-link,
+body .site-footer .footer-social a {
+  transition: color 220ms ease;
+}
+body .lightbox-close:is(:hover, :focus-visible, :active),
+body .lightbox-nav:is(:hover, :focus-visible, :active),
+body .about-contact-value[href]:is(:hover, :focus-visible, :active),
+body .about-contact-link:is(:hover, :focus-visible, :active),
+body .site-footer .footer-social a:is(:hover, :focus-visible, :active),
+body .tab-button:is(:focus-visible, :focus-within, :active) {
+  color: var(--accent) !important;
+}
+body .next-link::after,
+body .back-top::after {
+  transition: width 220ms ease;
+}
+body .next-link:is(:hover, :focus-visible, :active),
+body .back-top:is(:hover, :focus-visible, :active) {
+  color: var(--accent);
+}
+body .next-link:is(:hover, :focus-visible, :active)::after,
+body .back-top:is(:hover, :focus-visible, :active)::after {
+  width: 100%;
+}
+
+/* Press feedback is immediate, including touch input. */
+body nav .nav-links a:active,
+body .project-title-link:active,
+body .next-link:active,
+body .back-top:active,
+body .lightbox-close:active,
+body .lightbox-nav:active,
+body .tab-button:active {
+  transition-duration: 0s;
+}
+@media (prefers-reduced-motion: reduce) {
+  body nav .nav-links a,
+  body nav .nav-links a::after,
+  body .project-title-link,
+  body .next-link,
+  body .next-link::after,
+  body .back-top,
+  body .back-top::after {
+    transition: none !important;
+  }
+}

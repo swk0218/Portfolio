@@ -1,0 +1,50 @@
+/* Typography only: the existing palette, navigation, cards and layout are retained. */
+@font-face {
+  font-family: Manrope;
+  src: url("fonts/Manrope-variable.ttf") format("truetype");
+  font-weight: 200 800;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Funnel Display";
+  src: url("fonts/FunnelDisplay-variable.ttf") format("truetype");
+  font-weight: 300 800;
+  font-style: normal;
+  font-display: swap;
+}
+/* Keep the original Archivo typography rules; change the family only. */
+body, body h1, body h2, body h3, body p, body a, body button,
+body input, body select, body textarea, body .lede, body .body {
+  font-family: Manrope, system-ui, sans-serif !important;
+}
+body .hero h1.hero-title,
+body .project-title,
+body .work-item-title,
+body .next-link,
+body #highlights h2,
+body #portfolio h2,
+body #about h2 {
+  font-family: "Funnel Display", Manrope, sans-serif !important;
+}
+
+
+/* Full-name site identity, shared by home and project pages. */
+body nav .logo {
+  font-family: "Funnel Display", Manrope, sans-serif !important;
+  font-size: clamp(.96rem, 1.3vw, 1.22rem) !important;
+  letter-spacing: -.015em !important;
+  text-transform: none;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+@media (max-width: 600px) {
+  body nav .logo { font-size: clamp(.86rem, 3.4vw, 1rem) !important; }
+  body nav .nav-inner { gap: .65rem; }
+  body nav .nav-links { gap: .85rem !important; }
+}
+@media (max-width: 380px) {
+  body nav .nav-inner { gap: .5rem; }
+  body nav .nav-links { gap: .7rem !important; }
+  body nav .nav-links a { font-size: .68rem !important; letter-spacing: 0 !important; }
+}
