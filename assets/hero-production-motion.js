@@ -133,8 +133,8 @@
     // Leave the first revealed word readable, then retain the existing cycle cadence.
     setTimeout(() => {
       flip();
-      setInterval(flip, 2900);
-    }, 4200);
+      setInterval(flip, 2500);
+    }, 3800);
   }
   start();
   // Font completion adjusts layout without delaying or replaying the entrance.
