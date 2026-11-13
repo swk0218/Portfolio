@@ -120,8 +120,13 @@
     if (started) return;
     started = true;
     slot.classList.add('flip-slot');
-    current = makeWord(words[index], false);
-    slot.replaceChildren(current);
+    // Adopt the word already animating from the first HTML paint without restarting it.
+    current = slot.querySelector('.flip-word');
+    if (!current) {
+      current = makeWord(words[index], true);
+      current.classList.add('is-initial');
+      slot.replaceChildren(current);
+    }
     heading.setAttribute('aria-label', 'Crafting strategic identities');
     hero.dataset.keyword = words[index];
     queueLayout();
