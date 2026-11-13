@@ -42,14 +42,23 @@
 
   function positionCopy() {
     if (!content || !awards || !navigation) return;
+    const haze = getComputedStyle(navigation, '::before');
+    const hazeBottom = (parseFloat(haze.top) || 0) + (parseFloat(haze.height) || navigation.offsetHeight);
+    // Offset-based coordinates exclude entrance animations and our own translation.
+    const awardsTop = content.offsetTop + awards.offsetTop;
+    if (matchMedia('(min-width: 1200px)').matches) {
+      const rootSize = parseFloat(getComputedStyle(document.documentElement).fontSize) || 16;
+      const baseOffset = Math.min(rootSize, Math.max(rootSize * .55, innerHeight * .014));
+      const offset = Math.max(baseOffset, hazeBottom + 20 - awardsTop);
+      content.style.setProperty('--hero-copy-desktop-offset', `${offset}px`);
+      content.style.removeProperty('--hero-copy-optical-offset');
+      return;
+    }
+    content.style.removeProperty('--hero-copy-desktop-offset');
     if (!matchMedia('(max-width: 768px)').matches) {
       content.style.removeProperty('--hero-copy-optical-offset');
       return;
     }
-    const haze = getComputedStyle(navigation, '::before');
-    const hazeBottom = (parseFloat(haze.top) || 0) + (parseFloat(haze.height) || navigation.offsetHeight);
-    // Layout offsets exclude both the entrance animation and our own optical lift.
-    const awardsTop = content.offsetTop + awards.offsetTop;
     const desiredLift = Math.min(35.2, Math.max(19.2, hero.clientHeight * .035));
     const lift = Math.max(0, Math.min(desiredLift, awardsTop - hazeBottom - 16));
     content.style.setProperty('--hero-copy-optical-offset', `${-lift}px`);
