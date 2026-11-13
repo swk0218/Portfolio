@@ -120,7 +120,7 @@
     if (started) return;
     started = true;
     slot.classList.add('flip-slot');
-    // Adopt the word already animating from the first HTML paint without restarting it.
+    // Adopt the word prepared in HTML without restarting its staged first reveal.
     current = slot.querySelector('.flip-word');
     if (!current) {
       current = makeWord(words[index], true);
@@ -130,8 +130,11 @@
     heading.setAttribute('aria-label', 'Crafting strategic identities');
     hero.dataset.keyword = words[index];
     queueLayout();
-    // The original constellation entrance completes before the first shared pulse.
-    setInterval(flip, 2900);
+    // Leave the first revealed word readable, then retain the existing cycle cadence.
+    setTimeout(() => {
+      flip();
+      setInterval(flip, 2900);
+    }, 4200);
   }
   start();
   // Font completion adjusts layout without delaying or replaying the entrance.
