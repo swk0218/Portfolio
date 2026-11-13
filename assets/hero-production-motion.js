@@ -83,6 +83,7 @@
   }
 
   function awardWave() {
+    if (awards) awards.classList.remove('has-initial-wave');
     starAnimations.forEach(animation => animation.cancel());
     starAnimations = [];
     if (preference.matches) return;

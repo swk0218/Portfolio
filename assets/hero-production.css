@@ -1,4 +1,5 @@
 /* Centered composition with the developed Funnel Display typography. */
+body .hero { --hero-initial-reveal-delay: 850ms; }
 body .hero h1.hero-title {
   font-weight: 600;
   font-kerning: normal;
@@ -90,7 +91,7 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   animation-name: initial-letter-enter;
   animation-duration: 620ms;
   animation-timing-function: cubic-bezier(.22, 1, .36, 1);
-  animation-delay: calc(850ms + var(--letter-index) * 36ms);
+  animation-delay: calc(var(--hero-initial-reveal-delay) + var(--letter-index) * 36ms);
 }
 @keyframes initial-letter-enter {
   from { opacity: 0; transform: translate3d(.18em, 0, 0); filter: blur(.12em); }
@@ -126,8 +127,23 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   transform-box: fill-box;
   transform-origin: 50% 50%;
 }
+.hero-award-stars.has-initial-wave svg {
+  --hero-star-blur: .65px;
+  animation: hero-initial-star-wave 1100ms linear;
+  animation-delay: calc(var(--hero-initial-reveal-delay) + var(--star-index) * 55ms);
+}
+@keyframes hero-initial-star-wave {
+  0% { transform: translateX(-50%) rotate(0deg); opacity: 1; filter: blur(0px); animation-timing-function: cubic-bezier(.55, 0, .8, .4); }
+  26% { transform: translateX(-50%) rotate(160deg); opacity: 0; filter: blur(var(--hero-star-blur)); }
+  34% { transform: translateX(-50%) rotate(180deg); opacity: 0; filter: blur(var(--hero-star-blur)); animation-timing-function: cubic-bezier(.25, .75, .25, 1); }
+  100% { transform: translateX(-50%) rotate(360deg); opacity: 1; filter: blur(0px); }
+}
+@media (max-width: 600px) {
+  .hero-award-stars.has-initial-wave svg { --hero-star-blur: .45px; }
+}
 @media (prefers-reduced-motion: reduce) {
   .hero-shader-parallax { transform: none !important; opacity: 1 !important; }
+  .hero-award-stars svg { animation: none !important; }
   .hero-title .hero-line, .hero-award-stars {
     animation: none !important;
     transform: none !important;
