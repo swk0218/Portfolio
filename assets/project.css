@@ -650,8 +650,8 @@
       padding:4rem 5%;
     }
     .site-footer .footer-content{
-      width:min(1400px, 100%);
-      max-width:1400px;
+      width:min(1640px, 100%);
+      max-width:1640px;
       margin:0 auto;
       display:flex;
       flex-direction:column;

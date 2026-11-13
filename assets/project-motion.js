@@ -12,6 +12,40 @@
   window.addEventListener('resize', syncFullBleed, { passive: true });
   window.addEventListener('orientationchange', syncFullBleed, { passive: true });
 
+  // Inline project videos load and play near the viewport, respecting live motion preferences.
+  const mediaPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
+  const inlineVideos = [...document.querySelectorAll('.shot-block video[data-video-src], .hero-media video[data-video-src]')];
+  const visibleVideos = new Set();
+  function syncInlineVideo(video) {
+    if (mediaPreference.matches || document.hidden || document.body.classList.contains('lightbox-open') || !visibleVideos.has(video)) {
+      video.pause();
+      return;
+    }
+    if (!video.getAttribute('src')) video.src = video.dataset.videoSrc;
+    const playing = video.play();
+    if (playing?.catch) playing.catch(() => {});
+  }
+  if (inlineVideos.length) {
+    if ('IntersectionObserver' in window) {
+      const videoObserver = new IntersectionObserver(entries => {
+        entries.forEach(({ target, isIntersecting }) => {
+          if (isIntersecting) visibleVideos.add(target);
+          else visibleVideos.delete(target);
+          syncInlineVideo(target);
+        });
+      }, { rootMargin: '0px', threshold: 0 });
+      inlineVideos.forEach(video => videoObserver.observe(video));
+    } else {
+      inlineVideos.forEach(video => { visibleVideos.add(video); syncInlineVideo(video); });
+    }
+    mediaPreference.addEventListener('change', () => inlineVideos.forEach(syncInlineVideo));
+    document.addEventListener('visibilitychange', () => inlineVideos.forEach(syncInlineVideo));
+    if ('MutationObserver' in window) {
+      new MutationObserver(() => inlineVideos.forEach(syncInlineVideo))
+        .observe(document.body, { attributes: true, attributeFilter: ['class'] });
+    }
+  }
+
   if (!document.body?.classList.contains('motion-loco') || root.hasAttribute('data-motion-system')) return;
   root.setAttribute('data-motion-system', 'ready');
   const preference = window.matchMedia?.('(prefers-reduced-motion: reduce)');
@@ -129,6 +163,12 @@
       else record.el.setAttribute('data-reveal-settled', '');
     });
   }
+  document.addEventListener('focusin', event => {
+    const record = revealables.find(({ el }) => el.contains(event.target));
+    if (!record) return;
+    reveal(record);
+    record.settle?.();
+  });
   const motionChange = () => { if (preference?.matches) revealAll(); };
   if (preference?.addEventListener) preference.addEventListener('change', motionChange);
   else preference?.addListener?.(motionChange);

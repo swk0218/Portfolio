@@ -12,6 +12,7 @@
       const nextButton = modal.querySelector('.lightbox-next');
       let index = 0;
       let touchStartX = 0;
+      let canSwipe = false;
       let returnFocus = null;
       let backgroundState = [];
 
@@ -106,9 +107,13 @@
         if (event.key === 'ArrowRight' && !usesArrowKeys) move(1);
       });
       stage.addEventListener('touchstart', (event) => {
+        canSwipe = !event.target.closest('video[controls], iframe, input, textarea, select, button, a');
+        if (!canSwipe) return;
         touchStartX = event.changedTouches[0].clientX;
       }, { passive: true });
       stage.addEventListener('touchend', (event) => {
+        if (!canSwipe) return;
+        canSwipe = false;
         const delta = event.changedTouches[0].clientX - touchStartX;
         if (Math.abs(delta) > 45) move(delta > 0 ? -1 : 1);
       }, { passive: true });

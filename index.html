@@ -3,9 +3,10 @@
 <html lang="en">
 <head>
 <meta charset="utf-8"/>
-<meta name="portfolio-revision" content="20261113v"/>
+<meta name="portfolio-revision" content="20261113w"/>
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"/>
-<meta name="robots" content="noindex, nofollow, noarchive, nosnippet"/>
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noimageindex, max-image-preview:none, max-video-preview:0"/>
+<meta name="bingbot" content="noindex, nofollow, noarchive, nocache, nosnippet, ai-training:disallow, ai-grounding:disallow"/>
 <title>Wonkyoung Seo</title>
 <meta name="description" content="Specialist in brand experience design. Strategy. Design. Art direction. AI."/>
 <meta property="og:type" content="website"/>
@@ -2758,12 +2759,13 @@ nav::before{
   </style>
 <link rel="stylesheet" href="assets/type-system.css?v=20261111e">
 <link rel="stylesheet" href="assets/hero-production.css?v=20261113u">
-<link rel="stylesheet" href="assets/interaction-system.css?v=20261113m">
-<link rel="stylesheet" href="assets/motion-system.css?v=20261112i">
+<link rel="stylesheet" href="assets/interaction-system.css?v=20261113w">
+<link rel="stylesheet" href="assets/motion-system.css?v=20261113w">
 </head>
 <body class="motion-loco">
+  <a class="skip-link" href="#main-content">Skip to content</a>
 <div id="top"></div>
-<nav>
+<nav aria-label="Primary">
 <div class="nav-inner">
 <a class="logo" href="#top">Wonkyoung Seo</a>
 <ul class="nav-links">
@@ -2773,6 +2775,7 @@ nav::before{
 </ul>
 </div>
 </nav>
+<main id="main-content" tabindex="-1">
 <section class="hero">
 <div class="hero-shader-parallax" aria-hidden="true"><div class="hero-shader-gradient" id="heroShaderGradient"></div></div>
 <div class="hero-content">
@@ -3095,6 +3098,7 @@ nav::before{
 </div>
 </div>
 </section>
+</main>
   <footer class="site-footer" data-reveal="text" aria-label="Footer">
     <div class="footer-content">
       <p class="footer-copyright">© 2026 Wonkyoung Seo. All rights reserved.</p>
@@ -3107,7 +3111,7 @@ nav::before{
     </div>
   </footer>
 <script src="assets/hero-production-motion.js?v=20261113v" defer></script>
-<script src="assets/project-motion.js?v=20261112i" defer></script>
+<script src="assets/project-motion.js?v=20261113w" defer></script>
 <script src="assets/thumbs/list/manifest.js"></script>
 <script>
         // Portfolio data
@@ -3731,7 +3735,7 @@ const projects = [
 
         // Video previews keep their original source, but only decode and play near the viewport.
         const previewVideos = Array.from(document.querySelectorAll('video[data-video-src]'));
-        const reduceMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        const previewMotionPreference = window.matchMedia('(prefers-reduced-motion: reduce)');
 
         function prepareVideo(video) {
             if (video.src) return;
@@ -3740,7 +3744,7 @@ const projects = [
         }
 
         function playVideo(video) {
-            if (reduceMotion || document.hidden) return;
+            if (previewMotionPreference.matches || document.hidden) return;
             prepareVideo(video);
             const playPromise = video.play();
             if (playPromise && typeof playPromise.catch === 'function') playPromise.catch(() => {});
@@ -3750,7 +3754,7 @@ const projects = [
             const videoLoadObserver = new IntersectionObserver((entries, observer) => {
                 entries.forEach((entry) => {
                     if (!entry.isIntersecting) return;
-                    prepareVideo(entry.target);
+                    if (!previewMotionPreference.matches) prepareVideo(entry.target);
                     observer.unobserve(entry.target);
                 });
             }, { rootMargin: '700px 0px', threshold: 0 });
@@ -3770,7 +3774,7 @@ const projects = [
                 videoPlaybackObserver.observe(video);
             });
         } else {
-            previewVideos.forEach((video) => prepareVideo(video));
+            if (!previewMotionPreference.matches) previewVideos.forEach((video) => prepareVideo(video));
         }
 
         document.addEventListener('visibilitychange', () => {
@@ -3779,6 +3783,15 @@ const projects = [
                     video.pause();
                     return;
                 }
+                const rect = video.getBoundingClientRect();
+                if (rect.bottom > 0 && rect.top < window.innerHeight) playVideo(video);
+            });
+        });
+
+        previewMotionPreference.addEventListener('change', () => {
+            previewVideos.forEach((video) => {
+                video.pause();
+                if (previewMotionPreference.matches || document.hidden) return;
                 const rect = video.getBoundingClientRect();
                 if (rect.bottom > 0 && rect.top < window.innerHeight) playVideo(video);
             });
@@ -4007,7 +4020,7 @@ const projects = [
             if (workGrid) navLayoutObserver.observe(workGrid);
         }
 
-        // Smooth scroll
+        // Keep native fragment history and move keyboard focus with the destination.
         document.querySelectorAll('a[href^="#"]').forEach(a => {
             const href = a.getAttribute('href');
 
@@ -4016,8 +4029,10 @@ const projects = [
                     e.preventDefault();
                     return;
                 }
-                e.preventDefault();
-                document.querySelector(href)?.scrollIntoView({behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth'});
+                const target = document.getElementById(decodeURIComponent(href.slice(1)));
+                if (!target) return;
+                if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+                target.focus({ preventScroll: true });
             });
         });
     </script>

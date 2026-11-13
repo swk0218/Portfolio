@@ -1,4 +1,9 @@
 /* One entrance rhythm shared by the home page and every project page. */
+html:not([data-motion-system="ready"]) body.motion-loco [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+  transition: none !important;
+}
 body.motion-loco [data-reveal] {
   --loco-y: 44px !important;
   --loco-scale: 1 !important;
