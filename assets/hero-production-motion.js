@@ -120,7 +120,7 @@
     if (started) return;
     started = true;
     slot.classList.add('flip-slot');
-    current = makeWord(words[index], true);
+    current = makeWord(words[index], false);
     slot.replaceChildren(current);
     heading.setAttribute('aria-label', 'Crafting strategic identities');
     hero.dataset.keyword = words[index];
@@ -128,9 +128,16 @@
     // The original constellation entrance completes before the first shared pulse.
     setInterval(flip, 2900);
   }
-  const fallback = setTimeout(start, 1500);
-  if (document.fonts) document.fonts.ready.then(() => { clearTimeout(fallback); start(); });
-  else { clearTimeout(fallback); start(); }
+  start();
+  // Font completion adjusts layout without delaying or replaying the entrance.
+  if (document.fonts) document.fonts.ready.then(queueLayout);
+  // Let the foreground paint before loading the larger WebGL background bundle.
+  requestAnimationFrame(() => requestAnimationFrame(() => {
+    const shader = document.createElement('script');
+    shader.src = 'assets/hero-shadergradient.js?v=20260915';
+    shader.async = true;
+    document.body.append(shader);
+  }));
   preference.addEventListener('change', () => {
     starAnimations.forEach(animation => animation.cancel());
     starAnimations = [];

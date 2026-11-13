@@ -9,10 +9,24 @@ body .hero h1.hero-title {
   min-width: 0;
   font-size: clamp(7rem, min(13.05vw, 18.9vh), 12.6rem) !important;
   margin-bottom: clamp(1.8rem, 3.8vh, 2.7rem) !important;
+  animation: none !important;
+  opacity: 1 !important;
 }
 body .hero-title .hero-line {
   width: 100%;
   justify-content: center;
+  animation: hero-line-arrive 900ms cubic-bezier(.16, 1, .3, 1) both;
+}
+body .hero-title .hero-line:nth-child(2) { animation-delay: 60ms; }
+body .hero-title .hero-line:nth-child(3) { animation-delay: 120ms; }
+body .hero p.hero-subtitle { animation-delay: 160ms !important; }
+@keyframes hero-line-arrive {
+  from { opacity: 0; transform: translate3d(0, 22px, 0); filter: blur(12px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
+}
+@keyframes hero-stars-arrive {
+  from { opacity: 0; transform: translate3d(0, 16px, 0); filter: blur(7px); }
+  to { opacity: 1; transform: translate3d(0, 0, 0); filter: blur(0); }
 }
 body .hero-title .typing-slot { width: 100% !important; min-width: 0; }
 body .hero-title .hero-line,
@@ -52,6 +66,7 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   width: 100%;
   color: var(--accent) !important;
 }
+#typingText { color: var(--accent) !important; }
 #typingText::after { content: none !important; display: none !important; }
 .flip-word {
   grid-area: 1 / 1;
@@ -77,7 +92,10 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
   from { opacity: 0; transform: translateX(.035em) rotateX(35deg); filter: blur(.1em); }
   to { opacity: 1; transform: translateX(0) rotateX(0); filter: blur(0); }
 }
-.hero-award-stars { margin-bottom: clamp(.4rem, .55vw, .7rem) !important; }
+.hero-award-stars {
+  margin-bottom: clamp(.4rem, .55vw, .7rem) !important;
+  animation: hero-stars-arrive 900ms cubic-bezier(.16, 1, .3, 1) both !important;
+}
 @media (max-width: 768px) {
   .hero-award-stars { margin-bottom: .4rem !important; }
 }
@@ -99,6 +117,17 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
 }
 @media (prefers-reduced-motion: reduce) {
   .hero-shader-parallax { transform: none !important; opacity: 1 !important; }
+  .hero-title .hero-line, .hero-award-stars {
+    animation: none !important;
+    transform: none !important;
+    filter: none !important;
+    opacity: 1 !important;
+  }
+  body .hero p.hero-subtitle {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: translateX(var(--hero-subtitle-x, 0%)) !important;
+  }
   .flip-word, .flip-word > span {
     animation: none !important;
     transform: none !important;
@@ -109,6 +138,10 @@ body .hero-title .hero-line + .hero-line { margin-top: calc(-.05em + .5px) !impo
 }
 
 /* Retain the current non-hero link treatment and navigation haze. */
+body .highlights-section .project-description {
+  font-size: .95rem;
+  font-weight: 400;
+}
 /* Clip horizontal overflow without creating a second vertical scroll container. */
 html, body { overflow-x: clip; }
 .project-title-link { font-family: "Funnel Display", Manrope, sans-serif !important; color: inherit; text-decoration: none; }
