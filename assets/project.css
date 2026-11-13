@@ -94,12 +94,6 @@
       gap:1.5rem;
       margin-bottom: 3rem;
     }
-    .project-kicker{
-      color:var(--gray);
-      font-size:0.95rem;
-      letter-spacing:0.02em;
-      line-height:1.2;
-    }
     .project-title{
       font-size: clamp(3.1rem, 6.6vw, 5.3rem);
       font-weight:800;
