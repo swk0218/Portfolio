@@ -131,11 +131,11 @@
     heading.setAttribute('aria-label', 'Crafting strategic identities');
     hero.dataset.keyword = words[index];
     queueLayout();
-    // Leave the first revealed word readable, then retain the existing cycle cadence.
+    // Match visible entrances: 2850ms + 300ms incoming delay - 650ms first reveal = 2500ms.
     setTimeout(() => {
       flip();
       setInterval(flip, 2500);
-    }, 3800);
+    }, 2850);
   }
   start();
   // Font completion adjusts layout without delaying or replaying the entrance.
